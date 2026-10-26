@@ -121,6 +121,7 @@ function shareAppHtml(){
   return '<div class="card"><b>'+t('app_t')+'</b><p class="note">'+t('app_s')+'</p><button class="btn pri" id="a-app" type="button">'+t('app_b')+'</button></div>';
 }
 async function shareApp(){
+  if(window.PPAndroid){window.PPAndroid.shareApp();return;} // inside the Android app: share the APK itself
   const blob=new Blob([PRISTINE],{type:'text/html'}),name='PahaadPath.html';
   try{
     const f=new File([blob],name,{type:'text/html'});
