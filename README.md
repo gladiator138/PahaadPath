@@ -10,7 +10,7 @@ Advisory only. It is not an official warning. Follow police, BRO and district ad
 
 - **Plan trip:** any source, destination and date up to 14 days ahead. Fastest and lower-risk roads, landslide risk per stretch at the hour you reach it, long-weekend traffic, best departure window, night halts, entry rules with sources, road profile, safety kit with helplines and SOS, trip from a typed or spoken sentence.
 - **Control room:** all 44 hill stretches over 72 hours, animated map, advisory draft in English or Hindi, expected jams, road reports shared across phones.
-- **Proof:** replays real closure days (20 Aug 2025, 9 Jul 2026) and dry control days on recorded rain or on forecasts issued 1 or 2 days before. It compares Avoid stretches with closures named in the news. Threshold sensitivity chart. Open data builder for road distances (OSRM), terrain slope (Copernicus DEM). Incident history from the NASA landslide catalog is coded but switched off: NASA's catalog services stopped answering after its 2025 portal move (checked 26 Oct 2026), so incident counts are still demo values.
+- **Proof:** replays real closure days (20 Aug 2025, 9 Jul 2026) and dry control days on recorded rain or on forecasts issued 1 or 2 days before. It compares Avoid stretches with closures named in the news. Threshold sensitivity chart. Open data builder for road distances (OSRM), terrain slope (Copernicus DEM). Incident history comes from the NASA Global Landslide Catalog (2007 to 2017): 124 events in Uttarakhand located to 10 km or better are built into the app (`data/nasa_glc_uttarakhand_bbox.json`, taken from NASA's legacy export on data.nasa.gov because the live COOLR service is gone).
 
 The repository root holds the built app (`index.html`, identical to `PahaadPath.html`) so GitHub Pages can serve it. CI rebuilds it from `src/` and checks the copies match.
 
@@ -27,10 +27,10 @@ The repository root holds the built app (`index.html`, identical to `PahaadPath.
 - `replay_source/gt.json`: closures named in news reports for 20 Aug 2025 and 9 Jul 2026, mapped to road links, plus two dry control days.
 - `tools/basemap.json`: Natural Earth rivers, roads and Indian state lines clipped to the map area (made by `tools/clip_ne.py`).
 - `tests/`: `matrix.js` (connectivity and 240 random trips per scenario), `textaudit.js` (house style on 88 screens), `features.js` (proof, control room, open data and sentence entry with mocked web replies), `smoke.js` (screenshots).
-  `npm test` runs them all; `features2.js` covers shared reports between two simulated phones, NASA history, threshold sensitivity and the road profile.
+  `npm test` runs them all; `features2.js` covers shared reports between two simulated phones, NASA catalog history, threshold sensitivity and the road profile.
 
 ## Licences
 
-Leaflet (BSD 2-Clause), qrcode-generator (MIT), Natural Earth (public domain), OpenStreetMap data (ODbL) via OSRM, Open-Meteo data (CC BY 4.0), Copernicus GLO-90 DEM (free licence, credit Copernicus), ntfy.sh (public test channel for shared reports). Credits are shown in the app footer.
+Leaflet (BSD 2-Clause), qrcode-generator (MIT), Natural Earth (public domain), OpenStreetMap data (ODbL) via OSRM, Open-Meteo data (CC BY 4.0), Copernicus GLO-90 DEM (free licence, credit Copernicus), NASA Global Landslide Catalog (NASA open data), ntfy.sh (public test channel for shared reports). Credits are shown in the app footer.
 
 After a build, copy `dist/site/*` (including `.nojekyll`) and `dist/PahaadPath.html` to the repository root before committing.

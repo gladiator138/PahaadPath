@@ -1,4 +1,4 @@
-// v4.1 tests: shared reports between two "phones", NASA catalog history, threshold sensitivity, road profile. Mocked web replies.
+// v4.1 tests: shared reports between two "phones", NASA catalog history (baked), threshold sensitivity, road profile. Mocked web replies.
 const {chromium}=require('playwright');
 const F=process.argv[2];const fails=[];const ok=(c,m)=>{if(!c)fails.push(m);};
 const store=[];
@@ -13,8 +13,6 @@ async function mock(ctx){
   if(/archive-api/.test(u.host)){const lats=u.searchParams.get('latitude').split(','),lons=u.searchParams.get('longitude').split(','),hv=u.searchParams.get('hourly'),s=u.searchParams.get('start_date'),e=u.searchParams.get('end_date');
    const wetDay=s==='2025-08-17'||s==='2026-07-06';
    return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify(lats.map((la,i)=>{const wet=wetDay&&+la>30.6&&+lons[i]<78.9;const h=hourly(s,e,j=>j>=60&&j<90?(wet?9:.3):.05);return{hourly:{time:h.t,[hv]:h.v}};}))});}
-  if(u.host==='gis.earthdata.nasa.gov'){const off=+u.searchParams.get('resultOffset');const feats=[];for(let i=0;i<(off?300:1000);i++)feats.push({attributes:{event_date:1.6e12+i*1e8},geometry:{x:78.3+(i%50)*.05,y:30.0+Math.floor(i/50)*.05}});
-   return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({features:feats,exceededTransferLimit:!off})});}
   if(u.host==='api.open-meteo.com'&&u.pathname==='/v1/elevation'){const la=u.searchParams.get('latitude').split(',').map(Number);return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({elevation:la.map((a,i)=>500+3000*Math.max(0,a-29.5)+50*Math.sin(i))})});}
   return r.abort();
  });
@@ -23,7 +21,7 @@ async function mock(ctx){
  const b=await chromium.launch();
  const A=await b.newContext({viewport:{width:420,height:900}}),B=await b.newContext({viewport:{width:420,height:900}});
  await mock(A);await mock(B);
- for(const c of [A,B])await c.addInitScript(()=>{window.__shTest=1;window.__histTest=1;window.__pfAuto=1;window.__fastSleep=true;});
+ for(const c of [A,B])await c.addInitScript(()=>{window.__shTest=1;window.__pfAuto=1;window.__fastSleep=true;});
  const errs=[];
  const pa=await A.newPage(),pb=await B.newPage();[pa,pb].forEach(p=>p.on('pageerror',e=>errs.push(String(e))));
  const q='?scn=monsoon&from=delhi&to=kedarnath&tab=reports&tiles=0';
@@ -44,11 +42,11 @@ async function mock(ctx){
  // road profile on A
  await pa.click('[data-t="route"]');await pa.waitForFunction(()=>document.querySelector('#pf svg'),null,{timeout:8000});
  const pf=await pa.textContent('#pf');ok(/Highest point/.test(pf),'profile '+pf.slice(0,80));
- // NASA history + tuning on B
- await pb.click('[data-view="proof"]');await pb.click('#od-hist');
+ // NASA catalog history (baked in) + tuning on B
+ await pb.click('[data-view="proof"]');
  await pb.waitForFunction(()=>/Incident history: 44 of 44/.test(document.getElementById('od-msg')?.textContent||''),null,{timeout:30000});
- const hist=await pb.evaluate(()=>({pts:PP.OD.events.length,src:PP.S['rishikesh-devprayag'].hiSrc,foot:document.getElementById('foot').textContent.match(/\d+ incident counts[^·]*/)?.[0]}));
- ok(hist.pts===1300&&hist.src==='nasa','hist '+JSON.stringify(hist));console.log('nasa:',JSON.stringify(hist));
+ const hist=await pb.evaluate(()=>({pts:PP.OD.events.length,src:PP.S['rishikesh-devprayag'].hiSrc,top:Object.entries(PP.OD.hist).sort((a,b)=>b[1].n-a[1].n)[0]}));
+ ok(hist.pts>100&&hist.src==='nasa'&&hist.top[1].n>0,'hist '+JSON.stringify(hist));console.log('nasa:',JSON.stringify(hist));
  for(const ev of [0,2]){await pb.selectOption('#pr-ev',String(ev));await pb.selectOption('#pr-src','archive');await pb.click('#pr-run');await pb.waitForFunction(()=>/Done/.test(document.getElementById('pr-msg')?.textContent||''),null,{timeout:20000});}
  const tn=await pb.evaluate(()=>{const d=PP.tuneData();return d&&d.rows.map(r=>[r.k,Math.round(r.hit*100),Math.round((r.fa||0)*100)]);});
  ok(tn&&tn.length===13,'tune rows');console.log('tuning (mock):',JSON.stringify(tn));

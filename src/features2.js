@@ -3,7 +3,7 @@ Object.assign(T.en,{
   sh_t:'Share reports with other phones',sh_s:'Reports go to a public test channel (ntfy.sh) so every phone running PahaadPath and the control room see them within seconds. Only the stretch, the type of problem and a random device code are sent. A production version would use an authenticated server.',
   sh_on:'Shared channel connected · {n} reports from other phones in the last 12 hours',sh_off:'Sharing is off. Reports stay on this phone.',sh_wait:'Connecting to the shared channel…',sh_err:'Shared channel not reachable. Reports stay on this phone for now.',sh_from:'other phone',
   rep_none:'No reports.',
-  od_hist:'Count past landslides (NASA)',od_st_h:'Incident history: {hi} of {h} hill stretches from the NASA catalog.',od_hist_off:'Incident history still uses demo counts: the NASA Global Landslide Catalog services stopped answering after NASA moved its data portals in 2025 (checked 26 Oct 2026).',
+  od_st_h:'Incident history: {hi} of {h} hill stretches from the NASA catalog.',
   ft_hist_o:'{n} incident counts from the NASA landslide catalog',
   tn_t:'How sensitive is the trigger?',tn_s:'Recomputes the replay with the rain trigger scaled from 0.4 to 1.6 times Caine (1980). A lower trigger catches more named closures but also flags more stretches on dry days. Only a few days are replayed, so read this as an illustration, not a fitted threshold.',
   tn_hit:'Named closures caught',tn_fa:'Hill stretches at Avoid on dry control days',tn_un:'Avoid with no named closure',tn_x:'Trigger as a multiple of Caine (1980)',tn_now:'app uses 1.0',tn_need:'Run the replay with recorded rain for at least one closure day to see this.',
@@ -13,7 +13,7 @@ Object.assign(T.hi,{
   sh_t:'दूसरे फ़ोनों के साथ रिपोर्ट साझा करें',sh_s:'रिपोर्ट एक सार्वजनिक परीक्षण चैनल (ntfy.sh) पर जाती हैं, ताकि पहाड़ पथ चलाने वाला हर फ़ोन और कंट्रोल रूम उन्हें कुछ सेकंड में देख सके। सिर्फ़ सड़क का हिस्सा, समस्या का प्रकार और एक बेतरतीब डिवाइस कोड भेजा जाता है। असली संस्करण में प्रमाणित सर्वर होगा।',
   sh_on:'साझा चैनल जुड़ा है · पिछले 12 घंटे में दूसरे फ़ोनों से {n} रिपोर्ट',sh_off:'साझा करना बंद है। रिपोर्ट इसी फ़ोन में रहती हैं।',sh_wait:'साझा चैनल से जुड़ रहे हैं…',sh_err:'साझा चैनल नहीं मिला। अभी रिपोर्ट इसी फ़ोन में रहेंगी।',sh_from:'दूसरा फ़ोन',
   rep_none:'कोई रिपोर्ट नहीं।',
-  od_hist:'पुराने भूस्खलन गिनें (NASA)',od_st_h:'पुरानी घटनाएँ: {h} में से {hi} पहाड़ी हिस्से NASA सूची से।',od_hist_off:'पुरानी घटनाएँ अभी डेमो गिनती हैं: 2025 में NASA के डेटा पोर्टल बदलने के बाद NASA भूस्खलन सूची की सेवाएँ जवाब नहीं दे रहीं (26 अक्टूबर 2026 को जाँचा)।',
+  od_st_h:'पुरानी घटनाएँ: {h} में से {hi} पहाड़ी हिस्से NASA सूची से।',
   ft_hist_o:'{n} हिस्सों की घटनाएँ NASA भूस्खलन सूची से',
   tn_t:'बारिश की सीमा कितनी संवेदनशील है?',tn_s:'बारिश की सीमा को Caine (1980) के 0.4 से 1.6 गुना तक बदलकर जाँच दोबारा चलाई जाती है। सीमा नीची होने पर ज़्यादा बंद सड़कें पकड़ी जाती हैं, पर सूखे दिनों में भी ज़्यादा हिस्से चिह्नित होते हैं। सिर्फ़ कुछ दिन जाँचे गए हैं, इसलिए इसे उदाहरण मानें, तय की गई सीमा नहीं।',
   tn_hit:'पकड़ी गई बंद सड़कें',tn_fa:'सूखे नियंत्रण दिनों में "टालें" वाले पहाड़ी हिस्से',tn_un:'बिना ख़बर वाली जगह पर टालें',tn_x:'सीमा, Caine (1980) के गुणज में',tn_now:'ऐप 1.0 लेता है',tn_need:'इसे देखने के लिए कम से कम एक बंद सड़कों वाले दिन की दर्ज बारिश से जाँच चलाएँ।',
@@ -83,40 +83,20 @@ document.addEventListener('change',e=>{if(e.target.id==='sh-use'){st.share=e.tar
 window.addEventListener('online',()=>{if(st.share)shStart();});
 if(/^https?:/.test(location.protocol)||window.__shTest)setTimeout(shStart,800);
 
-/* ---------- incident history from the NASA Global Landslide Catalog (COOLR events, ArcGIS service, open data) ---------- */
-const COOLR='https://gis.earthdata.nasa.gov/gis05/rest/services/Landslides/COOLR_Events_Points/FeatureServer/0/query';
-const HIST_KM=3,histClass=n=>n===0?0:n===1?1:n<=3?2:n<=6?3:n<=10?4:5;
+/* ---------- incident history: distance from a catalogue event to a road line (km) ---------- */
 function distToLine(lat,lon,g){
   const kx=111.32*Math.cos(lat*Math.PI/180),ky=110.57;let best=1e9;
   for(let i=1;i<g.length;i++){const ax=(g[i-1][1]-lon)*kx,ay=(g[i-1][0]-lat)*ky,bx=(g[i][1]-lon)*kx,by=(g[i][0]-lat)*ky;
     const dx=bx-ax,dy=by-ay,L2=dx*dx+dy*dy,u=L2?Math.max(0,Math.min(1,-(ax*dx+ay*dy)/L2)):0,x=ax+u*dx,y=ay+u*dy;best=Math.min(best,Math.hypot(x,y));}
   return best;
 }
-async function buildHist(prog){
-  const pts=[];let off=0;
-  for(let page=0;page<30;page++){
-    prog(pts.length,'…');
-    const q=new URLSearchParams({where:'1=1',geometry:'77.4,28.9,80.9,31.3',geometryType:'esriGeometryEnvelope',inSR:'4326',spatialRel:'esriSpatialRelIntersects',outFields:'*',outSR:'4326',returnGeometry:'true',f:'json',resultOffset:String(off),resultRecordCount:'1000'});
-    const res=await fetch(COOLR+'?'+q.toString());if(!res.ok)throw new Error('NASA catalog '+res.status);
-    const js=await res.json();if(js.error)throw new Error('NASA catalog: '+(js.error.message||'error'));
-    (js.features||[]).forEach(f=>{const g=f.geometry||{},a=f.attributes||{};if(typeof g.x!=='number'||typeof g.y!=='number')return;
-      const d=a.event_date||a.ev_date||a.date||null,yr=typeof d==='number'?new Date(d).getUTCFullYear():(String(d||'').match(/\d{4}/)||[''])[0];
-      pts.push([+g.y.toFixed(4),+g.x.toFixed(4),yr?+yr:null]);});
-    if(!js.exceededTransferLimit||!(js.features||[]).length)break;off+=js.features.length;
-  }
-  OD.events=pts;
-  EDGES.filter(e=>!e.plain&&!e.virtual).forEach(e=>{const g=geomOf(e);const n=pts.filter(p=>distToLine(p[0],p[1],g)<=HIST_KM).length;OD.hist[e.id]={n,cls:histClass(n)};});
-  OD.meta.hist={at:new Date().toISOString(),source:'NASA COOLR / Global Landslide Catalog events (gis.earthdata.nasa.gov)',method:'events within '+HIST_KM+' km of the road; 0, 1, 2 to 3, 4 to 6, 7 to 10, more than 10 map to classes 0 to 5',points:pts.length};
-  saveOD();prog(pts.length,pts.length);
-}
-
 /* ---------- threshold sensitivity from the stored recorded-rain replays ---------- */
 const TN_K=[.4,.5,.6,.7,.8,.9,1,1.1,1.2,1.3,1.4,1.5,1.6];
 let tnCache=null;
 function tuneData(){
   const runs=GT.events.map(ev=>({ev,rec:RP.series[ev.id+'/archive']})).filter(x=>x.rec);
   if(!runs.some(x=>!x.ev.control))return null;
-  const key=runs.map(x=>x.ev.id).join(',')+'|'+st.useOD;
+  const key=runs.map(x=>x.ev.id).join(',')+'|'+st.useOD+'|'+odVer;
   if(tnCache&&tnCache.key===key)return tnCache;
   const rows=TN_K.map(k=>{THR=k;let hit=0,named=0,un=0,unN=0,fa=0,faN=0;
     runs.forEach(({ev,rec})=>{const r=scoreDay(ev.date,rec),m=rpMetrics(ev,r);if(ev.control){fa+=m.avoidTotal;faN+=m.links;}else{hit+=m.hit;named+=m.named;un+=m.avoidUnnamed;unN+=m.links-m.named;}});

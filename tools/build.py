@@ -23,6 +23,11 @@ def inj(tag,obj,default):
 inj('/*__BASEMAP__*/',json.load(open(os.path.join(R,'tools/basemap.json'))),'{rivers:[],roads:[],borders:[],lakes:[]}')
 inj('/*__GT__*/',gt,'{events:[]}')
 inj('/*__OPEN_DATA__*/',od,'null')
+# NASA Global Landslide Catalog subset (data/nasa_glc_uttarakhand_bbox.json): Indian events located to 10 km or better
+ACC={'exact':0,'1km':1,'5km':5,'10km':10}
+glc=[[e['la'],e['lo'],ACC[e['acc']],int(e['d'][:4]) if e['d'] else None,int(e['f']) if (e['f'] or '').isdigit() else 0]
+     for e in json.load(open(os.path.join(R,'data/nasa_glc_uttarakhand_bbox.json'),encoding='utf-8')) if e['acc'] in ACC and e['cc']=='IN']
+inj('/*__GLC__*/',glc,'null')
 inj('/*__REPLAY_BAKED__*/',{'results':rp['results'],'series':{k:v for k,v in rp.get('series',{}).items() if k.endswith('/archive')}} if rp else None,'null')
 sub('/*__FEATURES_JS__*/',feat)
 os.makedirs(os.path.join(R,'dist/site'),exist_ok=True)

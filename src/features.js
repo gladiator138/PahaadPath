@@ -37,8 +37,8 @@ const TX={
   // open data
   od_t:'Replace demo values with open data',od_s:'Runs in this browser. Road distance and shape come from OSRM on OpenStreetMap data. Terrain slope beside each hill road comes from the Copernicus 90 m elevation model through the Open-Meteo elevation API. Results stay on this device.',
   od_roads:'Fetch road distances and shapes',od_slope:'Compute terrain slope',od_use:'Use open data in the engine',od_exp:'Save open data file',od_imp:'Load open data file',od_clear:'Forget open data',
-  od_st:'Roads: {r} of {n} fetched ({b} flagged). Slope: {s} of {h} hill stretches.',od_busy:'Working: {i} of {n}…',pr_learn:'What the 26 Oct 2026 run showed',pr_l1:'Dry control days: no stretch reached Avoid on either day, with recorded rain or with forecasts.',pr_l2:'9 Jul 2026 on recorded rain with DEM slope: 3 of the 4 closed stretches were Caution or worse and 1 was Avoid. 4 other stretches were also Avoid.',pr_l3:'Forecasts issued 1 or 2 days before saw far less rain than fell. At most 1 closed stretch reached Caution. Forecast rain is the weak link.',pr_l4:'20 Aug 2025: no closed stretch was caught. Rain in the 3 days before was modest (at most 44 mm on a closed stretch) and the roads were still blocked by debris from earlier storms (the Dharali flood was on 5 Aug). A rain trigger cannot see old debris, which is why shared road reports matter.',pr_wait:'Free weather API limit reached. Waiting a minute, then going on…',od_wait:'Free API limit reached. Waiting a minute, then going on ({i} of {n})…',od_err:'Stopped: {e}',
-  od_tbl:'Stretch,Hand km,OSRM km,Check,Demo slope,DEM slope (75th pct),New class,Demo incidents,NASA landslides within 3 km → class',
+  od_st:'Roads: {r} of {n} fetched ({b} flagged). Slope: {s} of {h} hill stretches.',od_busy:'Working: {i} of {n}…',pr_learn:'What the 26 Oct 2026 run showed',pr_l1:'Dry control days: no stretch reached Avoid on either day, with recorded rain or with forecasts.',pr_l2:'9 Jul 2026 on recorded rain with open data (DEM slope, NASA incident history): 3 of the 4 closed stretches were Caution or worse and 1 was Avoid. 3 other stretches were also Avoid.',pr_l3:'Forecasts issued 1 or 2 days before saw far less rain than fell. At most 1 closed stretch reached Caution. Forecast rain is the weak link.',pr_l4:'20 Aug 2025: no closed stretch was caught. Rain in the 3 days before was modest (at most 44 mm on a closed stretch) and the roads were still blocked by debris from earlier storms (the Dharali flood was on 5 Aug). A rain trigger cannot see old debris, which is why shared road reports matter.',pr_wait:'Free weather API limit reached. Waiting a minute, then going on…',od_wait:'Free API limit reached. Waiting a minute, then going on ({i} of {n})…',od_err:'Stopped: {e}',
+  od_tbl:'Stretch,Hand km,OSRM km,Check,Demo slope,DEM slope (75th pct),New class,Demo incidents,NASA landslides near the road 2007 to 2017 → class',
   od_flag:'differs a lot, kept hand value',od_ok:'ok',
   // safety
   sf_t:'Safety kit',sf_help:'Helplines',sf_112:'Emergency: police, fire, ambulance, disaster',sf_1070:'Uttarakhand State Emergency Operation Centre',sf_1077:'District Emergency Operation Centre (add the district code from outside)',sf_1364:'Tourist Care Uttarakhand, yatra helpline',
@@ -51,7 +51,7 @@ const TX={
   ask_ph:'Type or say your trip, for example: Delhi to Kedarnath tomorrow 6 am',ask_mic:'Speak your trip',ask_ok:'Understood: {x}',ask_no:'Could not find two places. Try: Delhi to Mussoorie on Saturday.',ask_listen:'Listening…',
   // footer
   ft_data:'Data in this copy',ft_km_h:'road distances hand-entered',ft_km_o:'{n} road distances from OSRM (OpenStreetMap)',ft_sl_d:'slope classes are demo values',ft_sl_o:'{n} slope classes from the Copernicus DEM',ft_hist:'incident history is a demo value',
-  ft_cred:'Open data and code: OpenStreetMap contributors (ODbL), OSRM, Open-Meteo (CC BY 4.0), Copernicus GLO-90 DEM, Natural Earth (public domain), Leaflet (BSD 2-Clause), qrcode-generator (MIT).'
+  ft_cred:'Open data and code: OpenStreetMap contributors (ODbL), OSRM, Open-Meteo (CC BY 4.0), Copernicus GLO-90 DEM, NASA Global Landslide Catalog, Natural Earth (public domain), Leaflet (BSD 2-Clause), qrcode-generator (MIT).'
  },
  hi:{v_trip:'यात्रा',v_ops:'कंट्रोल रूम',v_proof:'जाँच',
   s_rp:'दर्ज बारिश, {d} (असली)',m_rp:'{d} की दर्ज बारिश दोबारा चल रही है · असली मौसम, बीता दिन',m_rpfail:'दर्ज बारिश नहीं मिल सकी (ऑफ़लाइन और सहेजी नहीं)। नकली मौसम दिखा रहे हैं।',cf_rp:'बीते दिन की दर्ज बारिश, पूर्वानुमान नहीं',
@@ -87,8 +87,8 @@ const TX={
   pr_src_l:'बंद सड़कों का स्रोत',
   od_t:'नमूना मानों की जगह खुला डेटा',od_s:'इसी ब्राउज़र में चलता है। सड़क की दूरी और आकार OpenStreetMap डेटा पर OSRM से। हर पहाड़ी सड़क के आसपास की ढलान Copernicus 90 मीटर ऊँचाई मॉडल से, Open-Meteo elevation API के ज़रिए। नतीजे इसी डिवाइस पर रहते हैं।',
   od_roads:'सड़क की दूरी और आकार लाएँ',od_slope:'ढलान निकालें',od_use:'इंजन में खुला डेटा इस्तेमाल करें',od_exp:'खुले डेटा की फ़ाइल सहेजें',od_imp:'खुले डेटा की फ़ाइल लोड करें',od_clear:'खुला डेटा हटाएँ',
-  od_st:'सड़कें: {n} में से {r} मिलीं ({b} संदिग्ध)। ढलान: {h} में से {s} पहाड़ी हिस्से।',od_busy:'चल रहा है: {n} में से {i}…',pr_learn:'26 अक्टूबर 2026 की जाँच में क्या दिखा',pr_l1:'सूखे नियंत्रण दिन: किसी भी दिन कोई हिस्सा टालें तक नहीं पहुँचा, न दर्ज बारिश से न पूर्वानुमान से।',pr_l2:'9 जुलाई 2026, दर्ज बारिश और DEM ढलान के साथ: बंद 4 में से 3 हिस्से सावधानी या उससे ऊपर थे और 1 टालें था। 4 और हिस्से भी टालें थे।',pr_l3:'1 या 2 दिन पहले के पूर्वानुमान में असल से बहुत कम बारिश थी। ज़्यादा से ज़्यादा 1 बंद हिस्सा सावधानी तक पहुँचा। पूर्वानुमान की बारिश सबसे कमज़ोर कड़ी है।',pr_l4:'20 अगस्त 2025: कोई बंद हिस्सा नहीं पकड़ा गया। पिछले 3 दिनों की बारिश कम थी (किसी बंद हिस्से पर ज़्यादा से ज़्यादा 44 मिमी) और सड़कें पहले के तूफ़ानों के मलबे से बंद थीं (धराली की बाढ़ 5 अगस्त को आई थी)। बारिश का पैमाना पुराना मलबा नहीं देख सकता, इसीलिए साझा सड़क रिपोर्ट ज़रूरी हैं।',pr_wait:'मुफ़्त मौसम API की सीमा पूरी हुई। एक मिनट रुककर आगे बढ़ेंगे…',od_wait:'मुफ़्त API की सीमा पूरी हुई। एक मिनट रुककर आगे बढ़ेंगे ({n} में से {i})…',od_err:'रुका: {e}',
-  od_tbl:'हिस्सा,हाथ से किमी,OSRM किमी,जाँच,नमूना ढलान,DEM ढलान (75वाँ प्रतिशतक),नया वर्ग,नमूना घटनाएँ,3 किमी में NASA भूस्खलन → वर्ग',
+  od_st:'सड़कें: {n} में से {r} मिलीं ({b} संदिग्ध)। ढलान: {h} में से {s} पहाड़ी हिस्से।',od_busy:'चल रहा है: {n} में से {i}…',pr_learn:'26 अक्टूबर 2026 की जाँच में क्या दिखा',pr_l1:'सूखे नियंत्रण दिन: किसी भी दिन कोई हिस्सा टालें तक नहीं पहुँचा, न दर्ज बारिश से न पूर्वानुमान से।',pr_l2:'9 जुलाई 2026, दर्ज बारिश और खुले डेटा (DEM ढलान, NASA घटना इतिहास) के साथ: बंद 4 में से 3 हिस्से सावधानी या उससे ऊपर थे और 1 टालें था। 3 और हिस्से भी टालें थे।',pr_l3:'1 या 2 दिन पहले के पूर्वानुमान में असल से बहुत कम बारिश थी। ज़्यादा से ज़्यादा 1 बंद हिस्सा सावधानी तक पहुँचा। पूर्वानुमान की बारिश सबसे कमज़ोर कड़ी है।',pr_l4:'20 अगस्त 2025: कोई बंद हिस्सा नहीं पकड़ा गया। पिछले 3 दिनों की बारिश कम थी (किसी बंद हिस्से पर ज़्यादा से ज़्यादा 44 मिमी) और सड़कें पहले के तूफ़ानों के मलबे से बंद थीं (धराली की बाढ़ 5 अगस्त को आई थी)। बारिश का पैमाना पुराना मलबा नहीं देख सकता, इसीलिए साझा सड़क रिपोर्ट ज़रूरी हैं।',pr_wait:'मुफ़्त मौसम API की सीमा पूरी हुई। एक मिनट रुककर आगे बढ़ेंगे…',od_wait:'मुफ़्त API की सीमा पूरी हुई। एक मिनट रुककर आगे बढ़ेंगे ({n} में से {i})…',od_err:'रुका: {e}',
+  od_tbl:'हिस्सा,हाथ से किमी,OSRM किमी,जाँच,नमूना ढलान,DEM ढलान (75वाँ प्रतिशतक),नया वर्ग,नमूना घटनाएँ,सड़क के पास NASA भूस्खलन 2007 से 2017 → वर्ग',
   od_flag:'बहुत अलग, हाथ वाला मान रखा',od_ok:'ठीक',
   sf_t:'सुरक्षा किट',sf_help:'हेल्पलाइन',sf_112:'आपातकाल: पुलिस, फ़ायर, एंबुलेंस, आपदा',sf_1070:'उत्तराखंड राज्य आपातकालीन संचालन केंद्र',sf_1077:'ज़िला आपातकालीन संचालन केंद्र (ज़िले के बाहर से ज़िले का कोड लगाएँ)',sf_1364:'टूरिस्ट केयर उत्तराखंड, यात्रा हेल्पलाइन',
   sf_src:'नंबर उत्तराखंड आपदा प्रबंधन प्राधिकरण की साइट और टूरिस्ट केयर उत्तराखंड पोर्टल से। यात्रा से पहले जाँच लें।',
@@ -98,7 +98,7 @@ const TX={
   sf_tipnote:'आम सुरक्षा सलाह, सरकारी निर्देश नहीं।',
   ask_ph:'अपनी यात्रा लिखें या बोलें, जैसे: दिल्ली से केदारनाथ कल सुबह 6 बजे',ask_mic:'यात्रा बोलें',ask_ok:'समझ गए: {x}',ask_no:'दो जगहें नहीं मिलीं। ऐसे बोलें: दिल्ली से मसूरी शनिवार को।',ask_listen:'सुन रहे हैं…',
   ft_data:'इस कॉपी का डेटा',ft_km_h:'सड़क की दूरियाँ हाथ से दर्ज',ft_km_o:'{n} सड़कों की दूरी OSRM (OpenStreetMap) से',ft_sl_d:'ढलान वर्ग नमूना मान हैं',ft_sl_o:'{n} ढलान वर्ग Copernicus DEM से',ft_hist:'पुरानी घटनाओं के मान नमूने हैं',
-  ft_cred:'खुला डेटा और कोड: OpenStreetMap योगदानकर्ता (ODbL), OSRM, Open-Meteo (CC BY 4.0), Copernicus GLO-90 DEM, Natural Earth (सार्वजनिक), Leaflet (BSD 2-Clause), qrcode-generator (MIT)।'
+  ft_cred:'खुला डेटा और कोड: OpenStreetMap योगदानकर्ता (ODbL), OSRM, Open-Meteo (CC BY 4.0), Copernicus GLO-90 DEM, NASA Global Landslide Catalog, Natural Earth (सार्वजनिक), Leaflet (BSD 2-Clause), qrcode-generator (MIT)।'
  }
 };
 Object.assign(T.en,TX.en);Object.assign(T.hi,TX.hi);
@@ -117,16 +117,31 @@ const segName=e=>pname(e.a)+' → '+pname(e.b);
 
 /* ---------- open data: real road km and shape (OSRM) and terrain slope (Copernicus DEM) ---------- */
 const OD_BAKED=/*__OPEN_DATA__*/null;
+/* NASA Global Landslide Catalog (2007 to 2017), events in and around Uttarakhand located to 10 km or better: [lat, lon, accuracy km, year, deaths] */
+const GLC=/*__GLC__*/null;
+/* Slope class from the 75th percentile side slope. Cut-offs near the terciles of the 44 hill stretches (30.7 and 36.9 degrees on the 26 Oct run),
+   rounded to 31 and 37, give classes of 15, 16 and 13 stretches. The earlier 22 and 30 put 32 of 44 in the top class, so slope stopped telling roads apart. */
+const SL_CUT=[31,37],slopeClass=d=>d<SL_CUT[0]?1:d<SL_CUT[1]?2:3;
+const HIST_KM=3,histClass=n=>n===0?0:n===1?1:n<=3?2:n<=6?3:n<=10?4:5;
+let odVer=0;
 EDGES.forEach(e=>{e.km0=e.km;e.susc0=e.susc;e.hist0=e.hist;});
 let OD=lsGet('pp_od',null)||OD_BAKED||{km:{},geom:{},slope:{},meta:{}};
 ['km','geom','slope','meta','hist'].forEach(k=>{OD[k]=OD[k]||{};});
 st.useOD=lsGet('pp_od_use',true);
+/* incident history: an event counts for a stretch when the road passes within its location accuracy (at least 3 km) */
+function catalogHist(){
+  if(!GLC)return;
+  OD.events=GLC;OD.hist={};
+  EDGES.filter(e=>!e.plain&&!e.virtual).forEach(e=>{const g=geomOf(e);const n=GLC.filter(p=>distToLine(p[0],p[1],g)<=Math.max(HIST_KM,p[2])).length;OD.hist[e.id]={n,cls:histClass(n)};});
+  OD.meta.hist={source:'NASA Global Landslide Catalog export (data.nasa.gov, open data), events 2007 to 2017',method:'events located to 10 km or better whose accuracy circle (at least 3 km) reaches the road; 0, 1, 2 to 3, 4 to 6, 7 to 10, more than 10 map to classes 0 to 5',points:GLC.length};
+}
 function applyOpenData(){
+  catalogHist();odVer++;
   EDGES.forEach(e=>{
     const k=st.useOD&&OD.km[e.id];
     e.km=k&&k.ok?Math.round(k.km):e.km0;e.h0=e.km/e.v;e.kmSrc=k&&k.ok?'osrm':'hand';
     const sl=st.useOD&&!e.plain&&OD.slope[e.id];
-    if(!e.plain){e.susc=sl?sl.cls:e.susc0;e.slSrc=sl?'dem':'demo';const hh=st.useOD&&OD.hist[e.id];e.hist=hh?hh.cls:e.hist0;e.hiSrc=hh?'nasa':'demo';}
+    if(!e.plain){e.susc=sl?slopeClass(sl.p75):e.susc0;e.slSrc=sl?'dem':'demo';const hh=st.useOD&&OD.hist[e.id];e.hist=hh?hh.cls:e.hist0;e.hiSrc=hh?'nasa':'demo';}
   });
   deriveOffsets();
 }
@@ -173,12 +188,12 @@ async function buildRoads(prog){
 }
 /* Terrain slope beside the road: at 16 points along each hill stretch, elevation on the road and 180 m to either side.
    Slope = steeper of the two side gradients. The 75th percentile over the stretch sets the class:
-   under 22 degrees = 1, 22 to 30 = 2, 30 or more = 3. Thresholds are provisional, to be calibrated against GSI maps. */
+   The class comes from SL_CUT above. */
 /* Open-Meteo's free tier counts each location as a call (600 a minute): on 429, wait out the minute and retry */
 async function omFetch(url,onWait){
   for(let tries=0;;tries++){const res=await fetch(url);if(res.status!==429||tries>=4)return res;if(onWait)onWait();await sleep(65000);}
 }
-const SL_D=180,SL_N=16,slopeClass=d=>d<22?1:d<30?2:3;
+const SL_D=180,SL_N=16;
 async function buildSlope(prog){
   const hill=EDGES.filter(e=>!e.plain&&!e.virtual),pts=[];
   hill.forEach(e=>{const g=geomOf(e);for(let k=0;k<SL_N;k++){
@@ -472,19 +487,19 @@ function odCard(){
   const hill=EDGES.filter(e=>!e.virtual&&(OD.km[e.id]||OD.slope[e.id]||OD.hist[e.id]));
   const cols=t('od_tbl').split(',');
   return '<div class="card"><h3>'+t('od_t')+'</h3><p class="sub">'+t('od_s')+'</p>'
-    +'<div class="acts in"><button class="btn pri" id="od-roads" type="button"'+(odBusy?' disabled':'')+'>'+t('od_roads')+'</button><button class="btn pri" id="od-slope" type="button"'+(odBusy?' disabled':'')+'>'+t('od_slope')+'</button>'+(window.__histTest?'<button class="btn pri" id="od-hist" type="button"'+(odBusy?' disabled':'')+'>'+t('od_hist')+'</button>':'')
+    +'<div class="acts in"><button class="btn pri" id="od-roads" type="button"'+(odBusy?' disabled':'')+'>'+t('od_roads')+'</button><button class="btn pri" id="od-slope" type="button"'+(odBusy?' disabled':'')+'>'+t('od_slope')+'</button>'
     +'<label class="chk"><input type="checkbox" id="od-use"'+(st.useOD?' checked':'')+'> '+t('od_use')+'</label></div>'
     +'<div class="acts in"><button class="btn" id="od-exp" type="button">'+t('od_exp')+'</button><button class="btn" id="od-imp" type="button">'+t('od_imp')+'</button><button class="btn" id="od-clear" type="button">'+t('od_clear')+'</button></div>'
-    +'<p class="note" id="od-msg">'+esc(odBusy||fill(t('od_st'),c)+' '+(Object.keys(OD.hist).length?fill(t('od_st_h'),c):t('od_hist_off')))+'</p>'
+    +'<p class="note" id="od-msg">'+esc(odBusy||fill(t('od_st'),c)+' '+fill(t('od_st_h'),c))+'</p>'
     +(hill.length?'<div class="wrap"><table class="tb"><tr>'+cols.map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr>'+hill.map(e=>{const k=OD.km[e.id],s=OD.slope[e.id];
-      return '<tr><td>'+esc(segName(e))+'</td><td>'+e.km0+'</td><td>'+(k?k.km:'')+'</td><td>'+(k?(k.ok?t('od_ok'):t('od_flag')):'')+'</td><td>'+(e.plain?'':e.susc0)+'</td><td>'+(s?s.p75+'°':'')+'</td><td>'+(s?s.cls:'')+'</td><td>'+(e.plain?'':e.hist0)+'</td><td>'+(OD.hist[e.id]?OD.hist[e.id].n+' → '+OD.hist[e.id].cls:'')+'</td></tr>';}).join('')+'</table></div>':'')
+      return '<tr><td>'+esc(segName(e))+'</td><td>'+e.km0+'</td><td>'+(k?k.km:'')+'</td><td>'+(k?(k.ok?t('od_ok'):t('od_flag')):'')+'</td><td>'+(e.plain?'':e.susc0)+'</td><td>'+(s?s.p75+'°':'')+'</td><td>'+(s?slopeClass(s.p75):'')+'</td><td>'+(e.plain?'':e.hist0)+'</td><td>'+(OD.hist[e.id]?OD.hist[e.id].n+' → '+OD.hist[e.id].cls:'')+'</td></tr>';}).join('')+'</table></div>':'')
     +'</div>';
 }
 async function odRun(kind){
   if(odBusy)return;
   const msg=x=>{odBusy=x;const m=$('od-msg');if(m)m.textContent=x;};
   try{msg(fill(t('od_busy'),{i:0,n:'…'}));renderProof();
-    await (kind==='roads'?buildRoads:kind==='hist'?buildHist:buildSlope)((i,n,w)=>msg(fill(t(w?'od_wait':'od_busy'),{i,n})));
+    await (kind==='roads'?buildRoads:buildSlope)((i,n,w)=>msg(fill(t(w?'od_wait':'od_busy'),{i,n})));
     odBusy=null;applyOpenData();opsCache=null;toast(fill(t('od_st'),odCounts()));
   }catch(e){odBusy=null;toast(fill(t('od_err'),{e:String(e.message||e)}));}
   applyOpenData();renderProof();
@@ -602,7 +617,7 @@ document.addEventListener('change',e=>{
   if(e.target.id==='od-use'){st.useOD=e.target.checked;lsSet('pp_od_use',st.useOD);applyOpenData();opsCache=null;render();}
 });
 document.addEventListener('click',e=>{
-  const c=e.target.closest('#od-hist,[data-view],[data-tiles],[data-oh],[data-oz],[data-rp],[data-rpplan],#ops-play,#adv-copy,#adv-wa,#pr-run,#pr-all,#pr-dl,#pr-ul,#od-roads,#od-slope,#od-exp,#od-imp,#od-clear,#a-sos,#a-qr,#a-copyl');if(!c)return;
+  const c=e.target.closest('[data-view],[data-tiles],[data-oh],[data-oz],[data-rp],[data-rpplan],#ops-play,#adv-copy,#adv-wa,#pr-run,#pr-all,#pr-dl,#pr-ul,#od-roads,#od-slope,#od-exp,#od-imp,#od-clear,#a-sos,#a-qr,#a-copyl');if(!c)return;
   if(c.dataset.view){st.view=c.dataset.view;render();window.scrollTo(0,0);}
   else if(c.dataset.tiles){st.tiles=c.dataset.tiles==='1';render();}
   else if(c.dataset.oh!=null){stopPlay();opsHour(+c.dataset.oh);}
@@ -620,7 +635,6 @@ document.addEventListener('click',e=>{
   else if(c.id==='pr-ul')pickFile(js=>{if(!js.results)throw new Error('no results in file');Object.assign(RP.results,js.results);Object.assign(RP.series,js.series||{});rpSel=Object.keys(js.results)[0];saveRP();renderProof();});
   else if(c.id==='od-roads')odRun('roads');
   else if(c.id==='od-slope')odRun('slope');
-  else if(c.id==='od-hist')odRun('hist');
   else if(c.id==='od-exp')download('pahaadpath_open_data.json',OD);
   else if(c.id==='od-imp')pickFile(js=>{if(!js.km)throw new Error('not an open data file');OD=js;['km','geom','slope','meta','hist'].forEach(k=>{OD[k]=OD[k]||{};});saveOD();applyOpenData();opsCache=null;renderProof();});
   else if(c.id==='od-clear'){OD={km:{},geom:{},slope:{},meta:{},hist:{}};saveOD();applyOpenData();opsCache=null;renderProof();}

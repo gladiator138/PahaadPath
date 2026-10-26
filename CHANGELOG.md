@@ -38,3 +38,9 @@ Dates are when the work was done. Kept so judges can see what existed before the
   - 20 Aug 2025: none caught; roads were blocked by debris from earlier storms.
 - NASA landslide catalog switched off: its services stopped answering after NASA's 2025 portal move. Incident counts stay demo values.
 - Elevation and weather calls now wait and retry when the free API limit is hit. Offline cache always fetches the new page on an update.
+
+## 26 Oct 2026 (v4.3): incident history and slope classes fixed
+- Incident history is real again: NASA's Global Landslide Catalog export (11,033 events, 2007 to 2017) was read from its legacy copy on data.nasa.gov. The 124 events in Uttarakhand located to 10 km or better are built into the app. An event counts for a stretch when the road passes within its location accuracy (at least 3 km). Highest: Uttarkashi to Bhatwari on the Gangotri road with 15 events. Catalogue points show on the control room map.
+- Slope classes recalibrated: cut-offs at 31 and 37 degrees, near the terciles of the 44 hill stretches, give 15, 16 and 13 stretches per class instead of 32 in the top class.
+- Replay re-scored with both changes from the rain recorded in the live run (the offline re-score reproduces the live demo-data rows exactly). 9 Jul 2026 on recorded rain: 3 of 4 closed stretches Caution or worse, 1 Avoid, 3 other stretches Avoid. 20 Aug 2025 still 0 of 5. Dry control days still no Avoid.
+- The footer no longer calls slope and incident values placeholders; its data line says what each copy uses.
