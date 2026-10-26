@@ -3,3 +3,8 @@ dist/
 node_modules/
 *.tgz
 __pycache__/
+data/cache/
+android/app/src/main/assets/
+android/.gradle/
+android/app/build/
+android/build/

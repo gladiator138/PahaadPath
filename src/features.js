@@ -239,7 +239,7 @@ const rpLabel=d=>{const i=parseDate(d),x=new Date(i*864e5);return x.getUTCDate()
 function footHtml(){
   const c=odCounts();
   const data=[c.kmUsed?fill(t('ft_km_o'),{n:c.kmUsed}):t('ft_km_h'),c.slUsed?fill(t('ft_sl_o'),{n:c.slUsed}):t('ft_sl_d'),c.hiUsed?fill(t('ft_hist_o'),{n:c.hiUsed}):t('ft_hist')].join(' · ');
-  return t('foot')+'<br><br><b>'+t('ft_data')+':</b> '+esc(data)+'<br>'+esc(t('ft_cred'))+'<br><br>PahaadPath · SAARTHI’26';
+  return engineHtml()+shareAppHtml()+t('foot')+'<br><br><b>'+t('ft_data')+':</b> '+esc(data)+'<br>'+esc(t('ft_cred'))+'<br><br>PahaadPath · SAARTHI’26';
 }
 
 /* ---------- Leaflet helpers ---------- */
@@ -421,6 +421,7 @@ function seriesFrom(rec,hour0){
 }
 function scoreDay(date,rec){
   const nowMs=Date.parse(date+'T00:00:00+05:30'),c={series:seriesFrom(rec,nowMs),reports:[],nowMs,hour0:nowMs};
+  const rd=RP_DAILY&&RP_DAILY[date];if(rd&&modelOn()){const o={};EDGES.forEach(e=>{o[e.id]=rd.by[locKey(e)]||null;});c.daily=o;c.dday0=parseDate(rd.start);}
   return EDGES.filter(e=>!e.plain&&!e.virtual).map(e=>{let best=null;for(let a=0;a<=23;a++){const r=segScore(e,a,c);if(!best||r.score>best.score)best=Object.assign({hour:a},r);}
     return{id:e.id,score:best.score,band:lvl(best.score),hour:best.hour,P6:+best.P6.toFixed(1),P24:+best.P24.toFixed(1),P72:+best.P72.toFixed(1),ratio:+best.ratio.toFixed(2),susc:e.susc,slSrc:e.slSrc};});
 }
@@ -434,8 +435,8 @@ async function rpRun(ev,src){
   const rec=await fetchRain(ev.date,src);
   RP.series[ev.id+'/'+src]={start:rec.start,by:rec.by};
   const rows=scoreDay(ev.date,rec),c=odCounts();
-  const res={event:ev.id,date:ev.date,source:src,nulls:rec.nulls,total:rec.total,rows,metrics:rpMetrics(ev,rows),slope:c.slUsed?'dem':'demo',hist:c.hiUsed?'nasa':'demo',km:c.kmUsed?'osrm':'hand',ranAt:new Date().toISOString(),url:rec.url};
-  const rk=ev.id+'/'+src+'/'+res.slope+(res.hist==='nasa'?'+nasa':'');RP.results[rk]=res;rpSel=rk;saveRP();return res;
+  const res={event:ev.id,date:ev.date,source:src,nulls:rec.nulls,total:rec.total,rows,metrics:rpMetrics(ev,rows),slope:c.slUsed?'dem':'demo',hist:c.hiUsed?'nasa':'demo',km:c.kmUsed?'osrm':'hand',engine:st.engine,ranAt:new Date().toISOString(),url:rec.url};
+  const rk=ev.id+'/'+src+'/'+res.slope+(res.hist==='nasa'?'+nasa':'')+(st.engine==='v5'?'/v5':'');RP.results[rk]=res;rpSel=rk;saveRP();return res;
 }
 /* weather for the trip planner on a recorded day: 06:00 IST on that day is "now" */
 async function loadReplayWeather(date){
@@ -460,7 +461,7 @@ function renderProof(){
   else{
     h+='<div class="card"><h3>'+t('pr_board')+'</h3><div class="wrap"><table class="tb"><tr><th>'+t('pr_b_day')+'</th><th>'+t('pr_b_src')+'</th><th>'+t('pr_b_hit')+'</th><th>'+t('pr_b_cau')+'</th><th>'+t('pr_b_fa')+'</th><th>'+t('pr_b_sl')+'</th></tr>'
       +keys.map(k=>{const r=RP.results[k],e=evs.find(x=>x.id===r.event)||{label:r.event,control:false},m=r.metrics;
-        return '<tr class="'+(k===rpSel?'on':'')+'" data-rp="'+esc(k)+'"><td>'+esc(rpEvLabel(e))+'</td><td>'+t('pr_'+r.source)+'</td><td>'+(e.control?'':m.hit+' / '+m.named+' ('+pct(m.hitRate)+')')+'</td><td>'+(e.control?'':m.hitCaution+' / '+m.named)+'</td><td>'+(e.control?m.avoidTotal:m.avoidUnnamed)+' / '+(m.links-m.named)+'</td><td>'+(r.slope==='dem'?'DEM':'demo')+' · '+(r.hist==='nasa'?'NASA':'demo')+'</td></tr>';}).join('')+'</table></div></div>';
+        return '<tr class="'+(k===rpSel?'on':'')+'" data-rp="'+esc(k)+'"><td>'+esc(rpEvLabel(e))+'</td><td>'+t('pr_'+r.source)+'</td><td>'+(e.control?'':m.hit+' / '+m.named+' ('+pct(m.hitRate)+')')+'</td><td>'+(e.control?'':m.hitCaution+' / '+m.named)+'</td><td>'+(e.control?m.avoidTotal:m.avoidUnnamed)+' / '+(m.links-m.named)+'</td><td>'+(r.slope==='dem'?'DEM':'demo')+' · '+(r.hist==='nasa'?'NASA':'demo')+' · '+(r.engine==='v5'?'v5':'v4')+'</td></tr>';}).join('')+'</table></div></div>';
   }
   if(R&&ev){
     const m=R.metrics,closed={};ev.closures.forEach(c=>{(closed[c.link]=closed[c.link]||[]).push(c.place);});

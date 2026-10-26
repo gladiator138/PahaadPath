@@ -16,6 +16,19 @@ It runs on today's data. On opening it fetches the live hourly rain forecast for
 
 The repository root holds the built app (`index.html`, identical to `PahaadPath.html`) so GitHub Pages can serve it. CI rebuilds it from `src/` and checks the copies match.
 
+## Offline first (v5)
+
+PahaadPath is meant for people who are out of network most of the time.
+
+- **Install once, use offline:** open the live app and add it to the home screen, or install the Android APK (`https://github.com/gladiator138/PahaadPath/releases/latest/download/PahaadPath.apk`). Either works with no signal afterwards.
+- **Pass it on with no internet:** the footer button saves the whole app as one file (the APK itself inside the Android app) to send by WhatsApp, Bluetooth or a memory card.
+- **Small daily data:** every 3 hours CI publishes a data pack with rain for every road stretch (about 6 KB compressed). A phone needs only a moment of signal to fetch it, and then plans offline from it for days. The header always says how old the forecast is.
+- **Road reports** made with no signal wait on the phone and go out when the connection returns.
+
+## Python
+
+`python/` holds the data and model pipeline (standard library only): rain download, model training and checking against the v4 engine, the data pack, a control room advisory and an optional road report sync server. See `python/README.md` and the latest model check in `data/model/REPORT.md`.
+
 ## Build
 
 1. `npm install && npm run vendor` gets Playwright for the tests and the two libraries that are inlined so the app works offline.
@@ -26,10 +39,12 @@ The repository root holds the built app (`index.html`, identical to `PahaadPath.
 
 - `src/app.html`: the Stage 1 prototype (road graph, risk engine, traffic model, planner, trip screens) with hooks for v4.
 - `src/features.js`, `src/features2.js`, `src/features.css`: v4 views (control room, proof), Leaflet map, open data builder, safety tab, sentence and voice entry, QR.
+- `src/features3.js`: v5 data pack loader, offline forecast age, rain memory note, experimental trained model, share the app.
+- `android/`: Android wrapper (WebView, assets/index.html copied in by CI).
 - `replay_source/gt.json`: closures named in news reports for 20 Aug 2025 and 9 Jul 2026, mapped to road links, plus two dry control days.
 - `tools/basemap.json`: Natural Earth rivers, roads and Indian state lines clipped to the map area (made by `tools/clip_ne.py`).
 - `tests/`: `matrix.js` (connectivity and 240 random trips per scenario), `textaudit.js` (house style on 88 screens), `features.js` (proof, control room, open data and sentence entry with mocked web replies), `smoke.js` (screenshots).
-  `npm test` runs them all; `features2.js` covers shared reports between two simulated phones, NASA catalog history, threshold sensitivity and the road profile.
+  `npm test` runs them all; `features2.js` covers shared reports between two simulated phones, NASA catalog history, threshold sensitivity and the road profile; `features3.js` covers the data pack, offline age, report outbox, sharing the app and the model matching Python. `npm run test:py` runs the Python tests.
 
 ## Licences
 

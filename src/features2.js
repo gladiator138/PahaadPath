@@ -44,9 +44,27 @@ function sharedReports(){
     out.push({id:'sh_'+r.rid,rid:r.rid,seg:r.seg,spot:r.spot,type:r.type,ts:st.nowMs-(now-r.rt),conf:remote(r.rid),shared:true,mine:!!(SHR.conf[r.rid]||{})[DEV]});});
   return out;
 }
+/* reports wait in an outbox on the phone until there is signal, then go out in order (or in one request to a sync server) */
+const SYNC_URL=(new URLSearchParams(location.search).get('sync')||lsGet('pp_sync','')).replace(/\/$/,'');
+if(SYNC_URL)lsSet('pp_sync',SYNC_URL);
+let OUTBOX=lsGet('pp_outbox',[]);if(!Array.isArray(OUTBOX))OUTBOX=[];
+function saveOutbox(){OUTBOX=OUTBOX.filter(m=>Date.now()-m.rt<12*3600e3);lsSet('pp_outbox',OUTBOX);}
 async function shPost(m){
   if(!st.share)return;
-  try{await fetch(SH_URL,{method:'POST',body:JSON.stringify(Object.assign({v:1,dev:DEV,rt:Date.now()},m))});}catch(e){SHR.status='err';}
+  OUTBOX.push(Object.assign({v:1,dev:DEV,rt:Date.now()},m));saveOutbox();shFlush();
+}
+let flushing=false;
+async function shFlush(){
+  if(flushing||!OUTBOX.length||navigator.onLine===false)return;flushing=true;
+  try{
+    if(SYNC_URL){
+      const res=await fetch(SYNC_URL+'/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({msgs:OUTBOX})});
+      if(!res.ok)throw new Error(res.status);const js=await res.json();OUTBOX=[];saveOutbox();
+      let ch=false;(js.msgs||[]).forEach(m=>{if(shIngest(JSON.stringify(m)))ch=true;});SHR.status='on';if(ch)shChanged();
+    }else{
+      while(OUTBOX.length){const res=await fetch(SH_URL,{method:'POST',body:JSON.stringify(OUTBOX[0])});if(!res.ok)throw new Error(res.status);OUTBOX.shift();saveOutbox();}
+    }
+  }catch(e){SHR.status='err';}finally{flushing=false;}
 }
 function shareReport(r,kind){if(kind==='report')shPost({k:'report',rid:r.id,seg:r.seg,spot:r.spot,type:r.type});else shPost({k:'confirm',rid:r.id});}
 function confirmShared(r){const c=SHR.conf[r.rid]=SHR.conf[r.rid]||{};if(c[DEV])return;c[DEV]=1;shPost({k:'confirm',rid:r.rid});}
@@ -57,15 +75,17 @@ function shChanged(){
     if(st.view!=='proof')render();},600);
 }
 async function shPoll(){
-  try{const res=await fetch(SH_URL+'/json?poll=1&since=12h');if(!res.ok)throw new Error(res.status);
-    const txt=await res.text();let ch=false;txt.split('\n').forEach(l=>{if(!l.trim())return;try{const o=JSON.parse(l);if(o.event==='message'&&shIngest(o.message))ch=true;}catch(e){}});
+  try{shFlush();const res=await fetch(SYNC_URL?SYNC_URL+'/reports':SH_URL+'/json?poll=1&since=12h');if(!res.ok)throw new Error(res.status);
+    const txt=await res.text();let ch=false;
+    if(SYNC_URL)(JSON.parse(txt).msgs||[]).forEach(m=>{if(shIngest(JSON.stringify(m)))ch=true;});
+    else txt.split('\n').forEach(l=>{if(!l.trim())return;try{const o=JSON.parse(l);if(o.event==='message'&&shIngest(o.message))ch=true;}catch(e){}});
     SHR.status='on';if(ch)shChanged();else if(st.view==='trip'&&st.tab==='reports'){const b=$('sh-st');if(b)b.textContent=shStatusText();}
   }catch(e){SHR.status='err';}
 }
 function shStart(){
   shStop();if(!st.share||navigator.onLine===false)return;
   SHR.status='wait';shPoll();
-  try{SHR.es=new EventSource(SH_URL+'/sse');SHR.es.onmessage=e=>{try{const o=JSON.parse(e.data);if(o.event==='message'&&shIngest(o.message)){SHR.status='on';shChanged();}}catch(_){}};
+  if(!SYNC_URL)try{SHR.es=new EventSource(SH_URL+'/sse');SHR.es.onmessage=e=>{try{const o=JSON.parse(e.data);if(o.event==='message'&&shIngest(o.message)){SHR.status='on';shChanged();}}catch(_){}};
     SHR.es.onerror=()=>{};}catch(e){}
   SHR.poll=setInterval(()=>{if(!document.hidden)shPoll();},45000);
 }
@@ -73,7 +93,7 @@ function shStop(){if(SHR.es){try{SHR.es.close();}catch(e){}SHR.es=null;}if(SHR.p
 function shStatusText(){
   if(!st.share)return t('sh_off');
   const n=Object.values(SHR.reps).filter(r=>r.dev!==DEV&&Date.now()-r.rt<12*3600e3).length;
-  return SHR.status==='on'?fill(t('sh_on'),{n}):SHR.status==='err'?t('sh_err'):t('sh_wait');
+  return (SHR.status==='on'?fill(t('sh_on'),{n}):SHR.status==='err'?t('sh_err'):t('sh_wait'))+(OUTBOX.length?' · '+fill(t('ob_n'),{n:OUTBOX.length}):'');
 }
 function shareBox(){
   return '<div class="card shbox"><label class="chk"><input type="checkbox" id="sh-use"'+(st.share?' checked':'')+'> '+t('sh_t')+'</label>'
