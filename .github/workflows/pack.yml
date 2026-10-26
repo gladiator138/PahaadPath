@@ -6,7 +6,7 @@ on:
     - cron: '17 */3 * * *'
   workflow_dispatch:
   push:
-    paths: ['python/pahaadpath/pack.py', 'python/pahaadpath/openmeteo.py', '.github/workflows/pack.yml']
+    paths: ['python/pahaadpath/pack.py', 'python/pahaadpath/openmeteo.py', 'python/pahaadpath/network.py', '.github/workflows/pack.yml']
 permissions:
   contents: write
 concurrency:

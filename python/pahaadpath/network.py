@@ -1,5 +1,6 @@
 """Road network parsed from src/app.html, with open data (OSRM shape, DEM slope) and NASA catalog incident history."""
 import math
+from decimal import ROUND_HALF_UP, Decimal
 import re
 
 from . import path, read_json
@@ -43,9 +44,14 @@ def js_round(x):
     return math.floor(x + 0.5)
 
 
+def to_fixed2(x):
+    """JavaScript's x.toFixed(2): exact binary value, halves rounded up (Python's '%.2f' rounds some of them down)."""
+    return str(Decimal(x).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP))
+
+
 def loc_key(lat, lon):
     """Same key as locKey() in the app: the midpoint to 2 decimals, which is also the weather grid point."""
-    return '%.2f,%.2f' % (lat, lon)
+    return to_fixed2(lat) + ',' + to_fixed2(lon)
 
 
 class Network:
