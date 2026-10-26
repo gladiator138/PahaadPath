@@ -520,13 +520,15 @@ function simSeries(kind){
   return out;
 }
 const TYPEW={landslide:1,washed:1,bridge:1,debris:.7};
+/* how long a report keeps its weight: a slide or a washed-out road stays shut far longer than loose debris takes to clear */
+const TYPEH={landslide:24,washed:24,bridge:48,debris:8};
 function repWeight(list,segId,a,nowMs){
   const rs=list.filter(r=>r.seg===segId).sort((x,y)=>x.ts-y.ts);
   let w=0;const latestClear=rs.filter(r=>r.type==='clear').reduce((m,r)=>Math.max(m,r.ts),0);
   rs.forEach(r=>{
     if(r.type==='clear'||r.ts<latestClear)return;
     const age=(nowMs-r.ts)/3600e3+a;
-    const decay=Math.max(0,1-age/6);
+    const decay=Math.max(0,1-age/(TYPEH[r.type]||6));
     w+=(TYPEW[r.type]*.6+.2*Math.min(r.conf,3))*decay;
   });
   return Math.min(w,1);
@@ -543,7 +545,7 @@ function segScore(seg,a,c){ // a = arrival time, hours from start of current hou
   const rw=repWeight(c.reports,seg.id,a,c.nowMs);
   let score=Math.round(100*Math.min(1,base+.4*rw));
   const blocked=rw>=.9;if(blocked)score=Math.max(score,85);
-  return{score,ratio,P6,P24,P72,rw,blocked,mem:v5?v5.mem:0};
+  return{score,ratio,P6,P24,P72,rw,blocked,mem:v5?v5.mem:memNote(seg,a,c)};
 }
 const lvl=s=>s<35?0:s<65?1:2;
 const tlvl=c=>c<18?0:c<40?1:2;
@@ -1169,7 +1171,7 @@ function whyText(cur){
   if(w.blocked)return route+': '+t('blocked')+(st.lang==='hi'?'। '+nRep+' '+t('rep')+'।':'. '+nRep+' '+t(nRep===1?'rep1':'rep')+'.');
   const rp=nRep?(st.lang==='hi'?' '+t('rep')+': '+nRep+'।':' '+nRep+' '+t(nRep===1?'rep1':'rep')+'.'):'';
   const day=w.day>1?(st.lang==='hi'?' (दिन '+w.day+')':' (day '+w.day+')'):'';
-  const mem=w.mem?' '+fill(t('mem_note'),{n:w.mem}):''; // heavy rain in the last days: debris may still be on the road
+  const mem=w.mem?' '+fill(t('mem_note'),{w:memWhen(w.mem)}):''; // heavy rain in the last days: debris may still be on the road
   if(st.lang==='hi')return route+day+': '+rain+' '+t('mm24')+' ('+t('vs')+' '+lim+' मिमी)। '+t('slope')+': '+slope+'।'+rp+mem;
   return route+day+': '+rain+' '+t('mm24')+' '+t('vs')+' '+lim+' mm trigger. '+t('slope')+': '+slope+'.'+rp+mem;
 }

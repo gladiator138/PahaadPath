@@ -19,6 +19,17 @@ Set to flag as many ordinary days as v4 does at Caution (4%), v5 would catch 18%
 
 Set to flag as many ordinary days as v4 does at Avoid (1%), v5 would catch 3% of landslide days and v4 catches 8%.
 
+**Verdict: v5 does not catch more landslide days than v4 at the same alarm rate, so the app keeps v4 as its default and offers v5 only as an experiment.**
+
+Rain memory: a day whose own rain reaches Avoid keeps the stretch at Caution or worse for the next days (debris, wet slopes). Chosen by this check: 7 days.
+
+| Memory days | Landslide days at Caution or worse | Ordinary days at Caution or worse |
+|---|---|---|
+| 0 | 46% | 10% |
+| 3 | 46% | 11% |
+| 5 | 48% | 11% |
+| 7 | 50% | 12% |
+
 | Year | Landslide days | v5 Avoid | v5 Caution or worse | v4 Avoid | v4 Caution or worse |
 |---|---|---|---|---|---|
 | 2009 | 2 | 1 | 2 | 0 | 1 |
@@ -45,7 +56,8 @@ Daily rain here is ERA5 reanalysis, which smooths out short cloudbursts, so thes
 
 | | Go | Caution | Avoid |
 |---|---|---|---|
-| v5 | 93% | 6% | 1% |
+| v5 | 92% | 7% | 1% |
+| v5 without memory | 93% | 6% | 1% |
 | v4 | 99% | 1% | 0% |
 
 ## Weights (raw feature units)

@@ -48,3 +48,13 @@ Dates are when the work was done. Kept so judges can see what existed before the
 ## 26 Oct 2026 (v4.4): live by default
 - The app opens on the live Open-Meteo forecast instead of the demo heavy-rain days, and plans from today. Live forecast is first in the weather menu; demo weather is a fallback only when there is no connection and no saved forecast.
 - The live forecast refreshes every hour while the app is open and as soon as a dropped connection comes back.
+
+## 26 Oct 2026 (v5): Python pipeline and offline first distribution
+Goal from here on: real users in Uttarakhand who are out of network most of the time.
+- Python pipeline (`python/`, standard library only): reads the road network from the app, ports the v4 engine (reproduces the app's scores on all 176 replay rows), downloads ERA5 rain for 2007 to 2017, trains and checks a v5 model, makes the data pack, prints a control room advisory and runs an optional road report sync server.
+- Model v5 (logistic regression on rain on the day, 3 days, 3 to 9 days before, 10 to 30 days before, slope and NASA incident count) checked year by year on 147 catalog landslide days: AUC 0.81 against 0.82 for v4, and at the same alarm rate v4 catches more. v4 stays the default; v5 is an experimental option. Full numbers in `data/model/REPORT.md`.
+- Rain memory: the app notes when very heavy rain fell on a stretch in the last 7 days (debris may still block it). ERA5 shows no heavy rain on the Gangotri road before 20 Aug 2025, so gridded rain cannot explain that day's closures; road reports remain the fix.
+- Road reports keep their weight longer: 24 h for a slide or washed-out road, 48 h for a bridge, 8 h for debris (was 6 h for all). Reports made with no signal wait in an outbox and go out when the connection returns.
+- Data pack: CI fetches the forecast every 3 hours and publishes one file (about 6 KB compressed instead of about 700 KB from the weather API). The app tries it first.
+- Offline: a saved forecast is used for up to 10 days (was 36 hours); the header gives its age and, after 36 hours, says that rain since then is unknown.
+- Distribution: "Share the app" saves the whole app as one file for WhatsApp, Bluetooth or a memory card. Android APK built in CI (WebView around the same file, works with no network, shares itself) and published as a release from main.

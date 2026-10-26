@@ -1,21 +1,21 @@
 /* ================= v5: trained risk model with rain memory, daily data pack, offline use for days, report outbox, share the app ================= */
 Object.assign(T.en,{
-  mem_note:'Heavy rain here {n} day(s) ago: debris may still block the road, so it stays at Caution at least.',
+  mem_note:'Very heavy rain here {w}: debris may still block the road. Ask locally and check road reports.',mem_1:'yesterday',mem_n:'{n} days ago',
   via_pack:' (from the PahaadPath data pack)',
   age_ok:'Offline. Forecast saved {w} ({a} ago).',age_old:'Offline. Forecast saved {w}, {a} ago. Rain since then is not known: ask locally and check road reports.',
   age_h:'{n} h',age_d:'{n} days',
-  en_t:'Risk engine',en_v5:'Trained model v5 (rain memory)',en_v4:'Rain threshold v4 (Caine 1980)',
-  en_s:'v5 was fitted on {n} landslide days in the NASA catalog (2007 to 2017) with 30 days of rain at each road. It ranks days; it is not a probability.',
+  en_t:'Risk engine',en_v5:'Trained model v5 (experimental)',en_v4:'Rain threshold v4 (Caine 1980)',
+  en_s:'v5 was fitted on {n} landslide days in the NASA catalog (2007 to 2017) with 30 days of rain at each road. Checked year by year it did not catch more landslide days than v4 at the same number of warnings, so v4 is the default.',
   ob_n:'{n} reports waiting for signal',
   app_apk:'Android app (APK file)',
   app_t:'Share the app with no internet',app_s:'Saves this whole app as one file. Send it by WhatsApp, Bluetooth or a memory card; it opens in any phone browser and works offline.',app_b:'Save or share the app file',app_done:'App file ready'
 });
 Object.assign(T.hi,{
-  mem_note:'यहाँ {n} दिन पहले भारी बारिश हुई: मलबा अब भी सड़क रोक सकता है, इसलिए कम से कम सावधानी।',
+  mem_note:'यहाँ {w} बहुत भारी बारिश हुई: मलबा अब भी सड़क रोक सकता है। स्थानीय लोगों से पूछें और सड़क रिपोर्ट देखें।',mem_1:'कल',mem_n:'{n} दिन पहले',
   via_pack:' (पहाड़ पथ डेटा पैक से)',
   age_ok:'ऑफ़लाइन। पूर्वानुमान {w} सहेजा गया ({a} पहले)।',age_old:'ऑफ़लाइन। पूर्वानुमान {w} सहेजा गया, {a} पहले। उसके बाद की बारिश पता नहीं: स्थानीय लोगों से पूछें और सड़क रिपोर्ट देखें।',
   age_h:'{n} घंटे',age_d:'{n} दिन',
-  en_t:'जोखिम इंजन',en_v5:'प्रशिक्षित मॉडल v5 (पिछली बारिश की याद)',en_v4:'बारिश सीमा v4 (Caine 1980)',
+  en_t:'जोखिम इंजन',en_v5:'प्रशिक्षित मॉडल v5 (प्रयोग)',en_v4:'बारिश सीमा v4 (Caine 1980)',
   en_s:'v5 को NASA सूची के {n} भूस्खलन दिनों (2007 से 2017) और हर सड़क पर 30 दिन की बारिश से बनाया गया। यह दिनों को क्रम देता है; यह संभावना नहीं है।',
   ob_n:'{n} रिपोर्ट नेटवर्क का इंतज़ार कर रही हैं',
   app_apk:'एंड्रॉयड ऐप (APK फ़ाइल)',
@@ -27,7 +27,8 @@ const MODEL=/*__MODEL__*/null;
 /* daily rain for the 30 days before each replayed closure day (ERA5), so the Proof tab can use the model's rain memory */
 const RP_DAILY=/*__RP_DAILY__*/null;
 const CACHE_MAX_H=10*24; // a saved forecast is used offline for up to 10 days, with its age on screen
-st.engine=MODEL?lsGet('pp_engine','v5'):'v4';
+/* v4 stays the default: on the 2007 to 2017 check (data/model/REPORT.md) the trained model did not beat it at the same alarm rate */
+st.engine=MODEL?lsGet('pp_engine','v4'):'v4';
 function modelOn(){return !!MODEL&&st.engine==='v5';}
 /* must match features() in python/pahaadpath/dataset.py and score() in model.py */
 function modelFeatures(r1,r3,a7,a30,slope,n){return[Math.log1p(r1),Math.log1p(r3),Math.log1p(a7),Math.log1p(a30),((slope==null?34:slope)-34)/5,Math.log1p(n)];}
@@ -59,6 +60,20 @@ function memDays(e,arr,i){
     if(modelScore(z)>=65)return k;}
   return 0;
 }
+/* rain memory for the v4 engine: a note only (the band is not raised), because on the 2007 to 2017 check raising it added
+   about as many false warnings as caught landslide days. Same daily-rain test as the Python check: v4 at Avoid on that day's rain. */
+const MEM_NOTE_DAYS=7;
+function memNote(e,a,c){
+  const arr=c.daily&&c.daily[e.id];if(e.plain||!arr||c.dday0==null)return 0;
+  const i=dayOf(c.hour0+a*3600e3)-c.dday0;let m=MEMO.get(arr);if(!m){m={};MEMO.set(arr,m);}
+  const k='v4|'+e.id+'|'+i+'|'+odVer;if(m[k]!=null)return m[k];
+  const pred=.6*[0,.15,.55,1][e.susc]+.4*Math.min(e.hist/5,1);let out=0;
+  for(let d=1;d<=MEM_NOTE_DAYS;d++){const j=i-d;if(j<0||j>=arr.length)continue;
+    const trig=Math.min(Math.max((arr[j]||0)/CAINE(24),dsum(arr,j-2,j)/CAINE(72)),1.5)/1.5;
+    if(Math.round(100*Math.min(1,trig*(.35+.65*pred)+.08*pred))>=65){out=d;break;}}
+  return m[k]=out;
+}
+function memWhen(n){return n===1?t('mem_1'):fill(t('mem_n'),{n});}
 function slopeOf(e){const s=st.useOD&&OD.slope[e.id];return s?s.p75:null;}
 const MEMO=new WeakMap();
 function modelRisk(e,a,c,P24,P72){

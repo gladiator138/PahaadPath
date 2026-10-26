@@ -23,6 +23,9 @@ def write_report(m, ext):
         if sr['rate']:
             L += ['Set to flag as many ordinary days as v4 does at %s (%s), v5 would catch %s of landslide days and v4 catches %s.'
                   % (sr['band'], pct(sr['rate']), pct(sr['v5_hit']), pct(sr['v4_hit'])), '']
+    beats = all(sr['v5_hit'] is not None and sr['v4_hit'] is not None and sr['v5_hit'] > sr['v4_hit'] for sr in cv['same_alarm_rate'] if sr['rate'])
+    L += ['**Verdict: %s**' % ('v5 catches more landslide days than v4 at the same alarm rate, so the app can use it by default.' if beats else
+          'v5 does not catch more landslide days than v4 at the same alarm rate, so the app keeps v4 as its default and offers v5 only as an experiment.'), '']
     L += ['Rain memory: a day whose own rain reaches Avoid keeps the stretch at Caution or worse for the next days (debris, wet slopes). '
           'Chosen by this check: %d days.' % cv['memory_days'], '', '| Memory days | Landslide days at Caution or worse | Ordinary days at Caution or worse |', '|---|---|---|']
     L += ['| %d | %s | %s |' % (x['days'], pct(x['caution_hit']), pct(x['caution_false'])) for x in cv['memory']]

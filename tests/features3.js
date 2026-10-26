@@ -77,7 +77,9 @@ const istHour=ms=>new Date(Math.floor((ms+5.5*3600e3)/3600e3)*3600e3).toISOStrin
   await p.goto('file://'+F+'?tiles=0');await p.waitForFunction(()=>window.PP&&PP.st.series);
   const m=await p.evaluate(()=>PP.modelCheck());
   if(m===null)console.log('model: not baked into this build');
-  else{ok(m.n>=10&&m.bad.length===0,'model parity '+JSON.stringify(m));console.log('model parity:',m.n,'checks');}
+  else{ok(m.n>=10&&m.bad.length===0,'model parity '+JSON.stringify(m));console.log('model parity:',m.n,'checks');
+   const e=await p.evaluate(()=>{const d=PP.st.engine;PP.st.engine='v5';PP.render();const ok5=!!(PP.last&&PP.last.plans&&PP.last.plans.length);PP.st.engine=d;PP.render();return{d,ok5};});
+   ok(e.d==='v4'&&e.ok5,'v4 is the default and v5 plans trips '+JSON.stringify(e));}
   await ctx.close();
  }
  await b.close();
