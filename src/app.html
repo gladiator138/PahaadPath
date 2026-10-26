@@ -588,7 +588,7 @@ function traffic(seg,dir,ms){
 }
 
 /* ---------- state ---------- */
-const st={view:'trip',tiles:null,useOD:true,opsH:0,lang:'en',scn:'monsoon',tday:'cal',from:'delhi',to:'mussoorie',date:'',dateIdx:0,dep:null,pick:null,layer:'risk',tab:'route',
+const st={view:'trip',tiles:null,useOD:true,opsH:0,lang:'en',scn:'live',tday:'cal',from:'delhi',to:'mussoorie',date:'',dateIdx:0,dep:null,pick:null,layer:'risk',tab:'route',
   reports:[],user:[],series:null,nowMs:0,hour0:0,src:'sim',err:'',vfrom:null,vto:null};
 const dayOf=ms=>Math.floor((ms+IST)/864e5);
 const hourOf=ms=>new Date(ms+IST).getUTCHours();
@@ -1056,7 +1056,7 @@ function saveUser(){try{localStorage.setItem('pp_user',JSON.stringify(st.user.sl
 function clampDate(){
   const today=dayOf(st.nowMs);
   let d=st.dateIdx||qDate||today+1;
-  if(!st.dateInit){st.dateInit=1;d=qDate||today+1;}
+  if(!st.dateInit){st.dateInit=1;d=qDate||(st.src==='sim'?today+1:today);} // real weather: plan from today
   const maxA=st.src==='replay'?1:MAX_AHEAD;
   if(st.src==='replay'&&(d<today||d>today+maxA))d=today;
   st.dateIdx=Math.max(today,Math.min(today+maxA,d));st.date=dateStr(st.dateIdx);
@@ -1492,6 +1492,11 @@ $('in-to').addEventListener('change',e=>commitPlace('to',e.target.value));
 $('in-date').addEventListener('change',e=>{const d=parseDate(e.target.value);if(d!=null){st.dateIdx=d;clampDate();resetPick();}render();});
 $('in-dep').addEventListener('change',e=>{st.dep=e.target.value==='auto'?null:+e.target.value;render();});
 $('scn').addEventListener('change',e=>{st.scn=e.target.value;st.err='';load();});
+/* live mode stays current: refetch the forecast every hour, and as soon as a dropped connection comes back */
+let liveWanted=st.scn==='live';
+$('scn').addEventListener('change',()=>{liveWanted=st.scn==='live';});
+setInterval(()=>{if(liveWanted&&st.src==='live'&&!document.hidden)load();},3600e3);
+window.addEventListener('online',()=>{if(liveWanted&&st.src!=='live'){st.scn='live';load();}});
 $('tday').addEventListener('change',e=>{st.tday=e.target.value;render();});
 
 /*__FEATURES_JS__*/

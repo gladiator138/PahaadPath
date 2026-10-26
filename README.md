@@ -2,13 +2,15 @@
 
 Hill-road landslide, traffic and entry-rule advisory for Uttarakhand, in English and Hindi. SAARTHI'26, Track 3 (Smart Cities, Mobility and Public Safety). Team Coding Club MCTE.
 
-**Live app:** https://gladiator138.github.io/pahaadpath/ (one HTML file; it also works opened straight from disk, offline).
+**Live app:** https://gladiator138.github.io/PahaadPath/ (one HTML file; it also works opened straight from disk, offline).
 
 Advisory only. It is not an official warning. Follow police, BRO and district administration notices on the road.
 
 ## What it does
 
-- **Plan trip:** any source, destination and date up to 14 days ahead. Fastest and lower-risk roads, landslide risk per stretch at the hour you reach it, long-weekend traffic, best departure window, night halts, entry rules with sources, road profile, safety kit with helplines and SOS, trip from a typed or spoken sentence.
+It runs on today's data. On opening it fetches the live hourly rain forecast for every road stretch (Open-Meteo, past 3 days and next 16), refreshes it every hour and again when a lost connection returns, and keeps the last forecast for up to 36 hours offline. Road distances and shapes come from OpenStreetMap through OSRM, slope from the Copernicus DEM, incident history from the NASA landslide catalog, and road reports are shared between phones as they are made. Demo weather is only used when there is no connection and nothing saved, and the screen says so.
+
+- **Plan trip:** any source, destination and date from today up to 14 days ahead. Fastest and lower-risk roads, landslide risk per stretch at the hour you reach it, long-weekend traffic, best departure window, night halts, entry rules with sources, road profile, safety kit with helplines and SOS, trip from a typed or spoken sentence.
 - **Control room:** all 44 hill stretches over 72 hours, animated map, advisory draft in English or Hindi, expected jams, road reports shared across phones.
 - **Proof:** replays real closure days (20 Aug 2025, 9 Jul 2026) and dry control days on recorded rain or on forecasts issued 1 or 2 days before. It compares Avoid stretches with closures named in the news. Threshold sensitivity chart. Open data builder for road distances (OSRM), terrain slope (Copernicus DEM). Incident history comes from the NASA Global Landslide Catalog (2007 to 2017): 124 events in Uttarakhand located to 10 km or better are built into the app (`data/nasa_glc_uttarakhand_bbox.json`, taken from NASA's legacy export on data.nasa.gov because the live COOLR service is gone).
 

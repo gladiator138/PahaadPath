@@ -44,3 +44,7 @@ Dates are when the work was done. Kept so judges can see what existed before the
 - Slope classes recalibrated: cut-offs at 31 and 37 degrees, near the terciles of the 44 hill stretches, give 15, 16 and 13 stretches per class instead of 32 in the top class.
 - Replay re-scored with both changes from the rain recorded in the live run (the offline re-score reproduces the live demo-data rows exactly). 9 Jul 2026 on recorded rain: 3 of 4 closed stretches Caution or worse, 1 Avoid, 3 other stretches Avoid. 20 Aug 2025 still 0 of 5. Dry control days still no Avoid.
 - The footer no longer calls slope and incident values placeholders; its data line says what each copy uses.
+
+## 26 Oct 2026 (v4.4): live by default
+- The app opens on the live Open-Meteo forecast instead of the demo heavy-rain days, and plans from today. Live forecast is first in the weather menu; demo weather is a fallback only when there is no connection and no saved forecast.
+- The live forecast refreshes every hour while the app is open and as soon as a dropped connection comes back.

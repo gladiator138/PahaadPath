@@ -230,7 +230,7 @@ function renderViews(){
   if(st.view!=='ops')stopPlay();
 }
 function renderScnOptions(){
-  const ids=['monsoon','clear','live'].concat(GT.events.filter(e=>!e.control).map(e=>'rp:'+e.date));
+  const ids=['live','monsoon','clear'].concat(GT.events.filter(e=>!e.control).map(e=>'rp:'+e.date));
   const lab=id=>id.startsWith('rp:')?fill(t('s_rp'),{d:rpLabel(id.slice(3))}):t('s_'+id);
   $('scn').innerHTML=ids.map(id=>'<option value="'+id+'">'+esc(lab(id))+'</option>').join('');
   $('scn').value=st.scn;
