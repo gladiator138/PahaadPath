@@ -4955,7 +4955,13 @@ const RP_BAKED={"results":{"2025-08-20/archive/demo":{"event":"2025-08-20","date
 const RP_API={archive:{host:'https://archive-api.open-meteo.com/v1/archive',v:'precipitation'},
  prev1:{host:'https://previous-runs-api.open-meteo.com/v1/forecast',v:'precipitation_previous_day1'},
  prev2:{host:'https://previous-runs-api.open-meteo.com/v1/forecast',v:'precipitation_previous_day2'}};
-let RP=lsGet('pp_proof',null)||RP_BAKED||{results:{},series:{}};RP.results=RP.results||{};RP.series=RP.series||{};
+/* baked results win over older runs saved in this browser; runs made here after the baked ones are kept */
+let RP=(()=>{const loc=lsGet('pp_proof',null);if(!RP_BAKED)return loc||{results:{},series:{}};
+  const out={results:Object.assign({},RP_BAKED.results),series:Object.assign({},RP_BAKED.series)};if(!loc)return out;
+  const newest=Object.values(RP_BAKED.results).reduce((m,r)=>r.ranAt>m?r.ranAt:m,'');
+  Object.entries(loc.results||{}).forEach(([k,r])=>{if(r.ranAt>newest)out.results[k]=r;});
+  Object.entries(loc.series||{}).forEach(([k,v])=>{if(!out.series[k])out.series[k]=v;});return out;})();
+RP.results=RP.results||{};RP.series=RP.series||{};
 let rpSel=Object.keys(RP.results)[0]||null,rpMsg='',rpErr='';
 function saveRP(){if(!lsSet('pp_proof',RP)){const lite={results:RP.results,series:{}};Object.keys(RP.series).filter(k=>k.endsWith('/archive')).forEach(k=>{lite.series[k]=RP.series[k];});lsSet('pp_proof',lite);}}
 function addDays(s,n){const d=new Date(s+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);}
