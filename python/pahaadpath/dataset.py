@@ -100,7 +100,7 @@ def training_rows(net, rain):
                 if ser[i] is None:
                     continue
                 r1, r3, a7, a30 = window_sums(ser, i)
-                rows.append({'link': l['id'], 'date': day, 'year': y, 'y': y1, 'r1': r1, 'r3': r3, 'a7': a7, 'a30': a30,
+                rows.append({'link': l['id'], 'key': l['key'], 'i': i, 'date': day, 'year': y, 'y': y1, 'r1': r1, 'r3': r3, 'a7': a7, 'a30': a30,
                              'slope': l['slope'], 'susc': l['susc']})
     return rows
 

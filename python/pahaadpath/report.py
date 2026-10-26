@@ -23,7 +23,10 @@ def write_report(m, ext):
         if sr['rate']:
             L += ['Set to flag as many ordinary days as v4 does at %s (%s), v5 would catch %s of landslide days and v4 catches %s.'
                   % (sr['band'], pct(sr['rate']), pct(sr['v5_hit']), pct(sr['v4_hit'])), '']
-    L += ['| Year | Landslide days | v5 Avoid | v5 Caution or worse | v4 Avoid | v4 Caution or worse |', '|---|---|---|---|---|---|']
+    L += ['Rain memory: a day whose own rain reaches Avoid keeps the stretch at Caution or worse for the next days (debris, wet slopes). '
+          'Chosen by this check: %d days.' % cv['memory_days'], '', '| Memory days | Landslide days at Caution or worse | Ordinary days at Caution or worse |', '|---|---|---|']
+    L += ['| %d | %s | %s |' % (x['days'], pct(x['caution_hit']), pct(x['caution_false'])) for x in cv['memory']]
+    L += ['', '| Year | Landslide days | v5 Avoid | v5 Caution or worse | v4 Avoid | v4 Caution or worse |', '|---|---|---|---|---|---|']
     for p in cv['per_year']:
         L.append('| %d | %d | %d | %d | %d | %d |' % (p['year'], p['positives'], p['v5_avoid'], p['v5_caution_up'], p['v4_avoid'], p['v4_caution_up']))
     L += ['', '## Closure days from the news (2025 and 2026, never used in training)', '',
@@ -31,6 +34,9 @@ def write_report(m, ext):
           '|---|---|---|---|---|---|---|---|']
     for e in ext['events']:
         a, b = e['v5'], e['v4']
+        c = e['v5_no_memory']
+        if c != a:
+            L.append('| %s without memory | %d | %d | %d | %d | | | |' % (e['date'], c['named'], c['avoid'], c['caution_up'], c['other_avoid']))
         L.append('| %s%s | %d | %d | %d | %d | %d | %d | %d |' % (e['date'], ' (dry control)' if e['control'] else '', a['named'], a['avoid'], a['caution_up'],
                                                               a['other_avoid'], b['avoid'], b['caution_up'], b['other_avoid']))
     s = ext['season2025']
@@ -39,6 +45,7 @@ def write_report(m, ext):
           '## How often it would warn (2025 monsoon, %d days by 44 stretches)' % s['days'], '',
           '| | Go | Caution | Avoid |', '|---|---|---|---|',
           '| v5 | %s | %s | %s |' % tuple(pct(x / tot) for x in s['v5']),
+          '| v5 without memory | %s | %s | %s |' % tuple(pct(x / tot) for x in s['v5_no_memory']),
           '| v4 | %s | %s | %s |' % tuple(pct(x / tot) for x in s['v4']), '',
           '## Weights (raw feature units)', '',
           '| Feature | Weight |', '|---|---|']

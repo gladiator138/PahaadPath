@@ -1,0 +1,25 @@
+"""The daily data pack: one small file with rain for every road stretch, made by CI every few hours and published at a
+fixed address. A phone that gets a moment of signal downloads this one file (about 30 KB compressed) instead of calling
+the weather API, then plans offline from it for days, telling the user how old it is."""
+import datetime as dt
+
+from .openmeteo import forecast
+
+
+def tenths(a):
+    return [int(round(v * 10)) for v in a]
+
+
+def build_pack(net, log=print):
+    keys = net.keys()
+    hour0, hourly, day0, daily = forecast(keys, log=log)
+    return {
+        'v': 1,
+        'made': dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+        'hour0': hour0,  # IST hour that is index 72 of each hourly row
+        'day0': day0,    # IST date of index 0 of each daily row (31 days ago)
+        'unit': 'tenths of a mm',
+        'source': 'Open-Meteo forecast API (CC BY 4.0): hourly precipitation, past 3 days and next 16; daily totals, past 31 days and next 16',
+        'hourly': {k: tenths(hourly[k]) for k in keys},
+        'daily': {k: tenths(daily[k]) for k in keys},
+    }

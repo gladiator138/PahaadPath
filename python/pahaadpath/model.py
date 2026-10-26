@@ -9,6 +9,7 @@ from .network import hist_class
 
 CAUTION_RATE, AVOID_RATE = 0.10, 0.025  # share of ordinary monsoon stretch-days (no reported landslide) above each band
 RIDGE = 1.0
+MEMORY_CHOICES = (0, 3, 5, 7)  # days a heavy-rain day keeps a stretch at Caution or worse; picked by the year-by-year check
 
 
 def sigmoid(z):
@@ -104,6 +105,22 @@ def v4_score(r1, r3, susc, n_hist):
     return int(math.floor(100 * min(1, trig * (.35 + .65 * pred) + .08 * pred) + 0.5))
 
 
+def mem_days(m, ser, i, slope, n_hist, days):
+    """Latest of the last `days` days whose own rain put the stretch at Avoid (0 if none). Matches memDays() in the app."""
+    for k in range(1, days + 1):
+        j = i - k
+        if j < 0 or j >= len(ser):
+            continue
+        r1, r3, a7, a30 = window_sums(ser, j)
+        if score(m, logit(m, features(r1, r3, a7, a30, slope, n_hist))) >= 65:
+            return k
+    return 0
+
+
+def with_memory(s, mem):
+    return max(s, 35) if mem else s
+
+
 def band(s):
     return 0 if s < 35 else 1 if s < 65 else 2
 
@@ -141,6 +158,7 @@ def train(net, rain):
     ys = [r['y'] for r in rows]
     # leave one year out
     oof5, oof4, oof_band5, oof_band4, per_year = [0.0] * len(rows), [0] * len(rows), [0] * len(rows), [0] * len(rows), []
+    oof_mem = {M: [0] * len(rows) for M in MEMORY_CHOICES}
     for y in years:
         tr = [i for i, r in enumerate(rows) if r['year'] != y]
         te = [i for i, r in enumerate(rows) if r['year'] == y]
@@ -157,6 +175,10 @@ def train(net, rain):
             oof_band5[i] = band(score(m, oof5[i]))
             oof4[i] = v4_score(r['r1'], r['r3'], r['susc'], hist[r['link']])
             oof_band4[i] = band(oof4[i])
+            ser = rain['by_year'][str(r['year'])][r['key']]
+            mem = mem_days(m, ser, r['i'], r['slope'], hist[r['link']], max(MEMORY_CHOICES))
+            for M in MEMORY_CHOICES:
+                oof_mem[M][i] = band(with_memory(score(m, oof5[i]), mem and mem <= M))
         per_year.append({'year': y, 'positives': sum(ys[i] for i in te), 'days': len(te),
                          'v5_avoid': sum(1 for i in te if ys[i] and oof_band5[i] == 2),
                          'v5_caution_up': sum(1 for i in te if ys[i] and oof_band5[i] >= 1),
@@ -174,12 +196,18 @@ def train(net, rain):
         return sum(1 for b in sel if b >= lvl) / len(sel) if sel else None
 
     v4_avoid_rate = rate(b4, 2, False)
+    memory = []
+    for M in MEMORY_CHOICES:
+        bm = [oof_mem[M][i] for i in held]
+        memory.append({'days': M, 'caution_hit': rate(bm, 1, True), 'caution_false': rate(bm, 1, False)})
+    best_mem = max(memory, key=lambda x: (x['caution_hit'] or 0) - (x['caution_false'] or 0))['days']
     cv = {
         'years': [p['year'] for p in per_year], 'positives': npos, 'ordinary_days': neg, 'per_year': per_year,
         'auc': {'v5': auc(s5, hy), 'v4': auc(s4, hy)},
         'v5': {'avoid_hit': rate(b5, 2, True), 'caution_hit': rate(b5, 1, True), 'avoid_false': rate(b5, 2, False), 'caution_false': rate(b5, 1, False)},
         'v4': {'avoid_hit': rate(b4, 2, True), 'caution_hit': rate(b4, 1, True), 'avoid_false': v4_avoid_rate, 'caution_false': rate(b4, 1, False)},
         # v5 cut where it flags as many ordinary days as v4 does at each band, so the two are compared at equal alarm burden
+        'memory': memory, 'memory_days': best_mem,
         'same_alarm_rate': [{'band': name, 'rate': r, 'v5_hit': hit_at_rate(s5, hy, r) if r else None, 'v4_hit': rate(b4, lvl, True)}
                             for name, lvl, r in (('Caution', 1, rate(b4, 1, False)), ('Avoid', 2, v4_avoid_rate))],
     }
@@ -192,7 +220,7 @@ def train(net, rain):
         'version': 5, 'features': FEATURES, 'trained': dt.date.today().isoformat(),
         'data': {'rain': rain['source'], 'labels': 'NASA Global Landslide Catalog 2007 to 2017, events located to 10 km or better within their accuracy circle (at least 3 km) of a hill road',
                  'years': years, 'stretch_days': len(rows), 'positives': sum(ys), 'season': '1 June to 30 September'},
-        'hist': hist_all, 'cv': cv,
+        'hist': hist_all, 'cv': cv, 'memory_days': cv['memory_days'],
         'note': 'Scores rank stretch-days by how much they look like days with a reported landslide. The catalog only has landslides that made the news, so this is not a probability.',
     })
     return m
@@ -208,7 +236,8 @@ def score_daily(m, net, start, by, day):
         z = logit(m, features(r1, r3, a7, a30, l['slope'], m['hist'][l['id']]))
         s5 = score(m, z)
         s4 = v4_score(r1, r3, l['susc'], m['hist'][l['id']])
-        out.append({'id': l['id'], 'v5': s5, 'v4': s4, 'r1': round(r1, 1), 'r3': round(r3, 1), 'a7': round(a7, 1), 'a30': round(a30, 1)})
+        mem = mem_days(m, ser, i, l['slope'], m['hist'][l['id']], m.get('memory_days', 0))
+        out.append({'id': l['id'], 'v5': with_memory(s5, mem), 'v5_no_memory': s5, 'mem': mem, 'v4': s4, 'r1': round(r1, 1), 'r3': round(r3, 1), 'a7': round(a7, 1), 'a30': round(a30, 1)})
     return out
 
 
@@ -220,15 +249,16 @@ def external(m, net, gt, ext):
         rows = score_daily(m, net, day['start'], day['by'], ev['date'])
         closed = sorted(set(c['link'] for c in ev['closures']))
         res.append({'date': ev['date'], 'control': ev['control'], 'closed': closed, 'rows': rows,
-                    'v5': _tally(rows, closed, 'v5'), 'v4': _tally(rows, closed, 'v4')})
+                    'v5': _tally(rows, closed, 'v5'), 'v5_no_memory': _tally(rows, closed, 'v5_no_memory'), 'v4': _tally(rows, closed, 'v4')})
     s = ext['season2025']
     first = (d('2025-06-01') - d(s['start'])).days
     n = len(next(iter(s['by'].values())))
-    season = {'v5': [0, 0, 0], 'v4': [0, 0, 0], 'days': 0}
+    season = {'v5': [0, 0, 0], 'v5_no_memory': [0, 0, 0], 'v4': [0, 0, 0], 'days': 0}
     for i in range(first, n):
         day = (d(s['start']) + dt.timedelta(days=i)).isoformat()
         for r in score_daily(m, net, s['start'], s['by'], day):
             season['v5'][band(r['v5'])] += 1
+            season['v5_no_memory'][band(r['v5_no_memory'])] += 1
             season['v4'][band(r['v4'])] += 1
         season['days'] += 1
     return {'events': res, 'season2025': season}
