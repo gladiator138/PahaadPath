@@ -20,7 +20,7 @@ function hourly(start,end,fn){const t=[],v=[];let d=new Date(start+'T00:00:00Z')
    const m=/driving\/([\d.]+),([\d.]+);([\d.]+),([\d.]+)/.exec(u.pathname),[x1,y1,x2,y2]=m.slice(1).map(Number);
    const km=Math.hypot((x2-x1)*96,(y2-y1)*111)*1.45;const g=[0,.25,.5,.75,1].map(f=>[x1+(x2-x1)*f+.01*Math.sin(f*6),y1+(y2-y1)*f]);
    return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({code:'Ok',routes:[{distance:km*1000,duration:km*90,geometry:{type:'LineString',coordinates:g}}]})});}
-  if(u.host==='api.open-meteo.com'&&u.pathname==='/v1/elevation'){calls.el++;
+  if(u.host==='api.open-meteo.com'&&u.pathname==='/v1/elevation'){calls.el++;if(calls.el===2)return r.fulfill({status:429,contentType:'application/json',body:'{"error":true}'}); // one rate-limit reply: the builder must wait and retry
    const la=u.searchParams.get('latitude').split(',').map(Number),lo=u.searchParams.get('longitude').split(',').map(Number);
    return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({elevation:la.map((a,i)=>1500+900*Math.sin(a*300)*Math.cos(lo[i]*300))})});}
   return r.abort();

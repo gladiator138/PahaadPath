@@ -23,7 +23,7 @@ async function mock(ctx){
  const b=await chromium.launch();
  const A=await b.newContext({viewport:{width:420,height:900}}),B=await b.newContext({viewport:{width:420,height:900}});
  await mock(A);await mock(B);
- for(const c of [A,B])await c.addInitScript(()=>{window.__shTest=1;window.__pfAuto=1;window.__fastSleep=true;});
+ for(const c of [A,B])await c.addInitScript(()=>{window.__shTest=1;window.__histTest=1;window.__pfAuto=1;window.__fastSleep=true;});
  const errs=[];
  const pa=await A.newPage(),pb=await B.newPage();[pa,pb].forEach(p=>p.on('pageerror',e=>errs.push(String(e))));
  const q='?scn=monsoon&from=delhi&to=kedarnath&tab=reports&tiles=0';

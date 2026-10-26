@@ -37,7 +37,7 @@ const TX={
   // open data
   od_t:'Replace demo values with open data',od_s:'Runs in this browser. Road distance and shape come from OSRM on OpenStreetMap data. Terrain slope beside each hill road comes from the Copernicus 90 m elevation model through the Open-Meteo elevation API. Results stay on this device.',
   od_roads:'Fetch road distances and shapes',od_slope:'Compute terrain slope',od_use:'Use open data in the engine',od_exp:'Save open data file',od_imp:'Load open data file',od_clear:'Forget open data',
-  od_st:'Roads: {r} of {n} fetched ({b} flagged). Slope: {s} of {h} hill stretches.',od_busy:'Working: {i} of {n}…',od_err:'Stopped: {e}',
+  od_st:'Roads: {r} of {n} fetched ({b} flagged). Slope: {s} of {h} hill stretches.',od_busy:'Working: {i} of {n}…',od_wait:'Free API limit reached. Waiting a minute, then going on ({i} of {n})…',od_err:'Stopped: {e}',
   od_tbl:'Stretch,Hand km,OSRM km,Check,Demo slope,DEM slope (75th pct),New class,Demo incidents,NASA landslides within 3 km → class',
   od_flag:'differs a lot, kept hand value',od_ok:'ok',
   // safety
@@ -87,7 +87,7 @@ const TX={
   pr_src_l:'बंद सड़कों का स्रोत',
   od_t:'नमूना मानों की जगह खुला डेटा',od_s:'इसी ब्राउज़र में चलता है। सड़क की दूरी और आकार OpenStreetMap डेटा पर OSRM से। हर पहाड़ी सड़क के आसपास की ढलान Copernicus 90 मीटर ऊँचाई मॉडल से, Open-Meteo elevation API के ज़रिए। नतीजे इसी डिवाइस पर रहते हैं।',
   od_roads:'सड़क की दूरी और आकार लाएँ',od_slope:'ढलान निकालें',od_use:'इंजन में खुला डेटा इस्तेमाल करें',od_exp:'खुले डेटा की फ़ाइल सहेजें',od_imp:'खुले डेटा की फ़ाइल लोड करें',od_clear:'खुला डेटा हटाएँ',
-  od_st:'सड़कें: {n} में से {r} मिलीं ({b} संदिग्ध)। ढलान: {h} में से {s} पहाड़ी हिस्से।',od_busy:'चल रहा है: {n} में से {i}…',od_err:'रुका: {e}',
+  od_st:'सड़कें: {n} में से {r} मिलीं ({b} संदिग्ध)। ढलान: {h} में से {s} पहाड़ी हिस्से।',od_busy:'चल रहा है: {n} में से {i}…',od_wait:'मुफ़्त API की सीमा पूरी हुई। एक मिनट रुककर आगे बढ़ेंगे ({n} में से {i})…',od_err:'रुका: {e}',
   od_tbl:'हिस्सा,हाथ से किमी,OSRM किमी,जाँच,नमूना ढलान,DEM ढलान (75वाँ प्रतिशतक),नया वर्ग,नमूना घटनाएँ,3 किमी में NASA भूस्खलन → वर्ग',
   od_flag:'बहुत अलग, हाथ वाला मान रखा',od_ok:'ठीक',
   sf_t:'सुरक्षा किट',sf_help:'हेल्पलाइन',sf_112:'आपातकाल: पुलिस, फ़ायर, एंबुलेंस, आपदा',sf_1070:'उत्तराखंड राज्य आपातकालीन संचालन केंद्र',sf_1077:'ज़िला आपातकालीन संचालन केंद्र (ज़िले के बाहर से ज़िले का कोड लगाएँ)',sf_1364:'टूरिस्ट केयर उत्तराखंड, यात्रा हेल्पलाइन',
@@ -187,10 +187,15 @@ async function buildSlope(prog){
     prog(i,pts.length);
     const ch=pts.slice(i,i+100);
     const url=ELEV+'?latitude='+ch.map(p=>p.lat.toFixed(5)).join(',')+'&longitude='+ch.map(p=>p.lon.toFixed(5)).join(',');
-    const res=await fetch(url);if(!res.ok)throw new Error('elevation '+res.status);
+    let res;
+    for(let tries=0;;tries++){ // Open-Meteo counts each point as a call: on 429, wait out the minute and retry
+      res=await fetch(url);if(res.status!==429||tries>=4)break;
+      prog(i,pts.length,true);await sleep(65000);
+    }
+    if(!res.ok)throw new Error('elevation '+res.status);
     const js=await res.json();if(!js.elevation||js.elevation.length!==ch.length)throw new Error('elevation reply shape');
     ch.forEach((p,j)=>{p.z=js.elevation[j];});
-    await sleep(250);
+    await sleep(11000); // about 550 points a minute, under the free limit of 600 calls a minute
   }
   const by={};pts.forEach(p=>{((by[p.e]=by[p.e]||{})[p.k]=by[p.e][p.k]||{})[p.s]=p.z;});
   hill.forEach(e=>{
@@ -466,10 +471,10 @@ function odCard(){
   const hill=EDGES.filter(e=>!e.virtual&&(OD.km[e.id]||OD.slope[e.id]||OD.hist[e.id]));
   const cols=t('od_tbl').split(',');
   return '<div class="card"><h3>'+t('od_t')+'</h3><p class="sub">'+t('od_s')+'</p>'
-    +'<div class="acts in"><button class="btn pri" id="od-roads" type="button"'+(odBusy?' disabled':'')+'>'+t('od_roads')+'</button><button class="btn pri" id="od-slope" type="button"'+(odBusy?' disabled':'')+'>'+t('od_slope')+'</button><button class="btn pri" id="od-hist" type="button"'+(odBusy?' disabled':'')+'>'+t('od_hist')+'</button>'
+    +'<div class="acts in"><button class="btn pri" id="od-roads" type="button"'+(odBusy?' disabled':'')+'>'+t('od_roads')+'</button><button class="btn pri" id="od-slope" type="button"'+(odBusy?' disabled':'')+'>'+t('od_slope')+'</button>'+(window.__histTest?'<button class="btn pri" id="od-hist" type="button"'+(odBusy?' disabled':'')+'>'+t('od_hist')+'</button>':'')
     +'<label class="chk"><input type="checkbox" id="od-use"'+(st.useOD?' checked':'')+'> '+t('od_use')+'</label></div>'
     +'<div class="acts in"><button class="btn" id="od-exp" type="button">'+t('od_exp')+'</button><button class="btn" id="od-imp" type="button">'+t('od_imp')+'</button><button class="btn" id="od-clear" type="button">'+t('od_clear')+'</button></div>'
-    +'<p class="note" id="od-msg">'+esc(odBusy||fill(t('od_st'),c)+' '+fill(t('od_st_h'),c))+'</p>'
+    +'<p class="note" id="od-msg">'+esc(odBusy||fill(t('od_st'),c)+' '+(Object.keys(OD.hist).length?fill(t('od_st_h'),c):t('od_hist_off')))+'</p>'
     +(hill.length?'<div class="wrap"><table class="tb"><tr>'+cols.map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr>'+hill.map(e=>{const k=OD.km[e.id],s=OD.slope[e.id];
       return '<tr><td>'+esc(segName(e))+'</td><td>'+e.km0+'</td><td>'+(k?k.km:'')+'</td><td>'+(k?(k.ok?t('od_ok'):t('od_flag')):'')+'</td><td>'+(e.plain?'':e.susc0)+'</td><td>'+(s?s.p75+'°':'')+'</td><td>'+(s?s.cls:'')+'</td><td>'+(e.plain?'':e.hist0)+'</td><td>'+(OD.hist[e.id]?OD.hist[e.id].n+' → '+OD.hist[e.id].cls:'')+'</td></tr>';}).join('')+'</table></div>':'')
     +'</div>';
@@ -478,7 +483,7 @@ async function odRun(kind){
   if(odBusy)return;
   const msg=x=>{odBusy=x;const m=$('od-msg');if(m)m.textContent=x;};
   try{msg(fill(t('od_busy'),{i:0,n:'…'}));renderProof();
-    await (kind==='roads'?buildRoads:kind==='hist'?buildHist:buildSlope)((i,n)=>msg(fill(t('od_busy'),{i,n})));
+    await (kind==='roads'?buildRoads:kind==='hist'?buildHist:buildSlope)((i,n,w)=>msg(fill(t(w?'od_wait':'od_busy'),{i,n})));
     odBusy=null;applyOpenData();opsCache=null;toast(fill(t('od_st'),odCounts()));
   }catch(e){odBusy=null;toast(fill(t('od_err'),{e:String(e.message||e)}));}
   applyOpenData();renderProof();
