@@ -32,7 +32,7 @@ inj('/*__REPLAY_BAKED__*/',{'results':rp['results'],'series':{k:v for k,v in rp.
 # v5 model and the daily rain before each replayed day, from python/ (python -m pahaadpath train); absent until trained
 MP=os.path.join(R,'data/model/model_v5.json')
 model=json.load(open(MP,encoding='utf-8')) if os.path.exists(MP) and '--no-model' not in sys.argv else None
-if model:model={k:model[k] for k in ('version','features','intercept','coef','bands','hist','memory_days','data','trained')}
+if model:model={k:model[k] for k in ('version','features','intercept','coef','bands','hist','memory_days','data','trained','checks')}
 inj('/*__MODEL__*/',model,'null')
 EP=os.path.join(R,'data/train/era5_daily_external.json')
 ext=json.load(open(EP,encoding='utf-8')) if model and os.path.exists(EP) else None

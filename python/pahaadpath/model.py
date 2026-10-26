@@ -221,8 +221,14 @@ def train(net, rain):
         'data': {'rain': rain['source'], 'labels': 'NASA Global Landslide Catalog 2007 to 2017, events located to 10 km or better within their accuracy circle (at least 3 km) of a hill road',
                  'years': years, 'stretch_days': len(rows), 'positives': sum(ys), 'season': '1 June to 30 September'},
         'hist': hist_all, 'cv': cv, 'memory_days': cv['memory_days'],
+        # raw inputs and the score Python gives them, so the app's test can check its copy of the model gives the same
+        'checks': [{'in': [r['r1'], r['r3'], r['a7'], r['a30'], r['slope'], hist_all[r['link']]], 'score': None} for r in
+                   ([r for r in rows if r['y']][:6] + rows[::max(1, len(rows) // 14)][:14])],
         'note': 'Scores rank stretch-days by how much they look like days with a reported landslide. The catalog only has landslides that made the news, so this is not a probability.',
     })
+    for c in m['checks']:
+        c['in'] = [round(v, 1) if isinstance(v, float) else v for v in c['in']]
+        c['score'] = score(m, logit(m, features(*c['in'])))
     return m
 
 

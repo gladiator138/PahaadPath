@@ -7,6 +7,7 @@ Object.assign(T.en,{
   en_t:'Risk engine',en_v5:'Trained model v5 (rain memory)',en_v4:'Rain threshold v4 (Caine 1980)',
   en_s:'v5 was fitted on {n} landslide days in the NASA catalog (2007 to 2017) with 30 days of rain at each road. It ranks days; it is not a probability.',
   ob_n:'{n} reports waiting for signal',
+  app_apk:'Android app (APK file)',
   app_t:'Share the app with no internet',app_s:'Saves this whole app as one file. Send it by WhatsApp, Bluetooth or a memory card; it opens in any phone browser and works offline.',app_b:'Save or share the app file',app_done:'App file ready'
 });
 Object.assign(T.hi,{
@@ -17,6 +18,7 @@ Object.assign(T.hi,{
   en_t:'जोखिम इंजन',en_v5:'प्रशिक्षित मॉडल v5 (पिछली बारिश की याद)',en_v4:'बारिश सीमा v4 (Caine 1980)',
   en_s:'v5 को NASA सूची के {n} भूस्खलन दिनों (2007 से 2017) और हर सड़क पर 30 दिन की बारिश से बनाया गया। यह दिनों को क्रम देता है; यह संभावना नहीं है।',
   ob_n:'{n} रिपोर्ट नेटवर्क का इंतज़ार कर रही हैं',
+  app_apk:'एंड्रॉयड ऐप (APK फ़ाइल)',
   app_t:'बिना इंटरनेट ऐप साझा करें',app_s:'पूरा ऐप एक फ़ाइल में सहेजता है। WhatsApp, ब्लूटूथ या मेमोरी कार्ड से भेजें; यह किसी भी फ़ोन ब्राउज़र में खुलता है और ऑफ़लाइन चलता है।',app_b:'ऐप फ़ाइल सहेजें या भेजें',app_done:'ऐप फ़ाइल तैयार'
 });
 
@@ -36,6 +38,11 @@ function modelScore(z){
   else if(z<b.za)s=35+29*(z-b.zc)/(b.za-b.zc);
   else s=65+35*Math.min(1,(z-b.za)/b.zspan);
   return Math.floor(s+.5);
+}
+function modelCheck(){
+  if(!MODEL)return null;const bad=[];
+  (MODEL.checks||[]).forEach(c=>{const s=modelScore(modelLogit(modelFeatures.apply(null,c.in)));if(s!==c.score)bad.push([c.in,c.score,s]);});
+  return{n:(MODEL.checks||[]).length,bad};
 }
 function setDaily(byKey,day0){
   if(!byKey){st.daily=null;st.dday0=null;return;}
@@ -71,6 +78,7 @@ function modelRisk(e,a,c,P24,P72){
 /* ---------- weather: the data pack first (one small file), then Open-Meteo directly ---------- */
 const PACK_URL='https://raw.githubusercontent.com/gladiator138/PahaadPath/datapack/pack.json';
 const PACK_FRESH_H=6;
+const APK_URL='https://github.com/gladiator138/PahaadPath/releases/latest/download/PahaadPath.apk';
 async function fetchPack(){
   const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),10000);
   try{
@@ -118,7 +126,8 @@ document.addEventListener('change',e=>{if(e.target.name==='eng'){st.engine=e.tar
 
 /* ---------- share the app itself: one file that works with no signal ---------- */
 function shareAppHtml(){
-  return '<div class="card"><b>'+t('app_t')+'</b><p class="note">'+t('app_s')+'</p><button class="btn pri" id="a-app" type="button">'+t('app_b')+'</button></div>';
+  return '<div class="card"><b>'+t('app_t')+'</b><p class="note">'+t('app_s')+'</p><button class="btn pri" id="a-app" type="button">'+t('app_b')+'</button>'
+    +(window.PPAndroid?'':' <a class="btn" href="'+APK_URL+'" rel="noopener">'+t('app_apk')+'</a>')+'</div>';
 }
 async function shareApp(){
   if(window.PPAndroid){window.PPAndroid.shareApp();return;} // inside the Android app: share the APK itself

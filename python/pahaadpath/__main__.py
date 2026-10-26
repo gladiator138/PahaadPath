@@ -3,6 +3,7 @@
   fetch-train   download ERA5 daily rain for training (2007 to 2017) and for the news closure days (needs internet)
   train         fit the v5 model, validate it year by year and on the closure days, write data/model/
   pack          download today's forecast and write the small data pack phones fetch when they get signal
+  advisory      worst band on every hill stretch over the next 72 hours (from the pack, or --pack a saved copy offline)
   serve         run the road report sync server (see pahaadpath/server.py)
 """
 import argparse
@@ -19,6 +20,9 @@ def main(argv=None):
     sub.add_parser('train')
     p = sub.add_parser('pack')
     p.add_argument('--out', default='dist/pack/pack.json')
+    v = sub.add_parser('advisory')
+    v.add_argument('--pack', help='saved pack.json to use with no signal (default: download the latest)')
+    v.add_argument('--hours', type=int, default=72)
     s = sub.add_parser('serve')
     s.add_argument('--host', default='0.0.0.0')
     s.add_argument('--port', type=int, default=8787)
@@ -49,6 +53,13 @@ def main(argv=None):
         with open(a.out, 'w', encoding='utf-8') as f:
             json.dump(pk, f, separators=(',', ':'))
         print('pack', a.out, pk['hour0'], len(pk['hourly']), 'places')
+    elif a.cmd == 'advisory':
+        from .advisory import advisory, load_pack
+        pk = load_pack(a.pack)
+        print('Data pack hour %s IST (made %s). Advisory only, not an official warning.' % (pk['hour0'], pk['made']))
+        for r in advisory(Network(), pk, hours=a.hours):
+            if r['band'] != 'Go':
+                print('%-8s %3d  %-28s worst at %s' % (r['band'], r['score'], r['id'], r['at']))
     elif a.cmd == 'serve':
         from .server import serve
         serve(a.host, a.port, a.db)
