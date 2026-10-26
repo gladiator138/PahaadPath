@@ -37,7 +37,7 @@ const TX={
   // open data
   od_t:'Replace demo values with open data',od_s:'Runs in this browser. Road distance and shape come from OSRM on OpenStreetMap data. Terrain slope beside each hill road comes from the Copernicus 90 m elevation model through the Open-Meteo elevation API. Results stay on this device.',
   od_roads:'Fetch road distances and shapes',od_slope:'Compute terrain slope',od_use:'Use open data in the engine',od_exp:'Save open data file',od_imp:'Load open data file',od_clear:'Forget open data',
-  od_st:'Roads: {r} of {n} fetched ({b} flagged). Slope: {s} of {h} hill stretches.',od_busy:'Working: {i} of {n}…',od_wait:'Free API limit reached. Waiting a minute, then going on ({i} of {n})…',od_err:'Stopped: {e}',
+  od_st:'Roads: {r} of {n} fetched ({b} flagged). Slope: {s} of {h} hill stretches.',od_busy:'Working: {i} of {n}…',pr_learn:'What the 26 Oct 2026 run showed',pr_l1:'Dry control days: no stretch reached Avoid on either day, with recorded rain or with forecasts.',pr_l2:'9 Jul 2026 on recorded rain with DEM slope: 3 of the 4 closed stretches were Caution or worse and 1 was Avoid. 4 other stretches were also Avoid.',pr_l3:'Forecasts issued 1 or 2 days before saw far less rain than fell. At most 1 closed stretch reached Caution. Forecast rain is the weak link.',pr_l4:'20 Aug 2025: no closed stretch was caught. Rain in the 3 days before was modest (at most 44 mm on a closed stretch) and the roads were still blocked by debris from earlier storms (the Dharali flood was on 5 Aug). A rain trigger cannot see old debris, which is why shared road reports matter.',pr_wait:'Free weather API limit reached. Waiting a minute, then going on…',od_wait:'Free API limit reached. Waiting a minute, then going on ({i} of {n})…',od_err:'Stopped: {e}',
   od_tbl:'Stretch,Hand km,OSRM km,Check,Demo slope,DEM slope (75th pct),New class,Demo incidents,NASA landslides within 3 km → class',
   od_flag:'differs a lot, kept hand value',od_ok:'ok',
   // safety
@@ -87,7 +87,7 @@ const TX={
   pr_src_l:'बंद सड़कों का स्रोत',
   od_t:'नमूना मानों की जगह खुला डेटा',od_s:'इसी ब्राउज़र में चलता है। सड़क की दूरी और आकार OpenStreetMap डेटा पर OSRM से। हर पहाड़ी सड़क के आसपास की ढलान Copernicus 90 मीटर ऊँचाई मॉडल से, Open-Meteo elevation API के ज़रिए। नतीजे इसी डिवाइस पर रहते हैं।',
   od_roads:'सड़क की दूरी और आकार लाएँ',od_slope:'ढलान निकालें',od_use:'इंजन में खुला डेटा इस्तेमाल करें',od_exp:'खुले डेटा की फ़ाइल सहेजें',od_imp:'खुले डेटा की फ़ाइल लोड करें',od_clear:'खुला डेटा हटाएँ',
-  od_st:'सड़कें: {n} में से {r} मिलीं ({b} संदिग्ध)। ढलान: {h} में से {s} पहाड़ी हिस्से।',od_busy:'चल रहा है: {n} में से {i}…',od_wait:'मुफ़्त API की सीमा पूरी हुई। एक मिनट रुककर आगे बढ़ेंगे ({n} में से {i})…',od_err:'रुका: {e}',
+  od_st:'सड़कें: {n} में से {r} मिलीं ({b} संदिग्ध)। ढलान: {h} में से {s} पहाड़ी हिस्से।',od_busy:'चल रहा है: {n} में से {i}…',pr_learn:'26 अक्टूबर 2026 की जाँच में क्या दिखा',pr_l1:'सूखे नियंत्रण दिन: किसी भी दिन कोई हिस्सा टालें तक नहीं पहुँचा, न दर्ज बारिश से न पूर्वानुमान से।',pr_l2:'9 जुलाई 2026, दर्ज बारिश और DEM ढलान के साथ: बंद 4 में से 3 हिस्से सावधानी या उससे ऊपर थे और 1 टालें था। 4 और हिस्से भी टालें थे।',pr_l3:'1 या 2 दिन पहले के पूर्वानुमान में असल से बहुत कम बारिश थी। ज़्यादा से ज़्यादा 1 बंद हिस्सा सावधानी तक पहुँचा। पूर्वानुमान की बारिश सबसे कमज़ोर कड़ी है।',pr_l4:'20 अगस्त 2025: कोई बंद हिस्सा नहीं पकड़ा गया। पिछले 3 दिनों की बारिश कम थी (किसी बंद हिस्से पर ज़्यादा से ज़्यादा 44 मिमी) और सड़कें पहले के तूफ़ानों के मलबे से बंद थीं (धराली की बाढ़ 5 अगस्त को आई थी)। बारिश का पैमाना पुराना मलबा नहीं देख सकता, इसीलिए साझा सड़क रिपोर्ट ज़रूरी हैं।',pr_wait:'मुफ़्त मौसम API की सीमा पूरी हुई। एक मिनट रुककर आगे बढ़ेंगे…',od_wait:'मुफ़्त API की सीमा पूरी हुई। एक मिनट रुककर आगे बढ़ेंगे ({n} में से {i})…',od_err:'रुका: {e}',
   od_tbl:'हिस्सा,हाथ से किमी,OSRM किमी,जाँच,नमूना ढलान,DEM ढलान (75वाँ प्रतिशतक),नया वर्ग,नमूना घटनाएँ,3 किमी में NASA भूस्खलन → वर्ग',
   od_flag:'बहुत अलग, हाथ वाला मान रखा',od_ok:'ठीक',
   sf_t:'सुरक्षा किट',sf_help:'हेल्पलाइन',sf_112:'आपातकाल: पुलिस, फ़ायर, एंबुलेंस, आपदा',sf_1070:'उत्तराखंड राज्य आपातकालीन संचालन केंद्र',sf_1077:'ज़िला आपातकालीन संचालन केंद्र (ज़िले के बाहर से ज़िले का कोड लगाएँ)',sf_1364:'टूरिस्ट केयर उत्तराखंड, यात्रा हेल्पलाइन',
@@ -174,6 +174,10 @@ async function buildRoads(prog){
 /* Terrain slope beside the road: at 16 points along each hill stretch, elevation on the road and 180 m to either side.
    Slope = steeper of the two side gradients. The 75th percentile over the stretch sets the class:
    under 22 degrees = 1, 22 to 30 = 2, 30 or more = 3. Thresholds are provisional, to be calibrated against GSI maps. */
+/* Open-Meteo's free tier counts each location as a call (600 a minute): on 429, wait out the minute and retry */
+async function omFetch(url,onWait){
+  for(let tries=0;;tries++){const res=await fetch(url);if(res.status!==429||tries>=4)return res;if(onWait)onWait();await sleep(65000);}
+}
 const SL_D=180,SL_N=16,slopeClass=d=>d<22?1:d<30?2:3;
 async function buildSlope(prog){
   const hill=EDGES.filter(e=>!e.plain&&!e.virtual),pts=[];
@@ -187,11 +191,7 @@ async function buildSlope(prog){
     prog(i,pts.length);
     const ch=pts.slice(i,i+100);
     const url=ELEV+'?latitude='+ch.map(p=>p.lat.toFixed(5)).join(',')+'&longitude='+ch.map(p=>p.lon.toFixed(5)).join(',');
-    let res;
-    for(let tries=0;;tries++){ // Open-Meteo counts each point as a call: on 429, wait out the minute and retry
-      res=await fetch(url);if(res.status!==429||tries>=4)break;
-      prog(i,pts.length,true);await sleep(65000);
-    }
+    const res=await omFetch(url,()=>prog(i,pts.length,true));
     if(!res.ok)throw new Error('elevation '+res.status);
     const js=await res.json();if(!js.elevation||js.elevation.length!==ch.length)throw new Error('elevation reply shape');
     ch.forEach((p,j)=>{p.z=js.elevation[j];});
@@ -384,7 +384,7 @@ const allKeys=()=>[...new Set(EDGES.filter(e=>!e.virtual).map(locKey))];
 async function fetchRain(date,src){
   const a=RP_API[src],keys=allKeys(),start=addDays(date,-3),end=addDays(date,2);
   const url=a.host+'?latitude='+keys.map(k=>k.split(',')[0]).join(',')+'&longitude='+keys.map(k=>k.split(',')[1]).join(',')+'&hourly='+a.v+'&start_date='+start+'&end_date='+end+'&timezone=Asia%2FKolkata';
-  const res=await fetch(url);if(!res.ok)throw new Error('Open-Meteo '+res.status+' ('+src+' '+date+')');
+  const res=await omFetch(url,()=>{rpMsg=t('pr_wait');if(st.view==='proof')renderProof();});if(!res.ok)throw new Error('Open-Meteo '+res.status+' ('+src+' '+date+')');
   let js=await res.json();if(!Array.isArray(js))js=[js];
   if(js.length!==keys.length)throw new Error('unexpected reply shape');
   const by={};let nulls=0,total=0;
@@ -430,6 +430,7 @@ function renderProof(){
   if(rpSel&&!RP.results[rpSel])rpSel=keys[0]||null;
   const R=rpSel&&RP.results[rpSel],ev=R&&evs.find(e=>e.id===R.event);
   let h='<div class="ops-h"><h2>'+t('pr_t')+'</h2><p class="sub">'+t('pr_s')+'</p></div>'
+   +(RP_BAKED?'<div class="card"><h3>'+t('pr_learn')+'</h3><ul class="ul">'+[1,2,3,4].map(i=>'<li>'+t('pr_l'+i)+'</li>').join('')+'</ul></div>':'')
    +'<div class="card"><div class="row"><label class="fld"><span>'+t('pr_day')+'</span><select id="pr-ev">'+evs.map((e,i)=>'<option value="'+i+'"'+(ev&&ev.id===e.id?' selected':'')+'>'+esc(rpEvLabel(e))+'</option>').join('')+'</select></label>'
    +'<label class="fld"><span>'+t('pr_src')+'</span><select id="pr-src">'+Object.keys(RP_API).map(k=>'<option value="'+k+'"'+(R&&R.source===k?' selected':'')+'>'+t('pr_'+k)+'</option>').join('')+'</select></label></div>'
    +'<div class="acts in"><button class="btn pri" id="pr-run" type="button">'+t('pr_run')+'</button><button class="btn" id="pr-all" type="button">'+t('pr_all')+'</button><button class="btn" id="pr-dl" type="button">'+t('pr_dl')+'</button><button class="btn" id="pr-ul" type="button">'+t('pr_ul')+'</button></div>'

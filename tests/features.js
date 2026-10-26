@@ -10,7 +10,7 @@ function hourly(start,end,fn){const t=[],v=[];let d=new Date(start+'T00:00:00Z')
  let calls={om:0,osrm:0,el:0};
  await p.route(/^https?:\/\//,async r=>{
   const u=new URL(r.request().url());
-  if(/archive-api|previous-runs-api/.test(u.host)){calls.om++;
+  if(/archive-api|previous-runs-api/.test(u.host)){calls.om++;if(calls.om===1)return r.fulfill({status:429,contentType:'application/json',body:'{"error":true}'}); // first reply rate-limited: the replay must wait and retry
    const lats=u.searchParams.get('latitude').split(','),lons=u.searchParams.get('longitude').split(','),hv=u.searchParams.get('hourly');
    const s=u.searchParams.get('start_date'),e=u.searchParams.get('end_date');
    const out=lats.map((la,i)=>{const wet=+la>30.6&&+lons[i]<78.9; // north-west Garhwal gets a storm on day 4
@@ -25,15 +25,15 @@ function hourly(start,end,fn){const t=[],v=[];let d=new Date(start+'T00:00:00Z')
    return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({elevation:la.map((a,i)=>1500+900*Math.sin(a*300)*Math.cos(lo[i]*300))})});}
   return r.abort();
  });
- await p.addInitScript(()=>{window.__sleep=1;});
+ await p.addInitScript(()=>{window.__sleep=1;window.__fastSleep=true;});
  await p.goto('file://'+F+'?view=proof&tiles=0');await p.waitForFunction(()=>window.PP&&PP.st.series);
  // 1. run one replay
  await p.click('#pr-run');await p.waitForFunction(()=>document.querySelector('#pmap'),null,{timeout:20000});
  const k1=await p.evaluate(()=>[...document.querySelectorAll('.kp b')].map(x=>x.textContent));
  ok(k1.length>=3,'proof kpis '+k1);
  const st1=await p.evaluate(()=>JSON.parse(localStorage.getItem('pp_proof')));
- ok(Object.keys(st1.results).length===1,'stored result');
- const r=Object.values(st1.results)[0];ok(r.rows.length===44,'44 rows');ok(r.nulls>0,'nulls counted');
+ ok(Object.keys(st1.results).length>=1,'stored result');
+ const r=Object.values(st1.results).sort((a,b)=>b.ranAt.localeCompare(a.ranAt))[0]; // newest run (a build may carry baked results)ok(r.rows.length===44,'44 rows');ok(r.nulls>0,'nulls counted');
  ok(r.metrics.named===5,'named links 5, got '+r.metrics.named);
  console.log('replay 20 Aug (mock):',JSON.stringify(r.metrics));
  // 2. plan a trip on the recorded day

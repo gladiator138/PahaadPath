@@ -23,7 +23,18 @@ Dates are when the work was done. Kept so judges can see what existed before the
 
 ## 26 Oct 2026 (v4.1)
 - Road reports shared across phones and the control room through a public test channel (ntfy.sh), with the two-confirmation rule.
-- Incident history from the NASA Global Landslide Catalog (COOLR events within 3 km of each hill road), built in the browser; catalogue points shown in the control room.
+- Incident history from the NASA Global Landslide Catalog (COOLR events within 3 km of each hill road), built in the browser; catalogue points shown in the control room. Switched off later the same day, see below.
 - Threshold sensitivity chart in Proof: hit rate and false alarms as the Caine trigger is scaled from 0.4 to 1.6.
 - Road profile on the Trip tab from the Copernicus DEM, coloured by risk.
 - Published on GitHub with CI that rebuilds the app and runs all tests.
+
+## 26 Oct 2026 (v4.2): real data run
+- Ran the Proof replay against live Open-Meteo data in a browser on the published site: 4 days by 3 rain sources, first with demo slope, then with open data.
+- Fetched road distance and shape for all 75 links from OSRM (3 links flagged for checking: Haldwani to Kathgodam, Kathgodam to Bhimtal, Sonprayag to Gaurikund) and terrain slope for all 44 hill stretches from the Copernicus DEM. The slope cut-offs put 32 of 44 stretches in the steepest class, so they still need calibration against GSI maps.
+- Results baked into the app (data/ folder) so the Proof tab works offline. Summary card in Proof:
+  - Dry control days: no Avoid anywhere.
+  - 9 Jul 2026, recorded rain, DEM slope: 3 of 4 closed stretches Caution or worse, 1 Avoid, 4 other stretches Avoid.
+  - Forecasts 1 or 2 days ahead: at most 1 closed stretch at Caution.
+  - 20 Aug 2025: none caught; roads were blocked by debris from earlier storms.
+- NASA landslide catalog switched off: its services stopped answering after NASA's 2025 portal move. Incident counts stay demo values.
+- Elevation and weather calls now wait and retry when the free API limit is hit. Offline cache always fetches the new page on an update.

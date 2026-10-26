@@ -10,7 +10,7 @@ Advisory only. It is not an official warning. Follow police, BRO and district ad
 
 - **Plan trip:** any source, destination and date up to 14 days ahead. Fastest and lower-risk roads, landslide risk per stretch at the hour you reach it, long-weekend traffic, best departure window, night halts, entry rules with sources, road profile, safety kit with helplines and SOS, trip from a typed or spoken sentence.
 - **Control room:** all 44 hill stretches over 72 hours, animated map, advisory draft in English or Hindi, expected jams, road reports shared across phones.
-- **Proof:** replays real closure days (20 Aug 2025, 9 Jul 2026) and dry control days on recorded rain or on forecasts issued 1 or 2 days before. It compares Avoid stretches with closures named in the news. Threshold sensitivity chart. Open data builder for road distances (OSRM), terrain slope (Copernicus DEM) and incident history (NASA landslide catalog).
+- **Proof:** replays real closure days (20 Aug 2025, 9 Jul 2026) and dry control days on recorded rain or on forecasts issued 1 or 2 days before. It compares Avoid stretches with closures named in the news. Threshold sensitivity chart. Open data builder for road distances (OSRM), terrain slope (Copernicus DEM). Incident history from the NASA landslide catalog is coded but switched off: NASA's catalog services stopped answering after its 2025 portal move (checked 26 Oct 2026), so incident counts are still demo values.
 
 The repository root holds the built app (`index.html`, identical to `PahaadPath.html`) so GitHub Pages can serve it. CI rebuilds it from `src/` and checks the copies match.
 
@@ -18,7 +18,7 @@ The repository root holds the built app (`index.html`, identical to `PahaadPath.
 
 1. `npm install && npm run vendor` gets Playwright for the tests and the two libraries that are inlined so the app works offline.
 2. `npm run build` (or `python3 tools/build.py`) writes `dist/PahaadPath.html` (one file) and `dist/site/` (installable web app for GitHub Pages).
-3. To bake in results the team fetched in a browser: `python3 tools/build.py pahaadpath_open_data.json pahaadpath_replay_results.json` (use `-` for the first file if you only have replay results).
+3. `npm run build` bakes in the real data run of 26 Oct 2026 from `data/`; `npm run build:demo` builds without it. To bake in a newer run fetched in a browser: `python3 tools/build.py pahaadpath_open_data.json pahaadpath_replay_results.json` (use `-` for the first file if you only have replay results).
 
 ## Files
 
@@ -31,6 +31,6 @@ The repository root holds the built app (`index.html`, identical to `PahaadPath.
 
 ## Licences
 
-Leaflet (BSD 2-Clause), qrcode-generator (MIT), Natural Earth (public domain), OpenStreetMap data (ODbL) via OSRM, Open-Meteo data (CC BY 4.0), Copernicus GLO-90 DEM (free licence, credit Copernicus), NASA Global Landslide Catalog (NASA open data), ntfy.sh (public test channel for shared reports). Credits are shown in the app footer.
+Leaflet (BSD 2-Clause), qrcode-generator (MIT), Natural Earth (public domain), OpenStreetMap data (ODbL) via OSRM, Open-Meteo data (CC BY 4.0), Copernicus GLO-90 DEM (free licence, credit Copernicus), ntfy.sh (public test channel for shared reports). Credits are shown in the app footer.
 
 After a build, copy `dist/site/*` (including `.nojekyll`) and `dist/PahaadPath.html` to the repository root before committing.
