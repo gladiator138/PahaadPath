@@ -14,7 +14,7 @@ Dates are when the work was done. Kept so judges can see what existed before the
 - Views: Plan trip, Control room, Proof.
 - Map rebuilt on Leaflet: OpenStreetMap street map when hosted and online, offline map from Natural Earth layers otherwise. Tap a stretch for its details.
 - Control room for the disaster management authority and police: risk for all 44 hill stretches over 72 hours, play slider, Avoid and Caution counts, advisory draft in English or Hindi to copy or send, expected jams, road reports.
-- Proof tab: the closure-day replay runs inside the app with the same engine, with scoreboard, map of named closures, results file save and load, and "plan a trip on this day" using the recorded rain.
+- Proof tab: the closure-day replay runs inside the app with the same engine, with scoreboard, map of named closures, results file save and load plus "plan a trip on this day" using the recorded rain.
 - Open data builder in the browser: road distance and shape per link from OSRM (OpenStreetMap data), terrain slope per hill link from the Copernicus DEM through the Open-Meteo elevation API. Toggle on or off; footer states which data are in use.
 - Safety tab: helplines 112, 1070, 1077 and 1364 with sources, SOS location share, towns with lodging on the route, what to do at a landslide.
 - Trip from a sentence, typed or spoken, in English, Hindi or Hinglish.

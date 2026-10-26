@@ -10,7 +10,7 @@ Advisory only. It is not an official warning. Follow police, BRO and district ad
 
 - **Plan trip:** any source, destination and date up to 14 days ahead. Fastest and lower-risk roads, landslide risk per stretch at the hour you reach it, long-weekend traffic, best departure window, night halts, entry rules with sources, road profile, safety kit with helplines and SOS, trip from a typed or spoken sentence.
 - **Control room:** all 44 hill stretches over 72 hours, animated map, advisory draft in English or Hindi, expected jams, road reports shared across phones.
-- **Proof:** replays real closure days (20 Aug 2025, 9 Jul 2026) and dry control days on recorded rain or on forecasts issued 1 or 2 days before, and compares Avoid stretches with closures named in the news. Threshold sensitivity chart. Open data builder for road distances (OSRM), terrain slope (Copernicus DEM) and incident history (NASA landslide catalog).
+- **Proof:** replays real closure days (20 Aug 2025, 9 Jul 2026) and dry control days on recorded rain or on forecasts issued 1 or 2 days before. It compares Avoid stretches with closures named in the news. Threshold sensitivity chart. Open data builder for road distances (OSRM), terrain slope (Copernicus DEM) and incident history (NASA landslide catalog).
 
 The repository root holds the built app (`index.html`, identical to `PahaadPath.html`) so GitHub Pages can serve it. CI rebuilds it from `src/` and checks the copies match.
 
