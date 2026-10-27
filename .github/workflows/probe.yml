@@ -9,8 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - run: sudo apt-get install -y -qq poppler-utils >/dev/null 2>&1; pdftotext -v 2>&1 | head -1
-      - name: PWD SRMD listing and latest report
+      - run: sudo apt-get update -qq >/dev/null; sudo apt-get install -y -qq poppler-utils >/dev/null; pdftotext -v 2>&1 | head -1
+      - continue-on-error: true
+        name: PWD SRMD listing and latest report
         run: |
           UA='Mozilla/5.0 (X11; Linux x86_64) pahaadpath-pipeline'
           curl -sSL -m 60 -A "$UA" https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/ -o list.html
@@ -23,7 +24,8 @@ jobs:
           pdftotext -layout r.pdf r.txt; wc -l r.txt; head -c 9000 r.txt
           echo; echo '----- grep highways'; grep -niE 'NH|राष्ट्रीय|बद्रीनाथ|केदारनाथ|गंगोत्री|यमुनोत्री|badrinath|kedarnath|gangotri|yamunotri' r.txt | head -40
           echo '----- tail'; tail -c 3000 r.txt
-      - name: PWD SRMD reports page
+      - continue-on-error: true
+        name: PWD SRMD reports page
         run: |
           curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/srmd-reports/ | sed -e 's/<[^>]*>/ /g' | tr -s ' \n' | grep -iE 'srmd|report|road' | head -40
       - name: news feeds, item titles
