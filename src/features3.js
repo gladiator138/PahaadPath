@@ -6,7 +6,7 @@ Object.assign(T.en,{
   age_h:'{n} h',age_d:'{n} days',
   en_t:'Risk engine',en_v5:'Trained model v5 (experimental)',en_v4:'Rain threshold v4 (Caine 1980)',
   en_s:'v5 was fitted on {n} landslide days in the NASA catalog (2007 to 2017) with 30 days of rain at each road. Checked year by year it did not catch more landslide days than v4 at the same number of warnings, so v4 is the default.',
-  ob_n:'{n} reports waiting for signal',
+  ob_n:'{n} reports waiting for signal',ob_1:'1 report waiting for signal',
   app_apk:'Android app (APK file)',
   app_t:'Share the app with no internet',app_s:'Saves this whole app as one file. Send it by WhatsApp, Bluetooth or a memory card; it opens in any phone browser and works offline.',app_b:'Save or share the app file',app_done:'App file ready'
 });
@@ -17,7 +17,7 @@ Object.assign(T.hi,{
   age_h:'{n} घंटे',age_d:'{n} दिन',
   en_t:'जोखिम इंजन',en_v5:'प्रशिक्षित मॉडल v5 (प्रयोग)',en_v4:'बारिश सीमा v4 (Caine 1980)',
   en_s:'v5 को NASA सूची के {n} भूस्खलन दिनों (2007 से 2017) और हर सड़क पर 30 दिन की बारिश से बनाया गया। यह दिनों को क्रम देता है; यह संभावना नहीं है।',
-  ob_n:'{n} रिपोर्ट नेटवर्क का इंतज़ार कर रही हैं',
+  ob_n:'{n} रिपोर्ट नेटवर्क का इंतज़ार कर रही हैं',ob_1:'1 रिपोर्ट नेटवर्क का इंतज़ार कर रही है',
   app_apk:'एंड्रॉयड ऐप (APK फ़ाइल)',
   app_t:'बिना इंटरनेट ऐप साझा करें',app_s:'पूरा ऐप एक फ़ाइल में सहेजता है। WhatsApp, ब्लूटूथ या मेमोरी कार्ड से भेजें; यह किसी भी फ़ोन ब्राउज़र में खुलता है और ऑफ़लाइन चलता है।',app_b:'ऐप फ़ाइल सहेजें या भेजें',app_done:'ऐप फ़ाइल तैयार'
 });
@@ -105,7 +105,8 @@ async function fetchPack(){
     Object.keys(p.hourly).forEach(k=>{const a=p.hourly[k].map(v=>v/10);by[k]=a.slice(shift).concat(new Array(shift).fill(0));});
     Object.keys(p.daily).forEach(k=>{daily[k]=p.daily[k].map(v=>v/10);});
     if(!EDGES.every(e=>e.virtual||by[locKey(e)]))throw new Error('pack places');
-    return{by,daily,day0:p.day0,ts:st.hour0,via:'pack'};
+    const made=Date.parse(p.made);
+    return{by,daily,day0:p.day0,ts:st.hour0,made:made>0&&made<=Date.now()?made:h0,via:'pack',alerts:Array.isArray(p.alerts)?p.alerts:null}; // made: when the pack's forecast was fetched, shown as its age
   }finally{clearTimeout(to);}
 }
 async function fetchDaily(){
@@ -127,7 +128,7 @@ async function fetchWeather(){
 }
 function viaMsg(){return st.via==='pack'?t('via_pack'):'';}
 function ageText(ms){const h=Math.max(0,Math.round((Date.now()-ms)/3600e3));return h<48?fill(t('age_h'),{n:h}):fill(t('age_d'),{n:Math.round(h/24)});}
-function cacheMsg(){const ts=st.cacheTs||st.nowMs,old=Date.now()-ts>36*3600e3;
+function cacheMsg(){const ts=st.cacheMade||st.cacheTs||st.nowMs,old=Date.now()-ts>36*3600e3;
   return fill(t(old?'age_old':'age_ok'),{w:fmtDate(dayOf(ts))+' '+clock(ts)+' IST',a:ageText(ts)});}
 
 /* ---------- engine choice, shown in the footer ---------- */

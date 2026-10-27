@@ -6,7 +6,8 @@ on:
     - cron: '17 */3 * * *'
   workflow_dispatch:
   push:
-    paths: ['python/pahaadpath/pack.py', 'python/pahaadpath/openmeteo.py', 'python/pahaadpath/network.py', '.github/workflows/pack.yml']
+    branches: [main]  # only main publishes the pack phones use
+    paths: ['python/pahaadpath/pack.py', 'python/pahaadpath/alerts.py', 'python/pahaadpath/openmeteo.py', 'python/pahaadpath/network.py', '.github/workflows/pack.yml']
 permissions:
   contents: write
 concurrency:

@@ -23,7 +23,7 @@
   "slope",
   "log_hist"
  ],
- "trained": "2026-10-26",
+ "trained": "2026-10-27",
  "data": {
   "rain": "ERA5 reanalysis via archive-api.open-meteo.com (CC BY 4.0), daily precipitation_sum, IST days",
   "labels": "NASA Global Landslide Catalog 2007 to 2017, events located to 10 km or better within their accuracy circle (at least 3 km) of a hill road",

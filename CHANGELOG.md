@@ -58,3 +58,19 @@ Goal from here on: real users in Uttarakhand who are out of network most of the 
 - Data pack: CI fetches the forecast every 3 hours and publishes one file (about 6 KB compressed instead of about 700 KB from the weather API). The app tries it first.
 - Offline: a saved forecast is used for up to 10 days (was 36 hours); the header gives its age and, after 36 hours, says that rain since then is unknown.
 - Distribution: "Share the app" saves the whole app as one file for WhatsApp, Bluetooth or a memory card. Android APK built in CI (WebView around the same file, works with no network, shares itself) and published as a release from main.
+
+## 27 Oct 2026 (phone test fixes)
+- Tested the Android build as a phone would run it (WebView origin, phone screen, real data pack, flight mode). Fixes from that run:
+- The app remembers English or Hindi between openings.
+- After signal returns the app leaves the saved forecast by itself (every 5 minutes and when reopened), even where the online event never fires, as in some Android web views.
+- Forecast age counts from when the data pack was made, not from when the phone downloaded it.
+- "1 report waiting" (was "1 reports"); Hindi summary line ends with a danda.
+
+## 27 Oct 2026 (v6): what general map apps lack on hill roads
+- My trips: save up to 5 trips; each is re-scored on every forecast update, also offline, and the list says when the risk went up since saving.
+- Tell family by SMS: trip plan with leave and arrival time and night halt, "reached safely", or "stuck" with the GPS location. Sent from the user's own phone; works on a voice-only signal.
+- Where am I on this trip: GPS only, no data. Risk on the current stretch now, next Caution or Avoid stretch, next town with lodging, km left.
+- Fuel and cost from the user's own mileage and fuel price.
+- Safety tab links to official warnings: Sachet (NDMA) and IMD Mausam.
+- Roadside stops from OpenStreetMap (fuel, hospital or clinic, ATM, mechanic within 3 km of each town; 45 of 64 towns have at least one): listed per town on the Safety tab, longest stretch with no fuel mapped, next fuel and hospital in "Where am I". Made by the new open data workflow.
+- Official alerts: the data pack now carries NDMA Sachet alerts for Uttarakhand from the last 48 hours, shown on the trip and kept offline with the saved forecast. The pack is published only from main.
