@@ -1,0 +1,43 @@
+name: probe closure sources
+# temporary: which road closure sources answer from a GitHub runner
+on:
+  push:
+    branches: [claude/project-thread-k1o0bg]
+    paths: ['.github/workflows/probe.yml']
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - run: |
+          UA='Mozilla/5.0 (X11; Linux x86_64) pahaadpath-pipeline'
+          while read -r u; do
+            [ -z "$u" ] && continue
+            r=$(curl -sSL -m 30 -A "$UA" -o /tmp/b -w '%{http_code} %{content_type} %{size_download}' "$u" 2>&1 | tail -1)
+            echo "=== $u -> $r"
+            head -c 700 /tmp/b | tr -d '\r' | tr '\n' ' '; echo
+          done <<'L'
+          https://usdma.uk.gov.in/document-category/road-status/
+          https://usdma.uk.gov.in/feed/
+          https://usdma.uk.gov.in/hi/feed/
+          https://usdma.uk.gov.in/wp-json/wp/v2/posts?per_page=3
+          https://www.newsonair.gov.in/feed/
+          https://www.newsonair.gov.in/wp-json/wp/v2/posts?search=uttarakhand%20roads%20blocked&per_page=5&_fields=date,link,title
+          https://indianexpress.com/section/cities/dehradun/feed/
+          https://www.hindustantimes.com/feeds/rss/cities/dehradun-news/rssfeed.xml
+          https://www.amarujala.com/rss/dehradun.xml
+          https://www.amarujala.com/rss/uttarakhand.xml
+          https://www.etvbharat.com/rss/hindi/uttarakhand.xml
+          https://www.tribuneindia.com/news/uttarakhand/feed/
+          https://news.google.com/rss/search?q=uttarakhand%20road%20blocked&hl=en-IN&gl=IN&ceid=IN:en
+          https://syndication.twitter.com/srv/timeline-profile/screen-name/chamolipolice
+          https://nitter.net/chamolipolice/rss
+          https://www.bro.gov.in/
+          https://pwd.uk.gov.in/
+          https://registrationandtouristcare.uk.gov.in/
+          https://sachet.ndma.gov.in/cap_public_website/rss/rss_uttarakhand.xml
+          https://sachet.ndma.gov.in/cap_public_website/FetchAllAlertDetails
+          https://cdnbbsr.s3waas.gov.in/s34a06d868d044c50af0cf9bc82d2fc19f/uploads/2025/08/2025080856552324.pdf
+          https://dmmc.uk.gov.in/
+          https://rajmargyatra.nhai.gov.in/
+          L
