@@ -4035,7 +4035,8 @@ const fill=(s,o)=>s.replace(/\{(\w+)\}/g,(m,k)=>o[k]!=null?o[k]:m);
 
 /* ---------- query string (used by tests and shared links) ---------- */
 const q=new URLSearchParams(location.search);
-if(q.get('lang')==='hi')st.lang='hi';
+try{if(localStorage.getItem('pp_lang')==='hi')st.lang='hi';}catch(e){} // the phone remembers the language picked last time
+if(q.get('lang')==='hi')st.lang='hi';else if(q.get('lang')==='en')st.lang='en';
 if(['monsoon','clear','live'].includes(q.get('scn'))||/^rp:\d{4}-\d{2}-\d{2}$/.test(q.get('scn')||''))st.scn=q.get('scn');
 if(['trip','ops','proof'].includes(q.get('view')))st.view=q.get('view');
 if(q.get('tiles')==='0')st.tiles=false;
@@ -4091,20 +4092,20 @@ function attachVirtualSeries(){
   Object.keys(VN).forEach(id=>{const e=VN[id].edge,ref=(ADJ[e.a]||[]).find(x=>!x.virtual);st.series[e.id]=(ref&&st.series[ref.id])||new Array(SERIES_LEN).fill(0);
     if(st.daily)st.daily[e.id]=(ref&&st.daily[ref.id])||null;});
 }
-async function load(){
+async function load(pre){
   st.err='';
   if(st.scn==='live'){
     setClock(false);
     try{
-      const w=await fetchWeather();st.series=seriesFromKeys(w.by);st.src='live';st.via=w.via;st.dataTs=w.ts;setDaily(w.daily,w.day0);
-      try{localStorage.setItem('pp_cache2',JSON.stringify({ts:w.ts,by:w.by,daily:w.daily,day0:w.day0}));}catch(e){}
+      const w=pre||await fetchWeather();st.series=seriesFromKeys(w.by);st.src='live';st.via=w.via;st.dataTs=w.ts;st.made=w.made||null;setDaily(w.daily,w.day0);
+      try{localStorage.setItem('pp_cache2',JSON.stringify({ts:w.ts,made:w.made,by:w.by,daily:w.daily,day0:w.day0}));}catch(e){}
     }catch(e){
       let c=null;try{c=JSON.parse(localStorage.getItem('pp_cache2')||'null');}catch(_){}
       /* offline: keep using the last forecast while it still covers the coming days; the header says how old it is */
       if(c&&c.by&&Date.now()-c.ts<CACHE_MAX_H*3600e3&&EDGES.every(e=>c.by[locKey(e)])){
         const shift=Math.round((st.hour0-c.ts)/3600e3),by={};
         Object.keys(c.by).forEach(k=>{by[k]=shift>0?c.by[k].slice(shift).concat(new Array(shift).fill(0)):c.by[k];});
-        st.series=seriesFromKeys(by);st.src='cache';st.cacheTs=c.ts;setDaily(c.daily,c.day0);
+        st.series=seriesFromKeys(by);st.src='cache';st.cacheTs=c.ts;st.cacheMade=c.made||null;setDaily(c.daily,c.day0);
       }else{st.scn='monsoon';st.src='sim';st.err='fail';setClock(true);st.series=simSeries('monsoon');}
     }
   }else if(st.scn.startsWith('rp:')){
@@ -4260,7 +4261,7 @@ function render(){
   renderViews();
   const o2=$('tday').options;['td_cal','td_normal','td_weekend','td_leve','td_lstart','td_lend'].forEach((k,i)=>{o2[i].textContent=t(k);});$('tday').value=st.tday;
   $('dot').className='dot'+(st.src==='live'?' live':'');
-  $('srcmsg').textContent=st.err==='fail'?t('m_fail'):st.err==='rpfail'?t('m_rpfail'):st.src==='sim'?t('m_sim')+clock(st.nowMs)+' IST':st.src==='live'?t('m_live')+clock(st.nowMs)+' IST'+viaMsg():st.src==='replay'?fill(t('m_rp'),{d:fmtDate(dayOf(st.nowMs))+' '+new Date(st.nowMs+IST).getUTCFullYear()}):cacheMsg();
+  $('srcmsg').textContent=st.err==='fail'?t('m_fail'):st.err==='rpfail'?t('m_rpfail'):st.src==='sim'?t('m_sim')+clock(st.nowMs)+' IST':st.src==='live'?t('m_live')+clock(st.made||st.nowMs)+' IST'+viaMsg():st.src==='replay'?fill(t('m_rp'),{d:fmtDate(dayOf(st.nowMs))+' '+new Date(st.nowMs+IST).getUTCFullYear()}):cacheMsg();
   $('foot').innerHTML=footHtml();
   if(st.view!=='trip'){if(st.view==='ops')renderOps();else renderProof();return;}
   renderForm();
@@ -4278,7 +4279,7 @@ function render(){
     +'<div class="lvl">'+t(LV[lv])+'</div>'
     +'<div class="score"><b>'+(cur.hasHill?cur.score:'n/a')+'</b>'+t('risk')+' '+t('of100')+'</div>'
     +'<div class="hl">'+t(cur.hasHill?'hl'+lv:'hl_pl')+'</div>'
-    +'<div class="why">'+esc(cur.hasHill&&lv===0?titleOf(M)+'. '+(st.lang==='hi'?'सबसे ऊँचा जोखिम: ':'Highest risk: ')+pname(cur.worst.from)+' → '+pname(cur.worst.to)+'.':cur.hasHill?whyText(cur):'')+'</div>'
+    +'<div class="why">'+esc(cur.hasHill&&lv===0?titleOf(M)+(st.lang==='hi'?'। सबसे ऊँचा जोखिम: ':'. Highest risk: ')+pname(cur.worst.from)+' → '+pname(cur.worst.to)+(st.lang==='hi'?'।':'.'):cur.hasHill?whyText(cur):'')+'</div>'
     +'<div class="meta">'+esc(titleOf(M))+' · ~'+Math.round(cur.totalKm/5)*5+' '+t('km')+' · '+t('leave')+' '+fmtDate(st.dateIdx)+' '+clock(depMs)+'</div>'
     +'</div></div>'
     +(cur.nightKm>0?'<p class="note pad" style="margin-top:8px">'+esc(t('late'))+'</p>':'');
@@ -4553,8 +4554,7 @@ document.addEventListener('click',e=>{
     st.pmsg=null;resetPick();render();
   }
   else if(c.dataset.c){const r=ctx().reports.find(x=>x.id===c.dataset.c);if(r){if(r.shared){confirmShared(r);}else{r.conf++;if(!r.sample){saveUser();shareReport(r,'confirm');}}render();}}
-  else if(c.id==='b-en'){st.lang='en';render();}
-  else if(c.id==='b-hi'){st.lang='hi';render();}
+  else if(c.id==='b-en'||c.id==='b-hi'){st.lang=c.id==='b-hi'?'hi':'en';try{localStorage.setItem('pp_lang',st.lang);}catch(e){}render();}
   else if(c.id==='a-listen')speak();
   else if(c.id==='a-share')share();
   else if(c.id==='r-send'){
@@ -4573,6 +4573,18 @@ $('scn').addEventListener('change',e=>{st.scn=e.target.value;st.err='';load();})
 let liveWanted=st.scn==='live';
 $('scn').addEventListener('change',()=>{liveWanted=st.scn==='live';});
 setInterval(()=>{if(liveWanted&&st.src==='live'&&!document.hidden)load();},3600e3);
+/* the online event is not enough: a phone app's web view may never fire it, and in the hills the radio often connects before data
+   flows. So while the app shows a saved forecast it quietly tries again every few minutes and whenever it comes back to the screen,
+   and redraws only when the new forecast has arrived. */
+const offlineNow=()=>liveWanted&&(st.src==='cache'||st.src==='sim'&&st.err==='fail');
+function retryLive(){
+  if(!offlineNow()||document.hidden||navigator.onLine===false)return;
+  const a=document.activeElement;if(a&&(a.tagName==='INPUT'||a.tagName==='SELECT'))return; // do not redraw under a typing finger
+  const was=[st.nowMs,st.hour0];setClock(false); // the pack is lined up with the real clock
+  fetchWeather().then(w=>{if(offlineNow()){st.scn='live';load(w);}},()=>{[st.nowMs,st.hour0]=was;});
+}
+setInterval(retryLive,5*60e3);
+document.addEventListener('visibilitychange',retryLive);
 window.addEventListener('online',()=>{if(liveWanted&&st.src!=='live'){st.scn='live';load();}});
 $('tday').addEventListener('change',e=>{st.tday=e.target.value;render();});
 
@@ -5327,7 +5339,7 @@ function shStop(){if(SHR.es){try{SHR.es.close();}catch(e){}SHR.es=null;}if(SHR.p
 function shStatusText(){
   if(!st.share)return t('sh_off');
   const n=Object.values(SHR.reps).filter(r=>r.dev!==DEV&&Date.now()-r.rt<12*3600e3).length;
-  return (SHR.status==='on'?fill(t('sh_on'),{n}):SHR.status==='err'?t('sh_err'):t('sh_wait'))+(OUTBOX.length?' · '+fill(t('ob_n'),{n:OUTBOX.length}):'');
+  return (SHR.status==='on'?fill(t('sh_on'),{n}):SHR.status==='err'?t('sh_err'):t('sh_wait'))+(OUTBOX.length?' · '+(OUTBOX.length===1?t('ob_1'):fill(t('ob_n'),{n:OUTBOX.length})):'');
 }
 function shareBox(){
   return '<div class="card shbox"><label class="chk"><input type="checkbox" id="sh-use"'+(st.share?' checked':'')+'> '+t('sh_t')+'</label>'
@@ -5424,7 +5436,7 @@ Object.assign(T.en,{
   age_h:'{n} h',age_d:'{n} days',
   en_t:'Risk engine',en_v5:'Trained model v5 (experimental)',en_v4:'Rain threshold v4 (Caine 1980)',
   en_s:'v5 was fitted on {n} landslide days in the NASA catalog (2007 to 2017) with 30 days of rain at each road. Checked year by year it did not catch more landslide days than v4 at the same number of warnings, so v4 is the default.',
-  ob_n:'{n} reports waiting for signal',
+  ob_n:'{n} reports waiting for signal',ob_1:'1 report waiting for signal',
   app_apk:'Android app (APK file)',
   app_t:'Share the app with no internet',app_s:'Saves this whole app as one file. Send it by WhatsApp, Bluetooth or a memory card; it opens in any phone browser and works offline.',app_b:'Save or share the app file',app_done:'App file ready'
 });
@@ -5435,7 +5447,7 @@ Object.assign(T.hi,{
   age_h:'{n} घंटे',age_d:'{n} दिन',
   en_t:'जोखिम इंजन',en_v5:'प्रशिक्षित मॉडल v5 (प्रयोग)',en_v4:'बारिश सीमा v4 (Caine 1980)',
   en_s:'v5 को NASA सूची के {n} भूस्खलन दिनों (2007 से 2017) और हर सड़क पर 30 दिन की बारिश से बनाया गया। यह दिनों को क्रम देता है; यह संभावना नहीं है।',
-  ob_n:'{n} रिपोर्ट नेटवर्क का इंतज़ार कर रही हैं',
+  ob_n:'{n} रिपोर्ट नेटवर्क का इंतज़ार कर रही हैं',ob_1:'1 रिपोर्ट नेटवर्क का इंतज़ार कर रही है',
   app_apk:'एंड्रॉयड ऐप (APK फ़ाइल)',
   app_t:'बिना इंटरनेट ऐप साझा करें',app_s:'पूरा ऐप एक फ़ाइल में सहेजता है। WhatsApp, ब्लूटूथ या मेमोरी कार्ड से भेजें; यह किसी भी फ़ोन ब्राउज़र में खुलता है और ऑफ़लाइन चलता है।',app_b:'ऐप फ़ाइल सहेजें या भेजें',app_done:'ऐप फ़ाइल तैयार'
 });
@@ -5523,7 +5535,8 @@ async function fetchPack(){
     Object.keys(p.hourly).forEach(k=>{const a=p.hourly[k].map(v=>v/10);by[k]=a.slice(shift).concat(new Array(shift).fill(0));});
     Object.keys(p.daily).forEach(k=>{daily[k]=p.daily[k].map(v=>v/10);});
     if(!EDGES.every(e=>e.virtual||by[locKey(e)]))throw new Error('pack places');
-    return{by,daily,day0:p.day0,ts:st.hour0,via:'pack'};
+    const made=Date.parse(p.made);
+    return{by,daily,day0:p.day0,ts:st.hour0,made:made>0&&made<=Date.now()?made:h0,via:'pack'}; // made: when the pack's forecast was fetched, shown as its age
   }finally{clearTimeout(to);}
 }
 async function fetchDaily(){
@@ -5545,7 +5558,7 @@ async function fetchWeather(){
 }
 function viaMsg(){return st.via==='pack'?t('via_pack'):'';}
 function ageText(ms){const h=Math.max(0,Math.round((Date.now()-ms)/3600e3));return h<48?fill(t('age_h'),{n:h}):fill(t('age_d'),{n:Math.round(h/24)});}
-function cacheMsg(){const ts=st.cacheTs||st.nowMs,old=Date.now()-ts>36*3600e3;
+function cacheMsg(){const ts=st.cacheMade||st.cacheTs||st.nowMs,old=Date.now()-ts>36*3600e3;
   return fill(t(old?'age_old':'age_ok'),{w:fmtDate(dayOf(ts))+' '+clock(ts)+' IST',a:ageText(ts)});}
 
 /* ---------- engine choice, shown in the footer ---------- */

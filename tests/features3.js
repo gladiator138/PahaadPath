@@ -71,6 +71,29 @@ const istHour=ms=>new Date(Math.floor((ms+5.5*3600e3)/3600e3)*3600e3).toISOStrin
   console.log('outbox and share: ok');
   await ctx.close();
  }
+ // 4b. inside the phone app the online event may never fire: the app still leaves the saved forecast once data flows again,
+ // and it remembers the language picked last time
+ {
+  const ctx=await b.newContext();await ctx.clock.install();const p=await ctx.newPage();let net=false;
+  await ctx.route(/^https?:\/\//,async r=>{const u=new URL(r.request().url());
+   if(net&&u.host==='raw.githubusercontent.com'&&u.pathname.endsWith('/datapack/pack.json')){
+    const keys=await p.evaluate(()=>[...new Set(PP.EDGES.filter(e=>!e.virtual).map(e=>e.cLat.toFixed(2)+','+e.cLon.toFixed(2)))]);
+    const hourly={},daily={};keys.forEach(k=>{hourly[k]=new Array(456).fill(0);daily[k]=new Array(47).fill(0);});
+    return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({v:1,hour0:istHour(Date.now()),day0:new Date(Date.now()+5.5*3600e3-31*864e5).toISOString().slice(0,10),hourly,daily})});}
+   return r.abort();});
+  await p.goto('file://'+F+'?tiles=0');await p.waitForFunction(()=>window.PP&&PP.st.series);
+  await p.evaluate(()=>{const by={};PP.EDGES.forEach(e=>{by[e.cLat.toFixed(2)+','+e.cLon.toFixed(2)]=new Array(456).fill(.5);});
+   localStorage.setItem('pp_cache2',JSON.stringify({ts:Math.floor((Date.now()-5*3600e3)/3600e3)*3600e3,by}));PP.st.scn='live';});
+  await p.evaluate(()=>PP.load());
+  const s1=await p.evaluate(()=>PP.st.src);
+  net=true;await p.clock.runFor(5*60e3+1000);await p.waitForFunction(()=>PP.st.src==='live',null,{timeout:8000}).catch(()=>{});
+  const s2=await p.evaluate(()=>({src:PP.st.src,via:PP.st.via}));
+  ok(s1==='cache'&&s2.src==='live'&&s2.via==='pack','back to the live forecast without an online event: '+s1+' then '+JSON.stringify(s2));
+  await p.click('#b-hi');await p.reload();await p.waitForFunction(()=>window.PP&&PP.st.series);
+  const lang=await p.evaluate(()=>PP.st.lang);ok(lang==='hi','language kept after reopening: '+lang);
+  console.log('reconnect without event and language memory: ok');
+  await ctx.close();
+ }
  // 5. the app's copy of the trained model gives the scores Python gave
  {
   const ctx=await b.newContext();const p=await ctx.newPage();await ctx.route(/^https?:\/\//,r=>r.abort());

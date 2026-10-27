@@ -93,7 +93,7 @@ function shStop(){if(SHR.es){try{SHR.es.close();}catch(e){}SHR.es=null;}if(SHR.p
 function shStatusText(){
   if(!st.share)return t('sh_off');
   const n=Object.values(SHR.reps).filter(r=>r.dev!==DEV&&Date.now()-r.rt<12*3600e3).length;
-  return (SHR.status==='on'?fill(t('sh_on'),{n}):SHR.status==='err'?t('sh_err'):t('sh_wait'))+(OUTBOX.length?' · '+fill(t('ob_n'),{n:OUTBOX.length}):'');
+  return (SHR.status==='on'?fill(t('sh_on'),{n}):SHR.status==='err'?t('sh_err'):t('sh_wait'))+(OUTBOX.length?' · '+(OUTBOX.length===1?t('ob_1'):fill(t('ob_n'),{n:OUTBOX.length})):'');
 }
 function shareBox(){
   return '<div class="card shbox"><label class="chk"><input type="checkbox" id="sh-use"'+(st.share?' checked':'')+'> '+t('sh_t')+'</label>'

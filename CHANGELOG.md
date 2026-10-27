@@ -58,3 +58,10 @@ Goal from here on: real users in Uttarakhand who are out of network most of the 
 - Data pack: CI fetches the forecast every 3 hours and publishes one file (about 6 KB compressed instead of about 700 KB from the weather API). The app tries it first.
 - Offline: a saved forecast is used for up to 10 days (was 36 hours); the header gives its age and, after 36 hours, says that rain since then is unknown.
 - Distribution: "Share the app" saves the whole app as one file for WhatsApp, Bluetooth or a memory card. Android APK built in CI (WebView around the same file, works with no network, shares itself) and published as a release from main.
+
+## 27 Oct 2026 (phone test fixes)
+- Tested the Android build as a phone would run it (WebView origin, phone screen, real data pack, flight mode). Fixes from that run:
+- The app remembers English or Hindi between openings.
+- After signal returns the app leaves the saved forecast by itself (every 5 minutes and when reopened), even where the online event never fires, as in some Android web views.
+- Forecast age counts from when the data pack was made, not from when the phone downloaded it.
+- "1 report waiting" (was "1 reports"); Hindi summary line ends with a danda.
