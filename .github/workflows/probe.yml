@@ -11,32 +11,22 @@ jobs:
     steps:
       - run: sudo apt-get update -qq >/dev/null; sudo apt-get install -y -qq poppler-utils >/dev/null; pdftotext -v 2>&1 | head -1
       - continue-on-error: true
-        name: PWD SRMD listing and latest report
+        name: links on the SRMD reports page and the category feed
         run: |
-          UA='Mozilla/5.0 (X11; Linux x86_64) pahaadpath-pipeline'
-          curl -sSL -m 60 -A "$UA" https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/ -o list.html
-          grep -oE 'https://cdnbbsr[^"]+\.pdf' list.html | sort -u | head -20
-          grep -oE '>[^<]*SRMD[^<]*<' list.html | head -20
-          grep -oE 'href="[^"]*srmd[^"]*"' list.html | sort -u | head -20
-          u=$(grep -oE 'https://cdnbbsr[^"]+\.pdf' list.html | head -1)
-          curl -sSL -m 120 -A "$UA" "$u" -o r.pdf; ls -l r.pdf; pdfinfo r.pdf | head -12
-          pdffonts r.pdf | head -12
-          pdftotext -layout r.pdf r.txt; wc -l r.txt; head -c 9000 r.txt
-          echo; echo '----- grep highways'; grep -niE 'NH|राष्ट्रीय|बद्रीनाथ|केदारनाथ|गंगोत्री|यमुनोत्री|badrinath|kedarnath|gangotri|yamunotri' r.txt | head -40
-          echo '----- tail'; tail -c 3000 r.txt
+          curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/srmd-reports/ -o s.html
+          grep -oE '<a [^>]*href="[^"]+"[^>]*>[^<]{3,200}</a>' s.html | grep -iE 'road|closure|odk|alternat|machine|report' | head -30
+          echo '----- feed'
+          curl -sSL -m 60 -A 'Mozilla/5.0' -w '\n%{http_code} %{content_type}\n' https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/feed/ | head -c 2500
+          echo '----- page 6 of the listing'
+          curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/page/6 | grep -oE '>SRMD[^<]*<|https://cdnbbsr[^"]+\.pdf' | head -30
+          echo '----- last page'
+          curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/page/17 | grep -oE '>SRMD[^<]*<|https://cdnbbsr[^"]+\.pdf' | head -30
       - continue-on-error: true
-        name: PWD SRMD reports page
+        name: full text of the 30 Sep morning report and a peak monsoon one
         run: |
-          curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/srmd-reports/ | sed -e 's/<[^>]*>/ /g' | tr -s ' \n' | grep -iE 'srmd|report|road' | head -40
-      - name: news feeds, item titles
-        run: |
-          for u in https://www.amarujala.com/rss/uttarakhand.xml https://www.amarujala.com/rss/dehradun.xml https://www.hindustantimes.com/feeds/rss/cities/dehradun-news/rssfeed.xml; do
-            echo "=== $u"; curl -sSL -m 30 -A 'Mozilla/5.0' "$u" | python3 -c "
-          import sys,xml.etree.ElementTree as E
-          r=E.fromstring(sys.stdin.read())
-          for i in r.iter('item'): print(i.findtext('pubDate'),'|',i.findtext('title'))"
-          done
-          echo '=== newsonair'
-          curl -sS -m 30 'https://www.newsonair.gov.in/wp-json/wp/v2/posts?search=uttarakhand%20roads&per_page=20&_fields=date,link,title' | python3 -c "
-          import sys,json
-          for p in json.load(sys.stdin): print(p['date'],'|',p['title']['rendered'],'|',p['link'])"
+          curl -sSL -m 120 -A 'Mozilla/5.0' https://cdnbbsr.s3waas.gov.in/s31e0a84051e6a4a7381473328f43c4884/uploads/2026/09/202609301796185342.pdf -o a.pdf
+          pdftotext -layout a.pdf a.txt; sed -n '1,400p' a.txt | cut -c1-260
+          u=$(curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/page/8 | grep -oE 'https://cdnbbsr[^"]+\.pdf' | head -1)
+          echo "===== $u"
+          curl -sSL -m 120 -A 'Mozilla/5.0' "$u" -o b.pdf; pdfinfo b.pdf | grep -E 'Pages|ModDate'
+          pdftotext -layout b.pdf b.txt; wc -l b.txt; sed -n '1,60p;150,330p' b.txt | cut -c1-260
