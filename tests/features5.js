@@ -24,7 +24,7 @@ const istDay=ms=>new Date(ms+5.5*3600e3).toISOString().slice(0,10);
  // a report of this morning: two roads in Chamoli (one names Joshimath, on the way to Badrinath), one in Pithoragarh (not on the trip)
  const dist={dehradun:'Dehradun',rishikesh:'Dehradun',devprayag:'Tehri',srinagar:'Pauri',rudraprayag:'Rudraprayag',karnaprayag:'Chamoli',chamoli:'Chamoli',joshimath:'Chamoli',govindghat:'Chamoli',badrinath:'Chamoli',pithoragarh:'Pithoragarh'};
  const today=istDay(Date.now()-4*3600e3);
- const rep={date:today,slot:'morning',url:'https://cdnbbsr.s3waas.gov.in/x/r.pdf',total:3,dist,roads:[
+ const rep={date:today,slot:'morning',url:'https://cdnbbsr.s3waas.gov.in/x/r.pdf',total:3,dist,per:{Chamoli:2,Pithoragarh:1},roads:[
   {n:'Jyotirmath Malari motor road',id:1,ag:'BRO',ty:'SH',d:'Chamoli',km:'12',c:today+'T07:10',e:today+'T18:00',near:['joshimath']},
   {n:'Nandprayag Ghat Sutol Kanol motor road',id:2,ag:'PWD',ty:'MDR',d:'Chamoli',km:'1,3',c:today+'T06:42'},
   {n:'Tawaghat Sobla motor road',id:3,ag:'BRO',ty:'SH',d:'Pithoragarh',km:'1',c:today+'T07:10'}]};
@@ -44,6 +44,10 @@ const istDay=ms=>new Date(ms+5.5*3600e3).toISOString().slice(0,10);
   // a trip through none of the report's districts shows nothing
   await q.evaluate(()=>{PP.st.from='delhi';PP.st.to='nainital';PP.render();});
   ok(await q.evaluate(()=>document.getElementById('closures').hidden),'no card off the districts');
+ });
+ // a long report is cut short in the pack, but the counts per district stay whole
+ await run(Object.assign({},rep,{per:{Chamoli:40}}),async q=>{
+  ok(/40 roads closed in districts on this trip \(Chamoli 40\)/.test(await q.innerText('#closures')),'counts from per');
  });
  // a report from three days ago is not shown
  await run(Object.assign({},rep,{date:istDay(Date.now()-3*864e5)}),async q=>{

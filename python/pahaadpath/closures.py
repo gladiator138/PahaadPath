@@ -108,7 +108,7 @@ def parse(text, places):
         if m.group('st') != 'Closed' or m.group('id') in seen:
             continue
         seen.add(m.group('id'))
-        name = m.group('name').strip()
+        name = re.sub(r'[\s:.]+$', '', m.group('name').strip())
         dist = m.group('dist')
         if dist:
             dist = 'Udham Singh Nagar' if 'Nagar' in dist else DIST_FIX.get(dist, dist)
@@ -151,7 +151,7 @@ def age_h(date, slot, now):
 def pack_closures(rep):
     """the closures part of the data pack: the report, its closed roads and the district of each town"""
     keep = ('n', 'id', 'ag', 'ty', 'd', 'km', 'c', 'e', 'near')
-    return {'date': rep['date'], 'slot': rep['slot'], 'url': rep['url'], 'total': rep['total'],
+    return {'date': rep['date'], 'slot': rep['slot'], 'url': rep['url'], 'total': rep['total'], 'per': rep.get('per', {}),
             'roads': [{k: r[k] for k in keep if r.get(k)} for r in rep['roads']], 'dist': DISTRICT}
 
 
@@ -185,6 +185,10 @@ def fetch_closures(places, now=None, log=print):
         rep.setdefault('slot', slot)
         rep['url'] = url
         rep['total'] = len(rep['roads'])
+        rep['per'] = {}  # closed roads per district, counted before the list is cut to MAX_ROADS
+        for r in rep['roads']:
+            if r['d']:
+                rep['per'][r['d']] = rep['per'].get(r['d'], 0) + 1
         # village roads far from any town on the network matter least; keep the ones that name a town first
         rep['roads'].sort(key=lambda r: (not r['near'], r['ag'] == 'PMGSY', r['ty'] == 'VR'))
         rep['roads'] = rep['roads'][:MAX_ROADS]

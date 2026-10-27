@@ -37,9 +37,10 @@ function closuresHtml(M){
   const ds=[...new Set(towns.map(id=>dist[id]).filter(Boolean))];if(!ds.length)return '';
   const inD=c.roads.filter(r=>ds.includes(r.d)),slot=t('cl_'+c.slot)||c.slot,d=clTime(c.date);
   let h='<h3>'+t('cl_t')+'</h3>';
-  if(!inD.length)return h+'<p class="note">'+esc(fill(t('cl_none'),{slot,d}))+'</p>';
-  const per=ds.map(x=>[x,inD.filter(r=>r.d===x).length]).filter(x=>x[1]).map(x=>clDist(x[0])+' '+x[1]).join(', ');
-  h+='<p class="note">'+esc(fill(t('cl_s'),{slot,d,n:inD.length,list:per}))+'</p>';
+  if(!inD.length&&!ds.some(x=>c.per&&c.per[x]))return h+'<p class="note">'+esc(fill(t('cl_none'),{slot,d}))+'</p>';
+  const cnt=x=>c.per&&c.per[x]!=null?c.per[x]:inD.filter(r=>r.d===x).length; // per: counted before the pack cut the list short
+  const per=ds.filter(cnt).map(x=>clDist(x)+' '+cnt(x)),n=ds.reduce((s,x)=>s+cnt(x),0);
+  h+='<p class="note">'+esc(fill(t('cl_s'),{slot,d,n,list:per.join(', ')}))+'</p>';
   const near=inD.filter(r=>(r.near||[]).some(id=>towns.includes(id)));
   const main=inD.filter(r=>!near.includes(r)&&['NH','SH','MDR'].includes(r.ty));
   const row=r=>'<div class="al"><p><b>'+esc(r.n)+'</b></p><p class="note">'+esc(fill(t('cl_row'),{dist:clDist(r.d),ty:t('cl_ty')[r.ty]||r.ty,c:clTime(r.c),e:r.e?fill(t('cl_e'),{e:clTime(r.e)}):''}))+'</p></div>';

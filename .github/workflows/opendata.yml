@@ -28,8 +28,8 @@ jobs:
         continue-on-error: true
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
-          cd python && python -u -m pahaadpath closures | head -40
-          python -u -m pahaadpath closures --at 2026-09-30T20:00+05:30 | head -40
+          cd python && python -u -m pahaadpath closures | tail -30
+          python -u -m pahaadpath closures --at 2026-09-30T20:00+05:30 | tail -30
       - name: Commit the stops file to this branch
         run: |
           git config user.name 'github-actions[bot]'
