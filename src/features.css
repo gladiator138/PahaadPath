@@ -120,3 +120,5 @@ svg.chart.tn{max-width:640px}
 #alerts h3{margin:0 0 2px}
 .al{border-top:1px solid var(--line);padding:6px 0 0}
 .al p{margin:0 0 2px}
+body.norisk .rk,body.norisk #planner{display:none}
+.card.nr{border-left:4px solid var(--avd)}

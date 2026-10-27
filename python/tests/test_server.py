@@ -33,9 +33,10 @@ class SyncServer(unittest.TestCase):
         now = int(time.time() * 1000)
         a = {'v': 1, 'k': 'report', 'rid': 'r1', 'dev': 'phoneA', 'rt': now - 3600000, 'seg': 'rishikesh-devprayag', 'spot': 0, 'type': 'landslide'}
         bad = dict(a, rid='r2', seg='nowhere')
-        old = dict(a, rid='r3', rt=now - 13 * 3600000)
-        js = self.post([a, bad, old, a])
-        self.assertEqual(js['took'], 1)
+        late = dict(a, rid='r4', rt=now - 20 * 3600000)  # queued in a valley for 20 h: still taken
+        old = dict(a, rid='r3', rt=now - 49 * 3600000)
+        js = self.post([a, bad, old, a, late])
+        self.assertEqual(js['took'], 2)
         js = self.post([{'v': 1, 'k': 'confirm', 'rid': 'r1', 'dev': 'phoneB', 'rt': now}])
         self.assertEqual(js['took'], 1)
         kinds = sorted((m['k'], m['dev']) for m in js['msgs'] if m['rid'] == 'r1')
