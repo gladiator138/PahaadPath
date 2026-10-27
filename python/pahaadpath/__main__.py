@@ -5,6 +5,7 @@
   pack          download today's forecast and write the small data pack phones fetch when they get signal
   advisory      worst band on every hill stretch over the next 72 hours (from the pack, or --pack a saved copy offline)
   serve         run the road report sync server (see pahaadpath/server.py)
+  stops         fuel, hospitals, ATMs and mechanics near each town from OpenStreetMap (needs internet)
 """
 import argparse
 import json
@@ -27,6 +28,8 @@ def main(argv=None):
     s.add_argument('--host', default='0.0.0.0')
     s.add_argument('--port', type=int, default=8787)
     s.add_argument('--db', default='reports.sqlite3')
+    o = sub.add_parser('stops')
+    o.add_argument('--out', default='data/osm_stops.json')
     a = ap.parse_args(argv)
 
     from .network import Network
@@ -60,6 +63,15 @@ def main(argv=None):
         for r in advisory(Network(), pk, hours=a.hours):
             if r['band'] != 'Go':
                 print('%-8s %3d  %-28s worst at %s' % (r['band'], r['score'], r['id'], r['at']))
+    elif a.cmd == 'stops':
+        from .stops import build_stops
+        import os
+        st = build_stops(Network())
+        os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
+        with open(a.out, 'w', encoding='utf-8') as f:
+            json.dump(st, f, ensure_ascii=False, separators=(',', ':'))
+            f.write('\n')
+        print('stops', a.out, len(st['towns']), 'towns')
     elif a.cmd == 'serve':
         from .server import serve
         serve(a.host, a.port, a.db)
