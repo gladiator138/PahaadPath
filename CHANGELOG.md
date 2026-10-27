@@ -74,3 +74,9 @@ Goal from here on: real users in Uttarakhand who are out of network most of the 
 - Safety tab links to official warnings: Sachet (NDMA) and IMD Mausam.
 - Roadside stops from OpenStreetMap (fuel, hospital or clinic, ATM, mechanic within 3 km of each town; 45 of 64 towns have at least one): listed per town on the Safety tab, longest stretch with no fuel mapped, next fuel and hospital in "Where am I". Made by the new open data workflow.
 - Official alerts: the data pack now carries NDMA Sachet alerts for Uttarakhand from the last 48 hours, shown on the trip and kept offline with the saved forecast. The pack is published only from main.
+
+## 27 Oct 2026 (v7): official road closures
+- Looked for a machine readable source of closed roads in Uttarakhand. Uttarakhand PWD publishes a road by road closure report (SRMD) every morning and evening in the monsoon, covering PWD roads, national highway divisions, BRO and PMGSY village roads, with district, road type, when each road closed and when it is expected to open. Police and district handles on X, news feeds and USDMA's archive were checked too; see the source comparison in the project files.
+- The data pack now carries the closed roads of the latest PWD report when it is less than 36 hours old (read on GitHub Actions with pdftotext). The parser reads every closed row on three real reports (174 of 174 on 19 Aug, 130 of 130 on 31 Aug, 82 of 82 on 30 Sep 2026).
+- Trip screen: "Roads reported closed (PWD Uttarakhand)" for the districts the trip passes, roads that name a town on the route first, then closed highways and district roads, with a link to the PDF. Kept offline with the saved forecast. The report names roads, not spots, so PahaadPath does not mark its own stretches closed.
+- Out of season (the last report of 2026 is from 30 Sep) the pack carries no closures and the card does not show.

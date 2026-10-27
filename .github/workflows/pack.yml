@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]  # only main publishes the pack phones use
-    paths: ['python/pahaadpath/pack.py', 'python/pahaadpath/alerts.py', 'python/pahaadpath/openmeteo.py', 'python/pahaadpath/network.py', '.github/workflows/pack.yml']
+    paths: ['python/pahaadpath/pack.py', 'python/pahaadpath/alerts.py', 'python/pahaadpath/closures.py', 'python/pahaadpath/openmeteo.py', 'python/pahaadpath/network.py', '.github/workflows/pack.yml']
 permissions:
   contents: write
 concurrency:
@@ -21,6 +21,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: pdftotext, to read the PWD road closure report
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils || echo 'no pdftotext: the pack goes out without closures'
       - run: cd python && python -u -m pahaadpath pack --out ../dist/pack/pack.json
       - name: Publish on the datapack branch (one commit, replaced each time)
         run: |

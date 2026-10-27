@@ -6,6 +6,7 @@
   advisory      worst band on every hill stretch over the next 72 hours (from the pack, or --pack a saved copy offline)
   serve         run the road report sync server (see pahaadpath/server.py)
   stops         fuel, hospitals, ATMs and mechanics near each town from OpenStreetMap (needs internet)
+  closures      roads closed in the latest PWD road closure report, as the data pack carries them (needs internet, pdftotext)
 """
 import argparse
 import json
@@ -30,6 +31,8 @@ def main(argv=None):
     s.add_argument('--db', default='reports.sqlite3')
     o = sub.add_parser('stops')
     o.add_argument('--out', default='data/osm_stops.json')
+    c = sub.add_parser('closures')
+    c.add_argument('--at', help='pretend it is this time (ISO, e.g. 2026-09-30T20:00+05:30) to read an older report')
     a = ap.parse_args(argv)
 
     from .network import Network
@@ -72,6 +75,17 @@ def main(argv=None):
             json.dump(st, f, ensure_ascii=False, separators=(',', ':'))
             f.write('\n')
         print('stops', a.out, len(st['towns']), 'towns')
+    elif a.cmd == 'closures':
+        import datetime as dt
+        from .closures import fetch_closures, pack_closures
+        rep = fetch_closures(Network().places, now=dt.datetime.fromisoformat(a.at) if a.at else None)
+        if rep is None:
+            sys.exit(0)
+        pk = pack_closures(rep)
+        print(json.dumps({k: v for k, v in pk.items() if k not in ('roads', 'dist')}, ensure_ascii=False))
+        for r in pk['roads']:
+            print(json.dumps(r, ensure_ascii=False))
+        print('%d bytes in the pack' % len(json.dumps(pk, ensure_ascii=False, separators=(',', ':')).encode()))
     elif a.cmd == 'serve':
         from .server import serve
         serve(a.host, a.port, a.db)
