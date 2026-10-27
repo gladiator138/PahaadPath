@@ -116,3 +116,7 @@ svg.chart.tn{max-width:640px}
 .fu-in label{font-size:12px;color:var(--muted)}
 .acts.wh{margin:0 0 10px}
 .btn.on{background:var(--cau-bg)}
+#alerts{border-left:4px solid var(--cau)}
+#alerts h3{margin:0 0 2px}
+.al{border-top:1px solid var(--line);padding:6px 0 0}
+.al p{margin:0 0 2px}

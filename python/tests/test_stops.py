@@ -14,6 +14,7 @@ class StopsTest(unittest.TestCase):
             {'type': 'node', 'lat': p['lat'], 'lon': p['lon'], 'tags': {'shop': 'car_repair'}},
             {'type': 'node', 'lat': p['lat'] + 0.5, 'lon': p['lon'], 'tags': {'amenity': 'fuel'}},  # far from every town
             {'type': 'node', 'lat': p['lat'], 'lon': p['lon'], 'tags': {'amenity': 'bench'}},
+            {'type': 'node', 'lat': p['lat'], 'lon': p['lon'], 'tags': {'amenity': 'hospital', 'name': 'Government Veterinary Hospital'}},
         ]
         t = assign(net, els)['rudraprayag']
         self.assertEqual(t['fuel'], [1, ['Indian Oil']])

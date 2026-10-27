@@ -106,7 +106,7 @@ async function fetchPack(){
     Object.keys(p.daily).forEach(k=>{daily[k]=p.daily[k].map(v=>v/10);});
     if(!EDGES.every(e=>e.virtual||by[locKey(e)]))throw new Error('pack places');
     const made=Date.parse(p.made);
-    return{by,daily,day0:p.day0,ts:st.hour0,made:made>0&&made<=Date.now()?made:h0,via:'pack'}; // made: when the pack's forecast was fetched, shown as its age
+    return{by,daily,day0:p.day0,ts:st.hour0,made:made>0&&made<=Date.now()?made:h0,via:'pack',alerts:Array.isArray(p.alerts)?p.alerts:null}; // made: when the pack's forecast was fetched, shown as its age
   }finally{clearTimeout(to);}
 }
 async function fetchDaily(){

@@ -46,7 +46,10 @@ def fetch(log=print):
 def kind_of(tags):
     if tags.get('shop') == 'car_repair':
         return 'mech'
-    return KINDS.get(tags.get('amenity'))
+    k = KINDS.get(tags.get('amenity'))
+    if k == 'hosp' and (tags.get('healthcare:speciality') == 'veterinary' or 'veterinar' in (tags.get('name') or '').lower()):
+        return None  # animal hospitals are tagged amenity=hospital or clinic too
+    return k
 
 
 def assign(net, elements):

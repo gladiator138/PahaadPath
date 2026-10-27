@@ -39,6 +39,11 @@ const style=s=>[/—/,/–/,/\S - \S/,/, (and|or|और|या) /].filter(re=>re
  await p.fill('#fu-mil','10');await p.fill('#fu-pr','100');
  const km=await p.evaluate(()=>Math.round(PP.st.M.cur.totalKm)),fu=await p.innerText('#fu-out');
  ok(fu.includes('about ₹'+(Math.round(km/10*100/50)*50).toLocaleString('en-IN')),'fuel '+fu+' for '+km+' km');
+ // 4b. roadside stops, when the OpenStreetMap file is baked in: listed per town on the Safety tab
+ await p.evaluate(()=>{PP.st.tab='safety';PP.render();});
+ const sf=await p.innerText('#panel');
+ if(require('fs').existsSync(require('path').join(__dirname,'..','data','osm_stops.json')))ok(/Fuel, hospitals and mechanics on this route/.test(sf)&&/Badrinath: /.test(sf),'stops on the safety tab');
+ await p.evaluate(()=>{PP.st.tab='route';PP.render();});
  // 5. house style on the new screens, both languages
  for(const lang of ['en','hi']){
   await p.click(lang==='en'?'#b-en':'#b-hi');
@@ -49,6 +54,27 @@ const style=s=>[/—/,/–/,/\S - \S/,/, (and|or|और|या) /].filter(re=>re
   const bad=style(decodeURIComponent(txt));ok(!bad.length,'house style '+lang+' '+bad);
  }
  ok(!errs.length,'page errors '+errs);
+ // 6. official alerts ride in the data pack and still show offline from the saved forecast
+ {
+  const c2=await b.newContext({viewport:{width:412,height:900}});const q=await c2.newPage();let net=true;
+  const istHour=ms=>new Date(Math.floor((ms+5.5*3600e3)/3600e3)*3600e3).toISOString().slice(0,13)+':00';
+  await c2.route(/^https?:\/\//,async r=>{const u=new URL(r.request().url());
+   if(net&&u.host==='raw.githubusercontent.com'&&u.pathname.endsWith('/pack.json')){
+    const keys=await q.evaluate(()=>[...new Set(PP.EDGES.filter(e=>!e.virtual).map(e=>e.cLat.toFixed(2)+','+e.cLon.toFixed(2)))]);
+    const hourly={},daily={};keys.forEach(k=>{hourly[k]=new Array(456).fill(0);daily[k]=new Array(47).fill(0);});
+    const at=new Date(Date.now()-2*3600e3).toISOString().slice(0,19)+'Z',old=new Date(Date.now()-60*3600e3).toISOString().slice(0,19)+'Z';
+    return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify({v:1,hour0:istHour(Date.now()),day0:new Date(Date.now()+5.5*3600e3-31*864e5).toISOString().slice(0,10),hourly,daily,
+     alerts:[{t:'Thunderstorm with lightning likely over Chamoli, Rudraprayag in next 3 hours.',by:'IMD Dehradun',at},{t:'Too old to show',by:'IMD Dehradun',at:old}]})});}
+   return r.abort();});
+  await q.goto('file://'+F+'?tiles=0');await q.waitForFunction(()=>window.PP&&PP.st.series);
+  await q.evaluate(()=>{PP.st.scn='live';return PP.load();});
+  const a1=await q.innerText('#alerts');
+  ok(/Official alerts for Uttarakhand/.test(a1)&&/Chamoli/.test(a1)&&/IMD Dehradun · 2 h ago/.test(a1)&&!/Too old/.test(a1),'alerts from the pack: '+a1);
+  net=false;await q.reload();await q.waitForFunction(()=>window.PP&&PP.st.series);await q.evaluate(()=>{PP.st.scn='live';return PP.load();});
+  const a2=await q.evaluate(()=>({src:PP.st.src,txt:document.getElementById('alerts').innerText}));
+  ok(a2.src==='cache'&&/Chamoli/.test(a2.txt),'alerts offline from the saved forecast '+JSON.stringify(a2));
+  await c2.close();
+ }
  await b.close();
  if(fails.length){console.log('FAIL\n'+fails.join('\n'));process.exit(1);}
  console.log('all v6 checks passed');

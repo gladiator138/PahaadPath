@@ -1,14 +1,14 @@
 name: open data
 # Run by hand: roadside stops (fuel, hospitals, ATMs, mechanics) near each town from OpenStreetMap, committed to the
-# branch it runs on as data/osm_stops.json and baked into the app by the next build. Also prints the start of the NDMA
-# Sachet public alert feed, so its format can be checked before the data pack uses it.
+# branch it runs on as data/osm_stops.json and baked into the app by the next build. Also prints the NDMA Sachet alerts
+# for Uttarakhand as the data pack will carry them.
 # The app build bakes this file in, so rebuild index.html after it changes (CI checks the copies match); for that reason a
 # push only runs it on branches other than main.
 on:
   workflow_dispatch:
   push:
     branches-ignore: [main]
-    paths: ['.github/workflows/opendata.yml', 'python/pahaadpath/stops.py']
+    paths: ['.github/workflows/opendata.yml', 'python/pahaadpath/stops.py', 'python/pahaadpath/alerts.py']
 permissions:
   contents: write
 jobs:
@@ -21,12 +21,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: cd python && python -u -m pahaadpath stops --out ../data/osm_stops.json
-      - name: Sachet alert feed (look only)
+      - name: Sachet alerts as the data pack will carry them (look only)
         continue-on-error: true
-        run: |
-          for u in https://sachet.ndma.gov.in/cap_public_website/rss/rss_india.xml https://sachet.ndma.gov.in/cap_public_website/rss/rss_uttarakhand.xml; do
-            echo "== $u"; curl -sS -m 60 -A pahaadpath-pipeline -w '\nHTTP %{http_code} %{content_type} %{size_download} bytes\n' "$u" | head -c 4000; echo
-          done
+        run: cd python && python -u -c "import json; from pahaadpath.alerts import fetch_alerts; print(json.dumps(fetch_alerts(), ensure_ascii=False, indent=1))"
       - name: Commit the stops file to this branch
         run: |
           git config user.name 'github-actions[bot]'

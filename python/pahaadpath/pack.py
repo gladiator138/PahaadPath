@@ -3,6 +3,7 @@ fixed address. A phone that gets a moment of signal downloads this one file (abo
 the weather API, then plans offline from it for days, telling the user how old it is."""
 import datetime as dt
 
+from .alerts import fetch_alerts
 from .openmeteo import forecast
 
 
@@ -13,7 +14,8 @@ def tenths(a):
 def build_pack(net, log=print):
     keys = net.keys()
     hour0, hourly, day0, daily = forecast(keys, log=log)
-    return {
+    alerts = fetch_alerts(log=log)
+    pk = {
         'v': 1,
         'made': dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
         'hour0': hour0,  # IST hour that is index 72 of each hourly row
@@ -23,3 +25,7 @@ def build_pack(net, log=print):
         'hourly': {k: tenths(hourly[k]) for k in keys},
         'daily': {k: tenths(daily[k]) for k in keys},
     }
+    if alerts is not None:  # absent when the feed could not be read, so the app keeps the alerts it already has
+        pk['alerts'] = alerts
+        pk['alerts_source'] = 'NDMA Sachet public alert feed for Uttarakhand (public domain), last %d hours' % 48
+    return pk

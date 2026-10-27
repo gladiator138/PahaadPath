@@ -11,6 +11,9 @@ Object.assign(T.en,{
   wh_stay:'Next town with lodging: {p}, about {km} km ahead.',wh_left:'About {km} km left to {p}.',wh_err:'No GPS fix. Go to open sky and try again, or check that location is allowed.',
   fu_t:'Fuel and cost',fu_s:'Your own numbers. Hill roads use more fuel than the plains, so use your car’s mileage on hills.',fu_mil:'Mileage, km per litre',fu_pr:'Fuel price, ₹ per litre',
   fu_out:'About {l} litres for {km} km, about ₹{c}.',
+  st_t:'Fuel, hospitals and mechanics on this route',st_s:'Mapped in OpenStreetMap within 3 km of each town ({d}). Small hill towns are often missing, so ask locally too.',st_fuel:'fuel',st_hosp:'hospital or clinic',st_atm:'ATM',st_mech:'mechanic',st_none:'none mapped',
+  st_gap:'Longest stretch with no fuel station mapped: about {km} km, {a} to {b}. Fill up in {a}.',wh_fuel:'Next fuel station mapped: {p}, about {km} km ahead.',wh_hosp:'Next hospital or clinic mapped: {p}, about {km} km ahead.',
+  al_t:'Official alerts for Uttarakhand',al_s:'From NDMA Sachet, saved with the forecast so they show with no signal. Issued by government agencies, not by PahaadPath.',al_ago:'{a} ago',al_more:'All alerts on Sachet',
   of_t:'Official warnings',of_s:'Needs internet. PahaadPath is advisory; these are the official sources.',of_sachet:'Sachet (NDMA): official disaster alerts by district',of_imd:'IMD Mausam: district weather warnings'
 });
 Object.assign(T.hi,{
@@ -25,6 +28,9 @@ Object.assign(T.hi,{
   wh_stay:'ठहरने की जगह वाला अगला शहर: {p}, लगभग {km} किमी आगे।',wh_left:'{p} तक लगभग {km} किमी बाकी।',wh_err:'GPS नहीं मिला। खुले आसमान के नीचे जाकर फिर कोशिश करें, या देखें कि लोकेशन की अनुमति है।',
   fu_t:'ईंधन और ख़र्च',fu_s:'आपके अपने आँकड़े। पहाड़ी सड़कों पर मैदान से ज़्यादा ईंधन लगता है, इसलिए पहाड़ पर अपनी गाड़ी का माइलेज डालें।',fu_mil:'माइलेज, किमी प्रति लीटर',fu_pr:'ईंधन का दाम, ₹ प्रति लीटर',
   fu_out:'{km} किमी के लिए लगभग {l} लीटर, लगभग ₹{c}।',
+  st_t:'इस रास्ते पर पेट्रोल पंप, अस्पताल और मिस्त्री',st_s:'OpenStreetMap में हर शहर से 3 किमी के अंदर दर्ज ({d})। छोटे पहाड़ी शहर अक्सर छूट जाते हैं, इसलिए स्थानीय लोगों से भी पूछें।',st_fuel:'पेट्रोल पंप',st_hosp:'अस्पताल या क्लिनिक',st_atm:'ATM',st_mech:'मिस्त्री',st_none:'कुछ दर्ज नहीं',
+  st_gap:'बिना दर्ज पेट्रोल पंप का सबसे लंबा हिस्सा: लगभग {km} किमी, {a} से {b}। {a} में टंकी भरवाएँ।',wh_fuel:'अगला दर्ज पेट्रोल पंप: {p}, लगभग {km} किमी आगे।',wh_hosp:'अगला दर्ज अस्पताल या क्लिनिक: {p}, लगभग {km} किमी आगे।',
+  al_t:'उत्तराखंड के लिए आधिकारिक चेतावनियाँ',al_s:'NDMA सचेत से, पूर्वानुमान के साथ सहेजी गईं ताकि बिना नेटवर्क भी दिखें। ये सरकारी एजेंसियों की हैं, पहाड़ पथ की नहीं।',al_ago:'{a} पहले',al_more:'सचेत पर सभी चेतावनियाँ',
   of_t:'आधिकारिक चेतावनियाँ',of_s:'इंटरनेट चाहिए। पहाड़ पथ सिर्फ़ सलाह देता है; ये आधिकारिक स्रोत हैं।',of_sachet:'सचेत (NDMA): ज़िलेवार आधिकारिक आपदा चेतावनियाँ',of_imd:'IMD मौसम: ज़िलेवार मौसम चेतावनियाँ'
 });
 
@@ -142,6 +148,7 @@ function whereHtml(pos){
   out.push(next?fill(t('wh_next'),{r:pname(next.from)+' → '+pname(next.to),l:t(LV[lvl(next.score)])+' '+next.score,km:Math.max(0,Math.round(next.kmStart-kmHere))}):t('wh_clear'));
   const stay=cur.rows.slice(w.i).find(x=>NODE(x.to).stay&&!NODE(x.to).virtual&&x.to!==M.trip.to);
   if(stay)out.push(fill(t('wh_stay'),{p:pname(stay.to),km:Math.max(0,Math.round(stay.kmStart+stay.seg.km-kmHere))}));
+  if(STOPS)['fuel','hosp'].forEach(k=>{const n=tripTowns(cur).find(x=>x.km>kmHere&&hasStop(x.id,k));if(n)out.push(fill(t('wh_'+k),{p:pname(n.id),km:Math.round(n.km-kmHere)}));});
   out.push(fill(t('wh_left'),{p:pname(M.trip.to),km:Math.max(0,Math.round(cur.totalKm-kmHere))}));
   return out.map(x=>'<p>'+esc(x)+'</p>').join('');
 }
@@ -156,7 +163,7 @@ function fuelHtml(M){
   return '<div class="card fu"><h3>'+t('fu_t')+'</h3><p class="note">'+t('fu_s')+'</p>'
     +'<div class="fu-in"><label>'+t('fu_mil')+'<input id="fu-mil" class="inp" type="number" min="3" max="40" step="0.5" inputmode="decimal" value="'+mil+'"></label>'
     +'<label>'+t('fu_pr')+'<input id="fu-pr" class="inp" type="number" min="50" max="200" step="1" inputmode="decimal" value="'+pr+'"></label></div>'
-    +'<p id="fu-out"><b>'+esc(fuelText(km,mil,pr))+'</b></p></div>';
+    +'<p id="fu-out"><b>'+esc(fuelText(km,mil,pr))+'</b></p>'+(STOPS&&fuelGap(M.cur)?'<p class="note">'+esc(fill(t('st_gap'),{km:Math.round(fuelGap(M.cur).km),a:pname(fuelGap(M.cur).a),b:pname(fuelGap(M.cur).b)}))+'</p>':'')+'</div>';
 }
 function fuelText(km,mil,pr){const l=km/mil;return fill(t('fu_out'),{l:Math.round(l),km,c:(Math.round(l*pr/50)*50).toLocaleString('en-IN')});}
 document.addEventListener('input',e=>{
@@ -164,6 +171,44 @@ document.addEventListener('input',e=>{
   const mil=+$('fu-mil').value,pr=+$('fu-pr').value;if(!(mil>=3&&pr>=10)||!st.M)return;
   lsSet('pp_mil',mil);lsSet('pp_fuel',pr);$('fu-out').innerHTML='<b>'+esc(fuelText(Math.round(st.M.cur.totalKm),mil,pr))+'</b>';
 });
+
+/* ---------- roadside stops from OpenStreetMap (python -m pahaadpath stops; tools/build.py bakes data/osm_stops.json in) ---------- */
+const STOPS=/*__STOPS__*/null;
+const ST_KINDS=['fuel','hosp','atm','mech'];
+function stopsAt(id){return STOPS&&STOPS.towns[id]||null;}
+function hasStop(id,k){const s=stopsAt(id);return !!(s&&s[k]&&s[k][0]);}
+/* towns along the trip with the km at which the trip reaches them */
+function tripTowns(cur){
+  const out=[];if(!cur.rows.length)return out;
+  out.push({id:cur.rows[0].from,km:0});
+  cur.rows.forEach(r=>out.push({id:r.to,km:r.kmStart+r.seg.km}));
+  return out.filter(x=>NODE(x.id)&&!NODE(x.id).virtual);
+}
+function fuelGap(cur){
+  const tw=tripTowns(cur).filter(x=>hasStop(x.id,'fuel'));let best=null;
+  for(let i=1;i<tw.length;i++){const g=tw[i].km-tw[i-1].km;if(!best||g>best.km)best={km:g,a:tw[i-1].id,b:tw[i].id};}
+  const last=tripTowns(cur).slice(-1)[0];
+  if(tw.length&&last&&last.km-tw[tw.length-1].km>(best?best.km:0))best={km:last.km-tw[tw.length-1].km,a:tw[tw.length-1].id,b:last.id};
+  return best&&best.km>=40?best:null;
+}
+function stopsHtml(M){
+  if(!STOPS)return '';
+  const row=id=>{const s=stopsAt(id)||{},parts=ST_KINDS.filter(k=>s[k]).map(k=>t('st_'+k)+' '+s[k][0]+(s[k][1].length?' ('+s[k][1].join(', ')+')':''));
+    return '<li><b>'+esc(pname(id))+'</b>: '+esc(parts.length?parts.join(' · '):t('st_none'))+'</li>';};
+  const g=fuelGap(M.cur);
+  return '<h4 class="sec">'+t('st_t')+'</h4><p class="note">'+esc(fill(t('st_s'),{d:STOPS.made}))+'</p>'
+    +(g?'<p><b>'+esc(fill(t('st_gap'),{km:Math.round(g.km),a:pname(g.a),b:pname(g.b)}))+'</b></p>':'')
+    +'<ul class="ul">'+tripTowns(M.cur).map(x=>row(x.id)).join('')+'</ul>';
+}
+
+/* ---------- official alerts (NDMA Sachet), carried in the data pack and saved with the forecast ---------- */
+function alertsHtml(){
+  const now=Date.now(),al=(st.alerts||[]).filter(a=>{const t0=Date.parse(a.at);return t0>0&&now-t0<48*3600e3&&t0-now<3600e3;});
+  if(!al.length||(st.src!=='live'&&st.src!=='cache'))return '';
+  return '<h3>'+t('al_t')+'</h3><p class="note">'+t('al_s')+'</p>'
+    +al.slice(0,3).map(a=>'<div class="al"><p>'+esc(a.t)+'</p><p class="note">'+esc((a.by?a.by+' · ':'')+fill(t('al_ago'),{a:ageText(Date.parse(a.at))}))+'</p></div>').join('')
+    +'<p class="note"><a href="https://sachet.ndma.gov.in/" target="_blank" rel="noopener noreferrer">'+t('al_more')+(al.length>3?' (+'+(al.length-3)+')':'')+'</a></p>';
+}
 
 /* ---------- hooks into the trip screen ---------- */
 const renderTripV5=renderTrip;
@@ -177,11 +222,14 @@ renderSafety=function(M){
   renderSafetyV5(M);
   $('panel').insertAdjacentHTML('beforeend','<h4 class="sec">'+t('of_t')+'</h4><p class="note">'+t('of_s')+'</p><ul class="ul">'
     +'<li><a href="https://sachet.ndma.gov.in/" target="_blank" rel="noopener noreferrer">'+t('of_sachet')+'</a></li>'
-    +'<li><a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener noreferrer">'+t('of_imd')+'</a></li></ul>');
+    +'<li><a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener noreferrer">'+t('of_imd')+'</a></li></ul>'+stopsHtml(M));
 };
 const renderV5=render;
 render=function(){
   renderV5();
+  let ab=$('alerts');
+  if(!ab){ab=document.createElement('section');ab.id='alerts';ab.className='card';$('routes').before(ab);}
+  const ah=st.view==='trip'?alertsHtml():'';ab.innerHTML=ah;ab.hidden=!ah;
   let box=$('mytrips');
   if(!box){box=document.createElement('section');box.id='mytrips';box.className='card';$('routes').before(box);}
   const h=st.view==='trip'?myTripsHtml():'';box.innerHTML=h;box.hidden=!h;
