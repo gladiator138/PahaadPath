@@ -65,3 +65,10 @@ Goal from here on: real users in Uttarakhand who are out of network most of the 
 - After signal returns the app leaves the saved forecast by itself (every 5 minutes and when reopened), even where the online event never fires, as in some Android web views.
 - Forecast age counts from when the data pack was made, not from when the phone downloaded it.
 - "1 report waiting" (was "1 reports"); Hindi summary line ends with a danda.
+
+## 27 Oct 2026 (v6): what general map apps lack on hill roads
+- My trips: save up to 5 trips; each is re-scored on every forecast update, also offline, and the list says when the risk went up since saving.
+- Tell family by SMS: trip plan with leave and arrival time and night halt, "reached safely", or "stuck" with the GPS location. Sent from the user's own phone; works on a voice-only signal.
+- Where am I on this trip: GPS only, no data. Risk on the current stretch now, next Caution or Avoid stretch, next town with lodging, km left.
+- Fuel and cost from the user's own mileage and fuel price.
+- Safety tab links to official warnings: Sachet (NDMA) and IMD Mausam.
