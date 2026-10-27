@@ -832,7 +832,7 @@ const T={
   s_monsoon:'Heavy-rain days (demo)',s_clear:'Clear days (demo)',s_live:'Live forecast',
   lbl_w:'Weather',lbl_t:'Traffic assumption',
   td_cal:'Holiday calendar',rng:' to ',td_normal:'Normal weekday',td_weekend:'Weekend, Sat and Sun',td_leve:'Eve of long weekend',td_lstart:'Long weekend, day 1',td_lend:'Long weekend, last day',
-  m_sim:'Simulated weather · ',m_live:'Live rainfall forecast, ',m_cache:'Offline. Last saved forecast from ',m_fail:'No connection and nothing saved. Showing simulated weather.',
+  m_sim:'Simulated weather · ',m_live:'Live rainfall forecast, ',m_cache:'Offline. Last saved forecast from ',m_fail:'No connection and nothing saved. Showing simulated weather.',m_none:'No forecast yet: offline and nothing saved. Landslide risk is not shown. Get a moment of signal to download it (a few KB).',m_old:'Saved forecast is from {w}, more than 10 days old, so landslide risk is not shown. Ask locally and get a moment of signal to update.',
   f_from:'From',f_to:'To',f_date:'Date of travel',f_dep:'Leave at',f_auto:'Best time',swap:'Swap places',ph_place:'Type a town',try_:'Try',
   pl_nf:'“{q}” is not in the built-in list of {n} places.',pl_find:'Search it online',pl_off:'You are offline. Pick a town from the list.',pl_busy:'Searching…',
   pl_none:'No place found for “{q}”.',pl_far:'{name} is too far from the mapped roads (nearest town {n}, {k} km). The map covers Uttarakhand and the roads from Delhi NCR, western UP, Haryana and Chandigarh.',
@@ -840,7 +840,7 @@ const T={
   pl_foot:'{p} is reached on foot from {h}: {km} km, about {t}. The trek is not modelled, the drive is.',
   pl_footonly:'Both places are on the same trek. There is no road leg to plan.',
   dow:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],mon:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-  cf_sim:'Simulated weather, not a forecast',cf_hi:'Forecast {n} days ahead: high confidence',cf_med:'Forecast {n} days ahead: medium confidence',cf_low:'Forecast {n} days ahead: low confidence, treat it as an outlook',cf_today:'Forecast for today',
+  cf_sim:'Simulated weather, not a forecast',cf_none:'No current forecast: landslide risk not shown',cf_hi:'Forecast {n} days ahead: high confidence',cf_med:'Forecast {n} days ahead: medium confidence',cf_low:'Forecast {n} days ahead: low confidence, treat it as an outlook',cf_today:'Forecast for today',
   cal_note:'The holiday calendar covers Oct to Dec 2026. Other dates use the plain weekday pattern; change the traffic assumption if you know better.',
   go:'Go',cau:'Caution',avd:'Avoid',road:'Road',trf:'Traffic',
   trf0:'Free-flowing',trf1:'Busy',trf2:'Heavy jams',
@@ -881,7 +881,7 @@ const T={
   s_monsoon:'भारी बारिश के दिन (डेमो)',s_clear:'साफ़ दिन (डेमो)',s_live:'लाइव पूर्वानुमान',
   lbl_w:'मौसम',lbl_t:'ट्रैफ़िक का अनुमान',
   td_cal:'छुट्टियों के कैलेंडर से',rng:' से ',td_normal:'आम कामकाजी दिन',td_weekend:'सप्ताहांत, शनि और रवि',td_leve:'लंबे सप्ताहांत से पहले',td_lstart:'लंबा सप्ताहांत, दिन 1',td_lend:'लंबा सप्ताहांत, आख़िरी दिन',
-  m_sim:'नकली मौसम · ',m_live:'लाइव बारिश पूर्वानुमान, ',m_cache:'ऑफ़लाइन। आख़िरी सहेजा पूर्वानुमान: ',m_fail:'नेटवर्क नहीं है और कुछ सहेजा नहीं है। नकली मौसम दिखा रहे हैं।',
+  m_sim:'नकली मौसम · ',m_live:'लाइव बारिश पूर्वानुमान, ',m_cache:'ऑफ़लाइन। आख़िरी सहेजा पूर्वानुमान: ',m_fail:'नेटवर्क नहीं है और कुछ सहेजा नहीं है। नकली मौसम दिखा रहे हैं।',m_none:'अभी कोई पूर्वानुमान नहीं: ऑफ़लाइन और कुछ सहेजा नहीं। भूस्खलन जोखिम नहीं दिखाया जा रहा। इसे लेने के लिए थोड़ी देर नेटवर्क लें (कुछ KB)।',m_old:'सहेजा पूर्वानुमान {w} का है, 10 दिन से पुराना, इसलिए भूस्खलन जोखिम नहीं दिखाया जा रहा। स्थानीय लोगों से पूछें और अपडेट के लिए थोड़ी देर नेटवर्क लें।',
   f_from:'कहाँ से',f_to:'कहाँ तक',f_date:'यात्रा की तारीख़',f_dep:'कब निकलें',f_auto:'सबसे अच्छा समय',swap:'जगहें बदलें',ph_place:'शहर का नाम लिखें',try_:'आज़माएँ',
   pl_nf:'“{q}” हमारी {n} जगहों की सूची में नहीं है।',pl_find:'ऑनलाइन खोजें',pl_off:'आप ऑफ़लाइन हैं। सूची से कोई शहर चुनें।',pl_busy:'खोज रहे हैं…',
   pl_none:'“{q}” के लिए कोई जगह नहीं मिली।',pl_far:'{name} नक्शे की सड़कों से बहुत दूर है (सबसे पास का शहर {n}, {k} किमी)। नक्शा उत्तराखंड और दिल्ली एनसीआर, पश्चिमी उत्तर प्रदेश, हरियाणा और चंडीगढ़ से आने वाली सड़कों तक है।',
@@ -889,7 +889,7 @@ const T={
   pl_foot:'{p} तक {h} से पैदल जाना होता है: {km} किमी, लगभग {t}। पैदल रास्ते का अनुमान नहीं लगाया गया, सड़क का लगाया गया है।',
   pl_footonly:'दोनों जगहें एक ही पैदल मार्ग पर हैं। सड़क का कोई हिस्सा नहीं है।',
   dow:['रवि','सोम','मंगल','बुध','गुरु','शुक्र','शनि'],mon:['जनवरी','फ़रवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्तूबर','नवंबर','दिसंबर'],
-  cf_sim:'नकली मौसम, पूर्वानुमान नहीं',cf_hi:'{n} दिन आगे का पूर्वानुमान: भरोसा ज़्यादा',cf_med:'{n} दिन आगे का पूर्वानुमान: भरोसा मध्यम',cf_low:'{n} दिन आगे का पूर्वानुमान: भरोसा कम, इसे मोटा अनुमान मानें',cf_today:'आज का पूर्वानुमान',
+  cf_sim:'नकली मौसम, पूर्वानुमान नहीं',cf_none:'मौजूदा पूर्वानुमान नहीं: भूस्खलन जोखिम नहीं दिखाया गया',cf_hi:'{n} दिन आगे का पूर्वानुमान: भरोसा ज़्यादा',cf_med:'{n} दिन आगे का पूर्वानुमान: भरोसा मध्यम',cf_low:'{n} दिन आगे का पूर्वानुमान: भरोसा कम, इसे मोटा अनुमान मानें',cf_today:'आज का पूर्वानुमान',
   cal_note:'छुट्टियों का कैलेंडर अक्तूबर से दिसंबर 2026 तक है। बाक़ी तारीख़ों के लिए आम सप्ताह का ढर्रा लिया जाता है; बेहतर जानकारी हो तो ट्रैफ़िक का अनुमान बदल लें।',
   go:'चलें',cau:'सावधानी',avd:'टालें',road:'सड़क',trf:'ट्रैफ़िक',
   trf0:'खुला रास्ता',trf1:'व्यस्त',trf2:'भारी जाम',
@@ -1038,7 +1038,11 @@ async function load(pre){
         const shift=Math.round((st.hour0-c.ts)/3600e3),by={};
         Object.keys(c.by).forEach(k=>{by[k]=shift>0?c.by[k].slice(shift).concat(new Array(shift).fill(0)):c.by[k];});
         st.series=seriesFromKeys(by);st.src='cache';st.cacheTs=c.ts;st.cacheMade=c.made||null;st.alerts=c.alerts||null;setDaily(c.daily,c.day0);
-      }else{st.scn='monsoon';st.src='sim';st.err='fail';setClock(true);st.series=simSeries('monsoon');}
+      }else{
+        /* nothing usable saved: say so, and plan roads, time and halts without a landslide score (never demo rain on a real trip) */
+        st.src='none';st.err=c&&c.ts?'old':'none';st.cacheTs=c&&c.ts||null;st.cacheMade=c&&c.made||null;
+        st.series={};EDGES.forEach(e=>{st.series[e.id]=new Array(SERIES_LEN).fill(0);});setDaily(null);
+      }
     }
   }else if(st.scn.startsWith('rp:')){
     const ok=await loadReplayWeather(st.scn.slice(3));if(ok)setReplayDaily(st.scn.slice(3));
@@ -1046,7 +1050,7 @@ async function load(pre){
   }else{
     setClock(true);st.series=simSeries(st.scn);st.src='sim';
   }
-  if(st.src==='sim')setDaily(null);
+  if(st.src==='sim'||st.src==='none')setDaily(null);
   attachVirtualSeries();
   st.reports=(st.scn==='monsoon'&&st.src==='sim'?seedReports():[]);
   clampDate();
@@ -1160,7 +1164,7 @@ function viaText(plan,all){
 }
 function windowText(w,slots){
   const a=slots[w.a].ms,b=slots[w.b].ms,s=slots[w.a];
-  return clock(a)+(w.b>w.a?t('rng')+clock(b):'')+' · '+t('road')+': '+(s.hasHill?t(LV[lvl(s.score)]):t('plains'))+' · '+t('trf')+': '+t('trf'+s.tlevel)+(w.halts?' · '+t('halt_t').toLowerCase():'');
+  return clock(a)+(w.b>w.a?t('rng')+clock(b):'')+(st.src==='none'?'':' · '+t('road')+': '+(s.hasHill?t(LV[lvl(s.score)]):t('plains')))+' · '+t('trf')+': '+t('trf'+s.tlevel)+(w.halts?' · '+t('halt_t').toLowerCase():'');
 }
 function titleOf(M){return pname(M.trip.from)+' → '+pname(M.trip.to);}
 function whyText(cur){
@@ -1179,6 +1183,7 @@ function whyText(cur){
 function confText(){
   const lead=st.dateIdx-dayOf(st.nowMs);
   if(st.src==='sim')return t('cf_sim');
+  if(st.src==='none')return t('cf_none');
   if(st.src==='replay')return t('cf_rp');
   if(lead<=0)return t('cf_today');
   return fill(t(lead<=2?'cf_hi':lead<=5?'cf_med':'cf_low'),{n:lead});
@@ -1193,7 +1198,7 @@ function render(){
   renderViews();
   const o2=$('tday').options;['td_cal','td_normal','td_weekend','td_leve','td_lstart','td_lend'].forEach((k,i)=>{o2[i].textContent=t(k);});$('tday').value=st.tday;
   $('dot').className='dot'+(st.src==='live'?' live':'');
-  $('srcmsg').textContent=st.err==='fail'?t('m_fail'):st.err==='rpfail'?t('m_rpfail'):st.src==='sim'?t('m_sim')+clock(st.nowMs)+' IST':st.src==='live'?t('m_live')+clock(st.made||st.nowMs)+' IST'+viaMsg():st.src==='replay'?fill(t('m_rp'),{d:fmtDate(dayOf(st.nowMs))+' '+new Date(st.nowMs+IST).getUTCFullYear()}):cacheMsg();
+  $('srcmsg').textContent=st.src==='none'?(st.err==='old'?fill(t('m_old'),{w:fmtDate(dayOf(st.cacheMade||st.cacheTs))}):t('m_none')):st.err==='fail'?t('m_fail'):st.err==='rpfail'?t('m_rpfail'):st.src==='sim'?t('m_sim')+clock(st.nowMs)+' IST':st.src==='live'?t('m_live')+clock(st.made||st.nowMs)+' IST'+viaMsg():st.src==='replay'?fill(t('m_rp'),{d:fmtDate(dayOf(st.nowMs))+' '+new Date(st.nowMs+IST).getUTCFullYear()}):cacheMsg();
   $('foot').innerHTML=footHtml();
   if(st.view!=='trip'){if(st.view==='ops')renderOps();else renderProof();return;}
   renderForm();
@@ -1269,7 +1274,7 @@ function renderRoutes(M){
     return '<button class="ro" type="button" data-pickroute="'+p.tag+'" aria-pressed="'+(p===M.sel)+'">'
       +'<span class="ro-top"><b>'+esc(optLabel(p))+'</b>'+(p.rec&&M.plans.length>1?'<i class="rec">'+t('ro_rec')+'</i>':'')+'<span class="ro-t">'+fmtH(p.elapsed)+'</span></span>'
       +'<span class="ro-via">'+esc(viaText(p,M.plans)||titleOf(M))+'</span>'
-      +'<span class="ro-m"><span class="pill l'+lv+'">'+(p.hasHill?t(LV[lv])+' '+p.score:t('plains'))+'</span><span class="pill l'+p.tlevel+'">'+t('trf'+p.tlevel)+'</span>'
+      +'<span class="ro-m"><span class="pill rk l'+lv+'">'+(p.hasHill?t(LV[lv])+' '+p.score:t('plains'))+'</span><span class="pill l'+p.tlevel+'">'+t('trf'+p.tlevel)+'</span>'
       +'<span class="mut">'+Math.round(p.totalKm)+' '+t('km')+(p.halts.length?' · '+t('ro_total'):'')+(p.nightKm>0?' · '+t('ro_dark'):'')+(dt?' · '+esc(dt):'')+'</span></span></button>';
   }).join('');
   if(M.plans.length===1)h+='<p class="note">'+t('ro_none')+'</p>';
@@ -1339,8 +1344,8 @@ function renderTrip(M){
     const nRep=ctx().reports.filter(x=>x.seg===seg.id&&x.type!=='clear').length;
     const rain=Math.round(r.P24),lim=Math.round(CAINE(24));
     const spots=seg.spots.length?'<div class="sp"><span class="warn-tri"></span>'+seg.spots.map(p=>esc(nm(p))).join(' · ')+'</div>':'';
-    const pill=seg.plain?'<span class="pill pl">'+t('plains')+'</span>':'<span class="pill l'+l+'">'+(r.blocked?t('blocked'):t(LV[l]))+' '+r.score+'</span>';
-    const rs=seg.plain?t('plains_note'):t('rain')+' '+rain+'/'+lim+' mm · '+t('slope')+' '+slope+(nRep?' · '+nRep+' '+t(nRep===1?'rep1':'rep'):'');
+    const pill=seg.plain?'<span class="pill pl">'+t('plains')+'</span>':'<span class="pill rk l'+l+'">'+(r.blocked?t('blocked'):t(LV[l]))+' '+r.score+'</span>';
+    const rs=seg.plain?t('plains_note'):(st.src==='none'?'':t('rain')+' '+rain+'/'+lim+' mm · ')+t('slope')+' '+slope+(nRep?' · '+nRep+' '+t(nRep===1?'rep1':'rep'):'');
     const tr='<div class="tr"><i class="l'+tl+'"></i><span>'+esc(clock(msOf(r.start))+t('rng')+clock(msOf(r.end)))+' · '+t('trf')+' ×'+r.x.toFixed(1)+' · '+fmtH(r.dur)+' ('+t('usually')+' '+fmtH(r.norm)+')'+(r.dark?' · <span class="dk">'+t('darkseg')+'</span>':'')+'</span></div>';
     const jam=seg.jam&&r.x>=1.3?'<div class="sp">'+t('jam')+': '+seg.jam.map(p=>esc(nm(p))).join(' · ')+'</div>':'';
     h+='<div class="seg"><div class="km"><b>'+Math.round(r.kmStart)+'</b>'+t('km')+'</div>'
@@ -1445,13 +1450,13 @@ function toast(msg){const e=$('toast');e.textContent=msg;e.hidden=false;clearTim
 function summary(){
   const M=st.M;if(!M||!M.cur)return '';
   const {cur,bw,slots,trip}=M,L=st.lang;
-  const lvW=cur.hasHill?t(LV[cur.level]):t('plains'),title=titleOf(M),tl=t('trf'+cur.tlevel);
+  const nr=st.src==='none',lvW=nr?t('cf_none'):cur.hasHill?t(LV[cur.level]):t('plains'),title=titleOf(M),tl=t('trf'+cur.tlevel);
   const rl=M.rules.filter(k=>RULES[k].tag==='req').map(k=>RULES[k][L].h);
   const dateS=fmtDate(st.dateIdx)+' '+clock(slots[M.k].ms);
   const halt=cur.halts.map((h,i)=>(L==='hi'?'रात का पड़ाव: ':'Night halt: ')+pname(h.node)+' ('+when(msOf(h.arr))+')').join('; ');
   const via=viaText(M.sel,M.plans);
-  if(L==='hi')return 'पहाड़ पथ · '+title+' · '+dateS+'\nसड़क: '+lvW+(cur.hasHill?' (जोखिम '+cur.score+'/100)':'')+' · ट्रैफ़िक: '+tl+'\nगाड़ी चलाने का अनुमानित समय '+fmtH(cur.totalH)+' (आम दिन में '+fmtH(cur.normH)+')।'+(via?'\nरास्ता: '+via+'।':'')+(halt?'\n'+halt+'।':'')+(bw?'\nसबसे अच्छा समय: '+windowText(bw,slots)+'।':'\n'+t('nowin'))+(rl.length?'\nनिकलने से पहले: '+rl.join(', ')+'।':'')+'\nयह सिर्फ़ सलाह है। सड़क पर पुलिस और प्रशासन की सूचना मानें।';
-  return 'PahaadPath · '+title+' · '+dateS+'\nROAD: '+lvW.toUpperCase()+(cur.hasHill?' (landslide risk '+cur.score+'/100)':'')+' · TRAFFIC: '+tl.toUpperCase()+'\nExpected driving time '+fmtH(cur.totalH)+' (normal day '+fmtH(cur.normH)+').'+(via?'\nVia '+via+'.':'')+(halt?'\n'+halt+'.':'')+(bw?'\nBest window: '+windowText(bw,slots)+'.':'\n'+t('nowin'))+(rl.length?'\nBefore you go: '+rl.join(', ')+'.':'')+'\nAdvisory only. Follow police and district notices on the road.';
+  if(L==='hi')return 'पहाड़ पथ · '+title+' · '+dateS+'\nसड़क: '+lvW+(cur.hasHill&&!nr?' (जोखिम '+cur.score+'/100)':'')+' · ट्रैफ़िक: '+tl+'\nगाड़ी चलाने का अनुमानित समय '+fmtH(cur.totalH)+' (आम दिन में '+fmtH(cur.normH)+')।'+(via?'\nरास्ता: '+via+'।':'')+(halt?'\n'+halt+'।':'')+(bw?'\nसबसे अच्छा समय: '+windowText(bw,slots)+'।':'\n'+t('nowin'))+(rl.length?'\nनिकलने से पहले: '+rl.join(', ')+'।':'')+'\nयह सिर्फ़ सलाह है। सड़क पर पुलिस और प्रशासन की सूचना मानें।';
+  return 'PahaadPath · '+title+' · '+dateS+'\nROAD: '+lvW.toUpperCase()+(cur.hasHill&&!nr?' (landslide risk '+cur.score+'/100)':'')+' · TRAFFIC: '+tl.toUpperCase()+'\nExpected driving time '+fmtH(cur.totalH)+' (normal day '+fmtH(cur.normH)+').'+(via?'\nVia '+via+'.':'')+(halt?'\n'+halt+'.':'')+(bw?'\nBest window: '+windowText(bw,slots)+'.':'\n'+t('nowin'))+(rl.length?'\nBefore you go: '+rl.join(', ')+'.':'')+'\nAdvisory only. Follow police and district notices on the road.';
 }
 function speak(){
   const txt=summary().replace(/\n/g,'. ').replace(/PahaadPath ·|पहाड़ पथ ·/,'').replace(/→/g,st.lang==='hi'?' से ':' to ');
@@ -1508,7 +1513,7 @@ setInterval(()=>{if(liveWanted&&st.src==='live'&&!document.hidden)load();},3600e
 /* the online event is not enough: a phone app's web view may never fire it, and in the hills the radio often connects before data
    flows. So while the app shows a saved forecast it quietly tries again every few minutes and whenever it comes back to the screen,
    and redraws only when the new forecast has arrived. */
-const offlineNow=()=>liveWanted&&(st.src==='cache'||st.src==='sim'&&st.err==='fail');
+const offlineNow=()=>liveWanted&&(st.src==='cache'||st.src==='none'||st.src==='sim'&&st.err==='fail');
 function retryLive(){
   if(!offlineNow()||document.hidden||navigator.onLine===false)return;
   const a=document.activeElement;if(a&&(a.tagName==='INPUT'||a.tagName==='SELECT'))return; // do not redraw under a typing finger

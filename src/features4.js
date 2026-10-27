@@ -62,8 +62,9 @@ function myTripsHtml(){
   mtPrune();if(!MY.length||st.src==='replay')return '';
   const rows=MY.map((x,i)=>{
     const r=mtRisk(x);if(!r)return '';
+    if(st.src==='none')r.hill=false; // no current forecast: no score to compare
     const ch=r.hill&&x.level!=null?Math.sign(r.level-x.level):0;
-    const pill=r.hill?'<span class="pill l'+r.level+'">'+esc(mtLabel(r.level,r.score,true))+'</span>':'<span class="pill pl">'+t('plains')+'</span>';
+    const pill=r.hill?'<span class="pill l'+r.level+'">'+esc(mtLabel(r.level,r.score,true))+'</span>':(st.src==='none'?'':'<span class="pill pl">'+t('plains')+'</span>');
     return '<div class="mt'+(ch>0?' up':'')+'"><div class="mt-h"><b>'+esc(pname(x.from)+' → '+pname(x.to))+'</b>'+pill+'</div>'
       +'<div class="note">'+esc(fmtDate(parseDate(x.date))+' '+clock(r.ms))+(x.level!=null&&r.hill?' · '+esc(fill(t('mt_was'),{w:mtLabel(x.level,x.score,true)})):'')+'</div>'
       +(ch?'<div class="mt-ch">'+t(ch>0?'mt_up':'mt_down')+'</div>':'')
@@ -73,7 +74,7 @@ function myTripsHtml(){
 }
 function mtSave(){
   const M=st.M;if(!M||!M.cur)return;
-  const x=Object.assign(mtCur(),{score:M.cur.score,level:M.cur.level});
+  const nr=st.src==='none',x=Object.assign(mtCur(),{score:nr?null:M.cur.score,level:nr?null:M.cur.level});
   const k=mtKey(x),i=MY.findIndex(y=>mtKey(y)===k);
   if(i>=0)MY[i]=x;else{if(MY.length>=MT_MAX){toast(fill(t('mt_full'),{n:MT_MAX}));return;}MY.push(x);}
   lsSet('pp_trips',MY);toast(t('mt_ok'));render();
@@ -82,7 +83,7 @@ function mtSave(){
 /* ---------- tell family by SMS: works on a voice-only signal, goes from the user's own phone ---------- */
 function famBody(kind,pos){
   const M=st.M;if(!M||!M.cur)return '';
-  const cur=M.cur,lvW=cur.hasHill?t(LV[cur.level])+' '+cur.score+'/100':t('plains');
+  const cur=M.cur,lvW=st.src==='none'?t('cf_none'):cur.hasHill?t(LV[cur.level])+' '+cur.score+'/100':t('plains');
   if(kind==='plan')return fill(t('fm_msg_plan'),{r:titleOf(M),d:fmtDate(st.dateIdx)+' '+clock(M.slots[M.k].ms),a:when(msOf(cur.end)),
     h:cur.halts.map(h=>fill(t('fm_msg_halt'),{p:pname(h.node)})).join(''),l:lvW});
   if(kind==='ok')return fill(t('fm_msg_ok'),{p:pname(M.trip.to)});
@@ -143,9 +144,10 @@ function whereHtml(pos){
   if(w.d>5){out.push(fill(t('wh_off'),{km:Math.round(w.d),p:pname(pos.near)}));return out.map(x=>'<p>'+esc(x)+'</p>').join('');}
   const r=w.r,kmHere=r.kmStart+r.seg.km*w.frac,nowH=(Date.now()-st.hour0)/3600e3;
   out.push(fill(t(r.seg.km*w.frac<1?'wh_at':'wh_on'),{r:pname(r.from)+' → '+pname(r.to),p:pname(r.from),km:Math.round(r.seg.km*w.frac)}));
-  if(!r.seg.plain){const s=evalEdge(r.seg,r.rev,nowH,ctx()).score;out.push(fill(t('wh_now'),{l:t(LV[lvl(s)])+' '+s}));}
+  const nr=st.src==='none';
+  if(!r.seg.plain&&!nr){const s=evalEdge(r.seg,r.rev,nowH,ctx()).score;out.push(fill(t('wh_now'),{l:t(LV[lvl(s)])+' '+s}));}
   const next=cur.rows.slice(w.i+1).find(x=>!x.seg.plain&&lvl(x.score)>0);
-  out.push(next?fill(t('wh_next'),{r:pname(next.from)+' → '+pname(next.to),l:t(LV[lvl(next.score)])+' '+next.score,km:Math.max(0,Math.round(next.kmStart-kmHere))}):t('wh_clear'));
+  if(!nr)out.push(next?fill(t('wh_next'),{r:pname(next.from)+' → '+pname(next.to),l:t(LV[lvl(next.score)])+' '+next.score,km:Math.max(0,Math.round(next.kmStart-kmHere))}):t('wh_clear'));
   const stay=cur.rows.slice(w.i).find(x=>NODE(x.to).stay&&!NODE(x.to).virtual&&x.to!==M.trip.to);
   if(stay)out.push(fill(t('wh_stay'),{p:pname(stay.to),km:Math.max(0,Math.round(stay.kmStart+stay.seg.km-kmHere))}));
   if(STOPS)['fuel','hosp'].forEach(k=>{const n=tripTowns(cur).find(x=>x.km>kmHere&&hasStop(x.id,k));if(n)out.push(fill(t('wh_'+k),{p:pname(n.id),km:Math.round(n.km-kmHere)}));});
@@ -224,9 +226,18 @@ renderSafety=function(M){
     +'<li><a href="https://sachet.ndma.gov.in/" target="_blank" rel="noopener noreferrer">'+t('of_sachet')+'</a></li>'
     +'<li><a href="https://mausam.imd.gov.in/" target="_blank" rel="noopener noreferrer">'+t('of_imd')+'</a></li></ul>'+stopsHtml(M));
 };
+/* no usable forecast: plan roads, time and halts, but show no landslide score anywhere */
+function noRiskHtml(){return '<div class="card nr"><b>'+esc(t('cf_none'))+'</b><p class="note">'+esc($('srcmsg').textContent)+'</p></div>';}
+const renderOpsV5=renderOps;
+renderOps=function(){if(st.src==='none'){$('v-ops').innerHTML=noRiskHtml();return;}renderOpsV5();};
 const renderV5=render;
 render=function(){
+  const nr=st.src==='none';
+  document.body.classList.toggle('norisk',nr);
+  if(nr&&st.layer==='risk')st.layer='traffic';
   renderV5();
+  if(nr&&st.view==='trip'&&st.M&&st.M.cur){$('verdict').innerHTML=noRiskHtml();$('planner').innerHTML='';}
+
   let ab=$('alerts');
   if(!ab){ab=document.createElement('section');ab.id='alerts';ab.className='card';$('routes').before(ab);}
   const ah=st.view==='trip'?alertsHtml():'';ab.innerHTML=ah;ab.hidden=!ah;

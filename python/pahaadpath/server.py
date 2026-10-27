@@ -1,7 +1,7 @@
 """Road report sync server (optional). Standard library only: http.server and sqlite3.
 
 Phones keep reports in a queue while they have no signal and send the whole queue in one POST /sync when a connection
-comes back; the reply carries every report and confirmation from the last 12 hours, so one round trip brings a phone up
+comes back; the reply carries every report and confirmation from the last 48 hours, so one round trip brings a phone up
 to date. Messages use the same format as the ntfy.sh channel the app uses when no server is set:
   {"v":1,"k":"report","rid":"...","dev":"...","rt":<ms>,"seg":"rishikesh-devprayag","spot":0,"type":"landslide"}
   {"v":1,"k":"confirm","rid":"...","dev":"...","rt":<ms>}
@@ -14,7 +14,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from .network import Network
 
-KEEP_MS = 12 * 3600 * 1000
+KEEP_MS = 48 * 3600 * 1000  # the longest a report keeps weight in the app (a bridge out, TYPEH)
 TYPES = {'landslide', 'debris', 'washed', 'bridge', 'clear'}
 MAX_BATCH = 200
 PER_DEVICE_HOUR = 60
