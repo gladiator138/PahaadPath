@@ -9,6 +9,7 @@ Run every command from this folder: `python -m pahaadpath <command>`.
 | `train` | Fits the v5 model, checks it year by year against the v4 rain threshold, scores the news closure days it never saw, and writes `data/model/model_v5.json` and `data/model/REPORT.md`. | no |
 | `pack` | Downloads today's forecast for every stretch and writes the data pack (about 6 KB compressed) that phones fetch in a moment of signal. | yes |
 | `advisory` | Prints every hill stretch at Caution or Avoid in the next 72 hours from the pack. `--pack pack.json` uses a saved copy with no signal. | only without `--pack` |
+| `closures` | Roads closed in Uttarakhand PWD's latest road closure report (SRMD, morning and evening in the monsoon), as the data pack carries them. `--at 2026-09-30T20:00+05:30` reads an older report. Needs `pdftotext` (poppler-utils). | yes |
 | `serve` | Road report sync server (sqlite). Phones queue reports offline and send the whole queue in one request when signal returns. Open the app with `?sync=https://your.server` to use it. | serves it |
 
 `python -m unittest discover -s tests` checks that the Python engine reproduces the app's own scores on all 176 replay rows and that the sync server handles an offline queue.

@@ -4,6 +4,7 @@ the weather API, then plans offline from it for days, telling the user how old i
 import datetime as dt
 
 from .alerts import fetch_alerts
+from .closures import fetch_closures, pack_closures
 from .openmeteo import forecast
 
 
@@ -15,6 +16,7 @@ def build_pack(net, log=print):
     keys = net.keys()
     hour0, hourly, day0, daily = forecast(keys, log=log)
     alerts = fetch_alerts(log=log)
+    closures = fetch_closures(net.places, log=log)
     pk = {
         'v': 1,
         'made': dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
@@ -28,4 +30,7 @@ def build_pack(net, log=print):
     if alerts is not None:  # absent when the feed could not be read, so the app keeps the alerts it already has
         pk['alerts'] = alerts
         pk['alerts_source'] = 'NDMA Sachet public alert feed for Uttarakhand (public domain), last %d hours' % 48
+    if closures is not None:  # absent out of season or when the report could not be read; the app also checks its age
+        pk['closures'] = pack_closures(closures)
+        pk['closures_source'] = 'Uttarakhand PWD SRMD road closure report (government of Uttarakhand), latest morning or evening report'
     return pk

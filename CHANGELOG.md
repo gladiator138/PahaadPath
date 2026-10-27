@@ -78,3 +78,9 @@ Goal from here on: real users in Uttarakhand who are out of network most of the 
 ## 27 Oct 2026: honest offline fixes
 - Back after more than 10 days offline (or never online): the app no longer falls back to demo rain and sample road reports on a real trip. It says the saved forecast is too old, hides landslide risk and still plans roads, time, halts and stops.
 - Road reports queued with no signal are no longer dropped after 12 hours; they go out whenever signal returns, with the time they were made. Shared reports are now kept for 48 hours (the longest a report counts, a bridge out), in the app and the sync server.
+
+## 27 Oct 2026 (v7): official road closures
+- Looked for a machine readable source of closed roads in Uttarakhand. Uttarakhand PWD publishes a road by road closure report (SRMD) every morning and evening in the monsoon, covering PWD roads, national highway divisions, BRO and PMGSY village roads, with district, road type, when each road closed and when it is expected to open. Police and district handles on X, news feeds and USDMA's archive were checked too; see the source comparison in the project files.
+- The data pack now carries the closed roads of the latest PWD report when it is less than 36 hours old (read on GitHub Actions with pdftotext). The parser reads every closed row on three real reports (174 of 174 on 19 Aug, 130 of 130 on 31 Aug, 82 of 82 on 30 Sep 2026).
+- Trip screen: "Roads reported closed (PWD Uttarakhand)" for the districts the trip passes, roads that name a town on the route first, then closed highways and district roads, with a link to the PDF. Kept offline with the saved forecast. The report names roads, not spots, so PahaadPath does not mark its own stretches closed.
+- Out of season (the last report of 2026 is from 30 Sep) the pack carries no closures and the card does not show.
