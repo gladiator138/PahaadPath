@@ -72,3 +72,5 @@ Goal from here on: real users in Uttarakhand who are out of network most of the 
 - Where am I on this trip: GPS only, no data. Risk on the current stretch now, next Caution or Avoid stretch, next town with lodging, km left.
 - Fuel and cost from the user's own mileage and fuel price.
 - Safety tab links to official warnings: Sachet (NDMA) and IMD Mausam.
+- Roadside stops from OpenStreetMap (fuel, hospital or clinic, ATM, mechanic within 3 km of each town; 45 of 64 towns have at least one): listed per town on the Safety tab, longest stretch with no fuel mapped, next fuel and hospital in "Where am I". Made by the new open data workflow.
+- Official alerts: the data pack now carries NDMA Sachet alerts for Uttarakhand from the last 48 hours, shown on the trip and kept offline with the saved forecast. The pack is published only from main.

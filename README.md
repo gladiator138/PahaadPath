@@ -24,7 +24,7 @@ PahaadPath is meant for people who are out of network most of the time.
 - **Pass it on with no internet:** the footer button saves the whole app as one file (the APK itself inside the Android app) to send by WhatsApp, Bluetooth or a memory card.
 - **Small daily data:** every 3 hours CI publishes a data pack with rain for every road stretch (about 6 KB compressed). A phone needs only a moment of signal to fetch it, and then plans offline from it for days. The header always says how old the forecast is.
 - **Road reports** made with no signal wait on the phone and go out when the connection returns.
-- **On the road with no data (v6):** "Where am I on this trip?" uses GPS only and says the risk where you are now, the next risky stretch and the next town with lodging. "Tell family (SMS)" sends the plan, "reached safely" or "stuck, here is my location" from the user's own phone, which often works where data does not. "My trips" re-checks saved trips on every forecast update and says when the risk went up. Fuel and cost from the user's own mileage and price.
+- **On the road with no data (v6):** "Where am I on this trip?" uses GPS only and says the risk where you are now, the next risky stretch and the next town with lodging. "Tell family (SMS)" sends the plan, "reached safely" or "stuck, here is my location" from the user's own phone, which often works where data does not. "My trips" re-checks saved trips on every forecast update and says when the risk went up. Fuel and cost from the user's own mileage and price. Fuel, hospitals, ATMs and mechanics per town from OpenStreetMap (`python -m pahaadpath stops`, open data workflow), and NDMA Sachet alerts for Uttarakhand carried in the data pack.
 
 ## Python
 
