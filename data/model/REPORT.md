@@ -1,6 +1,6 @@
 # PahaadPath risk model v5: validation
 
-Trained 2026-10-26 on 58766 hill stretch-days (1 June to 30 September, 2007 to 2017) with 147 stretch-days that had a landslide in the NASA catalog.
+Trained 2026-10-27 on 58766 hill stretch-days (1 June to 30 September, 2007 to 2017) with 147 stretch-days that had a landslide in the NASA catalog.
 
 Scores rank stretch-days by how much they look like days with a reported landslide. The catalog only has landslides that made the news, so this is not a probability.
 
