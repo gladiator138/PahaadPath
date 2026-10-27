@@ -75,6 +75,45 @@ const style=s=>[/—/,/–/,/\S - \S/,/, (and|or|और|या) /].filter(re=>re
   ok(a2.src==='cache'&&/Chamoli/.test(a2.txt),'alerts offline from the saved forecast '+JSON.stringify(a2));
   await c2.close();
  }
+ // 7. back after 10+ days offline: no demo rain and no sample reports on a real trip; say the forecast is too old, still plan the roads
+ for(const age of [11,null]){
+  const c3=await b.newContext();await c3.route(/^https?:\/\//,r=>r.abort());const q=await c3.newPage();const e3=[];q.on('pageerror',e=>e3.push(String(e)));
+  await q.goto('file://'+F+'?tiles=0&from=dehradun&to=badrinath');await q.waitForFunction(()=>window.PP&&PP.st.series);
+  await q.evaluate(age=>{if(age){const by={};PP.EDGES.forEach(e=>{by[e.cLat.toFixed(2)+','+e.cLon.toFixed(2)]=new Array(456).fill(9);});
+   localStorage.setItem('pp_cache2',JSON.stringify({ts:Date.now()-age*864e5,by}));}PP.st.scn='live';return PP.load();},age);
+  await q.evaluate(()=>{PP.st.view='trip';PP.render();});
+  const r=await q.evaluate(()=>({src:PP.st.src,msg:document.getElementById('srcmsg').textContent,reps:PP.st.reports.length,
+   rain:Math.max(...Object.values(PP.st.series).map(a=>Math.max(...a))),plans:!!(PP.last&&PP.last.plans&&PP.last.plans.length),
+   norisk:document.body.classList.contains('norisk'),pills:[...document.querySelectorAll('.rk')].filter(x=>x.offsetParent).length,
+   verdict:document.getElementById('verdict').innerText}));
+  ok(r.src==='none'&&r.reps===0&&r.rain===0,'no demo rain or sample reports after '+age+' days: '+JSON.stringify(r));
+  ok(age?/more than 10 days old/.test(r.msg):/nothing saved/.test(r.msg),'too old message: '+r.msg);
+  ok(r.plans&&r.norisk&&r.pills===0&&/landslide risk not shown/.test(r.verdict),'trip planned, risk hidden: '+JSON.stringify(r));
+  ok(!style(r.msg+r.verdict).length,'house style of the no forecast text');
+  ok(!e3.length,'page errors with no forecast '+e3);
+  await c3.close();
+ }
+ // 8. a report queued 20 h ago in a valley is not dropped: it goes out with the time it was made, and a 20 h old report from another phone is taken in
+ {
+  const c4=await b.newContext();let posted=[],online=false;const rt=Date.now()-20*3600e3;
+  const other={v:1,k:'report',rid:'x1',dev:'other1',rt,seg:'rishikesh-devprayag',spot:0,type:'bridge'};
+  await c4.route(/^https?:\/\//,async r=>{const u=new URL(r.request().url());
+   if(online&&u.host==='ntfy.sh'&&r.request().method()==='POST'){posted.push(JSON.parse(r.request().postData()));return r.fulfill({status:200,body:'{}'});}
+   if(u.host==='ntfy.sh'&&u.pathname.endsWith('/json'))return r.fulfill({status:200,body:JSON.stringify({event:'message',message:JSON.stringify(other)})+'\n'});
+   return r.abort();});
+  await c4.addInitScript(rt=>{window.__shTest=true;if(!localStorage.getItem('pp_t8')){localStorage.setItem('pp_t8','1');
+   localStorage.setItem('pp_outbox',JSON.stringify([{v:1,dev:'me1',rt,k:'report',rid:'q1',seg:'rishikesh-devprayag',spot:0,type:'landslide'}]));}},rt);
+  const q=await c4.newPage();await q.goto('file://'+F+'?tiles=0&scn=monsoon');await q.waitForFunction(()=>window.PP&&PP.st.series);
+  await q.evaluate(()=>{PP.st.tab='reports';PP.render();});await q.waitForSelector('#r-send');await q.click('#r-send');await q.waitForTimeout(300);
+  const n1=await q.evaluate(()=>JSON.parse(localStorage.getItem('pp_outbox')||'[]').length);
+  ok(n1===2,'old report still queued after a new one, outbox '+n1);
+  online=true;await q.evaluate(()=>window.dispatchEvent(new Event('online')));
+  await q.waitForFunction(()=>JSON.parse(localStorage.getItem('pp_outbox')||'[]').length===0,null,{timeout:8000}).catch(()=>{});
+  ok(posted.length===2&&posted[0].rid==='q1'&&posted[0].rt===rt,'old queued report sent with its time: '+JSON.stringify(posted));
+  await q.waitForFunction(()=>PP.sharedReports().some(r=>r.rid==='x1'),null,{timeout:8000}).catch(()=>{});
+  ok(await q.evaluate(()=>PP.sharedReports().some(r=>r.rid==='x1')),'20 h old shared report taken in');
+  await c4.close();
+ }
  await b.close();
  if(fails.length){console.log('FAIL\n'+fails.join('\n'));process.exit(1);}
  console.log('all v6 checks passed');

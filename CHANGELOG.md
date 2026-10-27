@@ -74,3 +74,7 @@ Goal from here on: real users in Uttarakhand who are out of network most of the 
 - Safety tab links to official warnings: Sachet (NDMA) and IMD Mausam.
 - Roadside stops from OpenStreetMap (fuel, hospital or clinic, ATM, mechanic within 3 km of each town; 45 of 64 towns have at least one): listed per town on the Safety tab, longest stretch with no fuel mapped, next fuel and hospital in "Where am I". Made by the new open data workflow.
 - Official alerts: the data pack now carries NDMA Sachet alerts for Uttarakhand from the last 48 hours, shown on the trip and kept offline with the saved forecast. The pack is published only from main.
+
+## 27 Oct 2026: honest offline fixes
+- Back after more than 10 days offline (or never online): the app no longer falls back to demo rain and sample road reports on a real trip. It says the saved forecast is too old, hides landslide risk and still plans roads, time, halts and stops.
+- Road reports queued with no signal are no longer dropped after 12 hours; they go out whenever signal returns, with the time they were made. Shared reports are now kept for 48 hours (the longest a report counts, a bridge out), in the app and the sync server.

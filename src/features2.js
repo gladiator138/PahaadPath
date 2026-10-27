@@ -1,7 +1,7 @@
 /* ================= v4.1: shared road reports, NASA landslide history, threshold sensitivity, road profile ================= */
 Object.assign(T.en,{
   sh_t:'Share reports with other phones',sh_s:'Reports go to a public test channel (ntfy.sh) so every phone running PahaadPath and the control room see them within seconds. Only the stretch, the type of problem and a random device code are sent. A production version would use an authenticated server.',
-  sh_on:'Shared channel connected · {n} reports from other phones in the last 12 hours',sh_off:'Sharing is off. Reports stay on this phone.',sh_wait:'Connecting to the shared channel…',sh_err:'Shared channel not reachable. Reports stay on this phone for now.',sh_from:'other phone',
+  sh_on:'Shared channel connected · {n} reports from other phones in the last 48 hours',sh_off:'Sharing is off. Reports stay on this phone.',sh_wait:'Connecting to the shared channel…',sh_err:'Shared channel not reachable. Reports stay on this phone for now.',sh_from:'other phone',
   rep_none:'No reports.',
   od_st_h:'Incident history: {hi} of {h} hill stretches from the NASA catalog.',
   ft_hist_o:'{n} incident counts from the NASA landslide catalog',
@@ -11,7 +11,7 @@ Object.assign(T.en,{
 });
 Object.assign(T.hi,{
   sh_t:'दूसरे फ़ोनों के साथ रिपोर्ट साझा करें',sh_s:'रिपोर्ट एक सार्वजनिक परीक्षण चैनल (ntfy.sh) पर जाती हैं, ताकि पहाड़ पथ चलाने वाला हर फ़ोन और कंट्रोल रूम उन्हें कुछ सेकंड में देख सके। सिर्फ़ सड़क का हिस्सा, समस्या का प्रकार और एक बेतरतीब डिवाइस कोड भेजा जाता है। असली संस्करण में प्रमाणित सर्वर होगा।',
-  sh_on:'साझा चैनल जुड़ा है · पिछले 12 घंटे में दूसरे फ़ोनों से {n} रिपोर्ट',sh_off:'साझा करना बंद है। रिपोर्ट इसी फ़ोन में रहती हैं।',sh_wait:'साझा चैनल से जुड़ रहे हैं…',sh_err:'साझा चैनल नहीं मिला। अभी रिपोर्ट इसी फ़ोन में रहेंगी।',sh_from:'दूसरा फ़ोन',
+  sh_on:'साझा चैनल जुड़ा है · पिछले 48 घंटे में दूसरे फ़ोनों से {n} रिपोर्ट',sh_off:'साझा करना बंद है। रिपोर्ट इसी फ़ोन में रहती हैं।',sh_wait:'साझा चैनल से जुड़ रहे हैं…',sh_err:'साझा चैनल नहीं मिला। अभी रिपोर्ट इसी फ़ोन में रहेंगी।',sh_from:'दूसरा फ़ोन',
   rep_none:'कोई रिपोर्ट नहीं।',
   od_st_h:'पुरानी घटनाएँ: {h} में से {hi} पहाड़ी हिस्से NASA सूची से।',
   ft_hist_o:'{n} हिस्सों की घटनाएँ NASA भूस्खलन सूची से',
@@ -26,10 +26,12 @@ const DEV=lsGet('pp_dev',null)||(()=>{const d=Math.random().toString(36).slice(2
 st.share=lsGet('pp_share',true);
 const SHR={reps:{},conf:{},status:'off',es:null,poll:null,dirty:false};
 const SH_TYPES=['landslide','debris','washed','bridge','clear'];
+/* a report can matter for up to 48 h (a bridge, see TYPEH), so shared reports are kept that long; the engine decays each by its type */
+const SH_KEEP=48*3600e3;
 function shIngest(txt){
   let m;try{m=JSON.parse(txt);}catch(e){return false;}
   const now=Date.now();
-  if(!m||m.v!==1||typeof m.rid!=='string'||m.rid.length>40||typeof m.dev!=='string'||m.dev.length>20||typeof m.rt!=='number'||m.rt<now-12*3600e3||m.rt>now+3e5)return false;
+  if(!m||m.v!==1||typeof m.rid!=='string'||m.rid.length>40||typeof m.dev!=='string'||m.dev.length>20||typeof m.rt!=='number'||m.rt<now-SH_KEEP||m.rt>now+3e5)return false;
   if(m.k==='report'){if(!S[m.seg]||S[m.seg].virtual||SH_TYPES.indexOf(m.type)<0)return false;
     const sp=S[m.seg].spots[m.spot]?+m.spot:-1;if(SHR.reps[m.rid])return false;SHR.reps[m.rid]={rid:m.rid,seg:m.seg,spot:sp,type:m.type,dev:m.dev,rt:m.rt};return true;}
   if(m.k==='confirm'){const c=SHR.conf[m.rid]=SHR.conf[m.rid]||{};if(c[m.dev])return false;c[m.dev]=1;return true;}
@@ -40,7 +42,7 @@ function sharedReports(){
   if(!st.share)return[];
   const now=Date.now(),out=[],remote=rid=>Object.keys(SHR.conf[rid]||{}).filter(d=>d!==DEV&&(!SHR.reps[rid]||d!==SHR.reps[rid].dev)).length;
   (st.user||[]).forEach(r=>{const n=remote(r.id);if(n>(r.rconf||0)){r.conf+=n-(r.rconf||0);r.rconf=n;}});
-  Object.values(SHR.reps).forEach(r=>{if(r.dev===DEV||now-r.rt>12*3600e3||!S[r.seg])return;
+  Object.values(SHR.reps).forEach(r=>{if(r.dev===DEV||now-r.rt>SH_KEEP||!S[r.seg])return;
     out.push({id:'sh_'+r.rid,rid:r.rid,seg:r.seg,spot:r.spot,type:r.type,ts:st.nowMs-(now-r.rt),conf:remote(r.rid),shared:true,mine:!!(SHR.conf[r.rid]||{})[DEV]});});
   return out;
 }
@@ -48,7 +50,8 @@ function sharedReports(){
 const SYNC_URL=(new URLSearchParams(location.search).get('sync')||lsGet('pp_sync','')).replace(/\/$/,'');
 if(SYNC_URL)lsSet('pp_sync',SYNC_URL);
 let OUTBOX=lsGet('pp_outbox',[]);if(!Array.isArray(OUTBOX))OUTBOX=[];
-function saveOutbox(){OUTBOX=OUTBOX.filter(m=>Date.now()-m.rt<12*3600e3);lsSet('pp_outbox',OUTBOX);}
+/* nothing in the outbox is dropped for age: a report made deep in a valley goes out whenever signal returns, with the time it was made */
+function saveOutbox(){if(OUTBOX.length>200)OUTBOX=OUTBOX.slice(-200);lsSet('pp_outbox',OUTBOX);}
 async function shPost(m){
   if(!st.share)return;
   OUTBOX.push(Object.assign({v:1,dev:DEV,rt:Date.now()},m));saveOutbox();shFlush();
@@ -75,7 +78,7 @@ function shChanged(){
     if(st.view!=='proof')render();},600);
 }
 async function shPoll(){
-  try{shFlush();const res=await fetch(SYNC_URL?SYNC_URL+'/reports':SH_URL+'/json?poll=1&since=12h');if(!res.ok)throw new Error(res.status);
+  try{shFlush();const res=await fetch(SYNC_URL?SYNC_URL+'/reports':SH_URL+'/json?poll=1&since=48h');if(!res.ok)throw new Error(res.status);
     const txt=await res.text();let ch=false;
     if(SYNC_URL)(JSON.parse(txt).msgs||[]).forEach(m=>{if(shIngest(JSON.stringify(m)))ch=true;});
     else txt.split('\n').forEach(l=>{if(!l.trim())return;try{const o=JSON.parse(l);if(o.event==='message'&&shIngest(o.message))ch=true;}catch(e){}});
@@ -92,7 +95,7 @@ function shStart(){
 function shStop(){if(SHR.es){try{SHR.es.close();}catch(e){}SHR.es=null;}if(SHR.poll){clearInterval(SHR.poll);SHR.poll=null;}}
 function shStatusText(){
   if(!st.share)return t('sh_off');
-  const n=Object.values(SHR.reps).filter(r=>r.dev!==DEV&&Date.now()-r.rt<12*3600e3).length;
+  const n=Object.values(SHR.reps).filter(r=>r.dev!==DEV&&Date.now()-r.rt<SH_KEEP).length;
   return (SHR.status==='on'?fill(t('sh_on'),{n}):SHR.status==='err'?t('sh_err'):t('sh_wait'))+(OUTBOX.length?' · '+(OUTBOX.length===1?t('ob_1'):fill(t('ob_n'),{n:OUTBOX.length})):'');
 }
 function shareBox(){
