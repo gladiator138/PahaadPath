@@ -1,32 +1,28 @@
 name: probe closure sources
-# temporary: which road closure sources answer from a GitHub runner
+# temporary: fetch a few PWD SRMD reports as text and word boxes, committed under probe_data/ for writing the parser
 on:
   push:
     branches: [claude/project-thread-k1o0bg]
     paths: ['.github/workflows/probe.yml']
+permissions:
+  contents: write
 jobs:
   probe:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - uses: actions/checkout@v4
       - run: sudo apt-get update -qq >/dev/null; sudo apt-get install -y -qq poppler-utils >/dev/null; pdftotext -v 2>&1 | head -1
-      - continue-on-error: true
-        name: links on the SRMD reports page and the category feed
-        run: |
-          curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/srmd-reports/ -o s.html
-          grep -oE '<a [^>]*href="[^"]+"[^>]*>[^<]{3,200}</a>' s.html | grep -iE 'road|closure|odk|alternat|machine|report' | head -30
-          echo '----- feed'
-          curl -sSL -m 60 -A 'Mozilla/5.0' -w '\n%{http_code} %{content_type}\n' https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/feed/ | head -c 2500
-          echo '----- page 6 of the listing'
-          curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/page/6 | grep -oE '>SRMD[^<]*<|https://cdnbbsr[^"]+\.pdf' | head -30
-          echo '----- last page'
-          curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/page/17 | grep -oE '>SRMD[^<]*<|https://cdnbbsr[^"]+\.pdf' | head -30
-      - continue-on-error: true
-        name: full text of the 30 Sep morning report and a peak monsoon one
-        run: |
-          curl -sSL -m 120 -A 'Mozilla/5.0' https://cdnbbsr.s3waas.gov.in/s31e0a84051e6a4a7381473328f43c4884/uploads/2026/09/202609301796185342.pdf -o a.pdf
-          pdftotext -layout a.pdf a.txt; sed -n '1,400p' a.txt | cut -c1-260
-          u=$(curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/page/8 | grep -oE 'https://cdnbbsr[^"]+\.pdf' | head -1)
-          echo "===== $u"
-          curl -sSL -m 120 -A 'Mozilla/5.0' "$u" -o b.pdf; pdfinfo b.pdf | grep -E 'Pages|ModDate'
-          pdftotext -layout b.pdf b.txt; wc -l b.txt; sed -n '1,60p;150,330p' b.txt | cut -c1-260
+      - run: |
+          mkdir -p probe_data; cd probe_data
+          for p in 1 6 8; do curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/page/$p -o list$p.html; done
+          cat list*.html | grep -oE '>SRMD[^<]*<|https://cdnbbsr[^"]+\.pdf' > listing.txt; rm list*.html
+          for u in https://cdnbbsr.s3waas.gov.in/s31e0a84051e6a4a7381473328f43c4884/uploads/2026/08/20260819190059234.pdf \
+                   https://cdnbbsr.s3waas.gov.in/s31e0a84051e6a4a7381473328f43c4884/uploads/2026/09/202609301999916866.pdf \
+                   https://cdnbbsr.s3waas.gov.in/s31e0a84051e6a4a7381473328f43c4884/uploads/2026/08/202608311866634785.pdf; do
+            n=$(basename $u .pdf); curl -sSL -m 120 -A 'Mozilla/5.0' $u -o $n.pdf
+            pdfinfo $n.pdf > $n.info; pdftotext -layout $n.pdf $n.txt; pdftotext -tsv $n.pdf $n.tsv; pdftotext -raw $n.pdf $n.raw.txt; rm $n.pdf
+          done
+          gzip -9 *.tsv *.txt; ls -l
+          cd ..; git config user.name 'github-actions[bot]'; git config user.email '41898299+github-actions[bot]@users.noreply.github.com'
+          git add probe_data; git commit -qm "Probe data: three PWD SRMD reports as text (temporary)"; git push -q origin HEAD:${GITHUB_REF_NAME}
