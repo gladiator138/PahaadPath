@@ -32,10 +32,13 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           VERSION_CODE: ${{ github.run_number }}
         run: |
-          if [ -n "$KS_B64" ]; then echo "$KS_B64" | base64 -d > "$RUNNER_TEMP/release.jks"; export KEYSTORE_FILE="$RUNNER_TEMP/release.jks"; fi
+          # secrets pasted from a chat or a document can carry a stray tab, space or newline
+          for v in KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do export "$v=$(printf '%s' "${!v}" | tr -d '[:space:]')"; done
+          if [ -n "$KS_B64" ]; then printf '%s' "$KS_B64" | tr -d '[:space:]' | base64 -d > "$RUNNER_TEMP/release.jks"; export KEYSTORE_FILE="$RUNNER_TEMP/release.jks"; fi
           gradle -p android assembleRelease --no-daemon
           cp android/app/build/outputs/apk/release/app-release.apk PahaadPath.apk
           ls -l PahaadPath.apk
+          keytool -printcert -jarfile PahaadPath.apk | grep -E "Owner|SHA256:"
       - uses: actions/upload-artifact@v4
         with:
           name: PahaadPath-apk
