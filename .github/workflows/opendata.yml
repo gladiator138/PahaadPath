@@ -2,8 +2,13 @@ name: open data
 # Run by hand: roadside stops (fuel, hospitals, ATMs, mechanics) near each town from OpenStreetMap, committed to the
 # branch it runs on as data/osm_stops.json and baked into the app by the next build. Also prints the start of the NDMA
 # Sachet public alert feed, so its format can be checked before the data pack uses it.
+# The app build bakes this file in, so rebuild index.html after it changes (CI checks the copies match); for that reason a
+# push only runs it on branches other than main.
 on:
   workflow_dispatch:
+  push:
+    branches-ignore: [main]
+    paths: ['.github/workflows/opendata.yml', 'python/pahaadpath/stops.py']
 permissions:
   contents: write
 jobs:
