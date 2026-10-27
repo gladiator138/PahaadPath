@@ -9,35 +9,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - run: |
+      - run: sudo apt-get install -y -qq poppler-utils >/dev/null 2>&1; pdftotext -v 2>&1 | head -1
+      - name: PWD SRMD listing and latest report
+        run: |
           UA='Mozilla/5.0 (X11; Linux x86_64) pahaadpath-pipeline'
-          while read -r u; do
-            [ -z "$u" ] && continue
-            r=$(curl -sSL -m 30 -A "$UA" -o /tmp/b -w '%{http_code} %{content_type} %{size_download}' "$u" 2>&1 | tail -1)
-            echo "=== $u -> $r"
-            head -c 700 /tmp/b | tr -d '\r' | tr '\n' ' '; echo
-          done <<'L'
-          https://usdma.uk.gov.in/document-category/road-status/
-          https://usdma.uk.gov.in/feed/
-          https://usdma.uk.gov.in/hi/feed/
-          https://usdma.uk.gov.in/wp-json/wp/v2/posts?per_page=3
-          https://www.newsonair.gov.in/feed/
-          https://www.newsonair.gov.in/wp-json/wp/v2/posts?search=uttarakhand%20roads%20blocked&per_page=5&_fields=date,link,title
-          https://indianexpress.com/section/cities/dehradun/feed/
-          https://www.hindustantimes.com/feeds/rss/cities/dehradun-news/rssfeed.xml
-          https://www.amarujala.com/rss/dehradun.xml
-          https://www.amarujala.com/rss/uttarakhand.xml
-          https://www.etvbharat.com/rss/hindi/uttarakhand.xml
-          https://www.tribuneindia.com/news/uttarakhand/feed/
-          https://news.google.com/rss/search?q=uttarakhand%20road%20blocked&hl=en-IN&gl=IN&ceid=IN:en
-          https://syndication.twitter.com/srv/timeline-profile/screen-name/chamolipolice
-          https://nitter.net/chamolipolice/rss
-          https://www.bro.gov.in/
-          https://pwd.uk.gov.in/
-          https://registrationandtouristcare.uk.gov.in/
-          https://sachet.ndma.gov.in/cap_public_website/rss/rss_uttarakhand.xml
-          https://sachet.ndma.gov.in/cap_public_website/FetchAllAlertDetails
-          https://cdnbbsr.s3waas.gov.in/s34a06d868d044c50af0cf9bc82d2fc19f/uploads/2025/08/2025080856552324.pdf
-          https://dmmc.uk.gov.in/
-          https://rajmargyatra.nhai.gov.in/
-          L
+          curl -sSL -m 60 -A "$UA" https://pwd.uk.gov.in/document-category/srmd-daily-reports-2026/ -o list.html
+          grep -oE 'https://cdnbbsr[^"]+\.pdf' list.html | sort -u | head -20
+          grep -oE '>[^<]*SRMD[^<]*<' list.html | head -20
+          grep -oE 'href="[^"]*srmd[^"]*"' list.html | sort -u | head -20
+          u=$(grep -oE 'https://cdnbbsr[^"]+\.pdf' list.html | head -1)
+          curl -sSL -m 120 -A "$UA" "$u" -o r.pdf; ls -l r.pdf; pdfinfo r.pdf | head -12
+          pdffonts r.pdf | head -12
+          pdftotext -layout r.pdf r.txt; wc -l r.txt; head -c 9000 r.txt
+          echo; echo '----- grep highways'; grep -niE 'NH|राष्ट्रीय|बद्रीनाथ|केदारनाथ|गंगोत्री|यमुनोत्री|badrinath|kedarnath|gangotri|yamunotri' r.txt | head -40
+          echo '----- tail'; tail -c 3000 r.txt
+      - name: PWD SRMD reports page
+        run: |
+          curl -sSL -m 60 -A 'Mozilla/5.0' https://pwd.uk.gov.in/srmd-reports/ | sed -e 's/<[^>]*>/ /g' | tr -s ' \n' | grep -iE 'srmd|report|road' | head -40
+      - name: news feeds, item titles
+        run: |
+          for u in https://www.amarujala.com/rss/uttarakhand.xml https://www.amarujala.com/rss/dehradun.xml https://www.hindustantimes.com/feeds/rss/cities/dehradun-news/rssfeed.xml; do
+            echo "=== $u"; curl -sSL -m 30 -A 'Mozilla/5.0' "$u" | python3 -c "
+          import sys,xml.etree.ElementTree as E
+          r=E.fromstring(sys.stdin.read())
+          for i in r.iter('item'): print(i.findtext('pubDate'),'|',i.findtext('title'))"
+          done
+          echo '=== newsonair'
+          curl -sS -m 30 'https://www.newsonair.gov.in/wp-json/wp/v2/posts?search=uttarakhand%20roads&per_page=20&_fields=date,link,title' | python3 -c "
+          import sys,json
+          for p in json.load(sys.stdin): print(p['date'],'|',p['title']['rendered'],'|',p['link'])"
