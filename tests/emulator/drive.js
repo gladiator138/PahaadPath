@@ -302,7 +302,7 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
  await step('English words left on Hindi screens (in context)',async()=>{
   await tap('#b-hi');const out={};
   for(const v of ['proof','ops']){await ev(()=>scrollTo(0,0));await tap('[data-view="'+v+'"]');await sleep(1200);
-   out[v]=await ev(()=>{const t=document.getElementById('v-'+v).innerText.split('\n');return t.filter(l=>/[A-Za-z]{4,}/.test(l)&&/[\u0900-\u097F]/.test(l)||/^[^\u0900-\u097F]*[a-z]{4,}[^\u0900-\u097F]*$/.test(l)).slice(0,25);});}
+   out[v]=await ev(v=>{const t=document.getElementById('v-'+v).innerText.split('\n');return t.filter(l=>/[A-Za-z]{4,}/.test(l)&&/[\u0900-\u097F]/.test(l)||/^[^\u0900-\u097F]*[a-z]{4,}[^\u0900-\u097F]*$/.test(l)).slice(0,25);},v);}
   for(const tb of ['rules','safety','reports']){await ev(()=>scrollTo(0,0));await tap('[data-view="trip"]');await ev(tb=>{PP.st.tab=tb;PP.render();},tb);
    out[tb]=await ev(()=>document.getElementById('panel').innerText.split('\n').filter(l=>/[a-z]{4,}/.test(l)).slice(0,25));}
   await tap('#b-en');return out;
