@@ -3,7 +3,6 @@
 // Writes out/results.json, out/*.png (screencap of the whole phone), out/console.txt. Never posts to the public report channel.
 const {execSync}=require('child_process');
 const fs=require('fs');
-const puppeteer=require('puppeteer-core');
 const OUT=process.argv[2]||'out';fs.mkdirSync(OUT,{recursive:true});
 const PKG='org.pahaadpath.app',ACT=PKG+'/.MainActivity';
 const R={steps:[]};const CON=[];
@@ -11,8 +10,10 @@ const sh=(c,o={})=>{try{return execSync(c,{encoding:'utf8',timeout:o.t||60000,st
 const adb=c=>sh('adb shell '+JSON.stringify(c));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let n=0;const shot=name=>{const f=String(++n).padStart(2,'0')+'_'+name+'.png';sh('adb exec-out screencap -p > '+OUT+'/'+f);return f;};
-const step=async(name,fn)=>{const s={name,t:new Date().toISOString()};R.steps.push(s);console.log('== '+name);
-  try{Object.assign(s,await fn()||{});}catch(e){s.error=String(e&&e.stack||e).slice(0,1500);console.log('  ERROR '+s.error);}
+const T0=Date.now(),DEADLINE=T0+62*60e3;
+const step=async(name,fn,ms=300000)=>{const s={name,t:new Date().toISOString()};R.steps.push(s);console.log('== '+name);
+  if(Date.now()>DEADLINE){s.error='skipped: out of time';return;}
+  try{Object.assign(s,await withTimeout(Promise.resolve().then(fn),ms,name)||{});}catch(e){try{s.failShot=shot('fail');}catch(_){}s.error=String(e&&e.stack||e).slice(0,1500);console.log('  ERROR '+s.error);}
   fs.writeFileSync(OUT+'/results.json',JSON.stringify(R,null,1));console.log('  '+JSON.stringify(s).slice(0,900));};
 const resumed=()=>{const m=adb('dumpsys activity activities | grep -E "mResumedActivity|topResumedActivity" | head -1');return(m.match(/u0 ([^ }]+)/)||[])[1]||m;};
 // UI tree of whatever is on screen (permission dialogs, other apps)
@@ -21,24 +22,52 @@ const ui=()=>{adb('uiautomator dump /sdcard/u.xml >/dev/null 2>&1');const x=adb(
 const uiTap=async re=>{for(let i=0;i<6;i++){const o=ui().find(o=>re.test(o.t));if(o){adb('input tap '+o.x+' '+o.y);await sleep(800);return o.t;}await sleep(700);}return null;};
 const uiTexts=()=>ui().map(o=>o.t);
 
-let browser=null,page=null,pageErrs=[];
+// a small DevTools client straight to the page target (a full browser client hangs on the WebView's limited browser endpoint)
+const WS=require('ws');const http=require('http');
+const getJSON=(u,t=5000)=>new Promise((res,rej)=>{const r=http.get(u,x=>{let d='';x.on('data',c=>d+=c);x.on('end',()=>{try{res(JSON.parse(d));}catch(e){rej(e);}});});
+  r.on('error',rej);r.setTimeout(t,()=>r.destroy(new Error('timeout '+u)));});
+const withTimeout=(p,ms,what)=>Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout '+ms+' ms: '+what)),ms))]);
+let page=null,pageErrs=[];
+function cdp(url){
+  return new Promise((res,rej)=>{
+    const ws=new WS(url,{perMessageDeflate:false});let id=0;const wait={};
+    const c={ws,closed:false,send(method,params={},ms=30000){const i=++id;ws.send(JSON.stringify({id:i,method,params}));
+      return withTimeout(new Promise((ok,no)=>{wait[i]={ok,no};}),ms,method);}};
+    ws.on('message',d=>{const m=JSON.parse(d);
+      if(m.id&&wait[m.id]){const w=wait[m.id];delete wait[m.id];m.error?w.no(new Error(m.error.message)):w.ok(m.result);return;}
+      if(m.method==='Runtime.consoleAPICalled')CON.push(new Date().toISOString().slice(11,19)+' '+m.params.type+' '+m.params.args.map(a=>a.value!==undefined?String(a.value):(a.description||a.type)).join(' '));
+      if(m.method==='Runtime.exceptionThrown'){const e=m.params.exceptionDetails;const t=(e.exception&&e.exception.description)||e.text;pageErrs.push(t);CON.push('PAGEERROR '+t);}});
+    ws.on('open',()=>res(c));ws.on('error',e=>{c.closed=true;rej(e);});ws.on('close',()=>{c.closed=true;Object.values(wait).forEach(w=>w.no(new Error('socket closed')));});
+  });
+}
+function makePage(c){
+  const evaluate=async(f,...a)=>{const r=await c.send('Runtime.evaluate',{expression:'('+f.toString()+')(...'+JSON.stringify(a)+')',awaitPromise:true,returnByValue:true},45000);
+    if(r.exceptionDetails)throw new Error('page: '+((r.exceptionDetails.exception&&r.exceptionDetails.exception.description)||r.exceptionDetails.text));return r.result.value;};
+  return {c,evaluate,
+    async waitForFunction(f,o={}){const end=Date.now()+(o.timeout||30000);let last;
+      for(;;){try{if(await evaluate(f))return true;}catch(e){last=e;}if(Date.now()>end)throw new Error('waitForFunction timeout '+(last?last.message:''));await sleep(500);}},
+    url(){return this._url||'';}};
+}
 async function connect(){
-  if(browser){try{browser.disconnect();}catch(e){}browser=null;page=null;}
+  if(page){try{page.c.ws.terminate();}catch(e){}page=null;}
+  let last='';
   for(let i=0;i<60;i++){
     const pid=adb('pidof '+PKG);
     const socks=adb('cat /proc/net/unix | grep -o "webview_devtools_remote_[0-9]*" | sort -u');
     const sock=(socks.split('\n').find(s=>s.endsWith('_'+pid))||'');
+    last='pid '+pid+' sockets '+socks.replace(/\n/g,' ');
     if(pid&&!pid.startsWith('ERR')&&sock){
       sh('adb forward --remove-all');sh('adb forward tcp:9222 localabstract:'+sock);
-      try{browser=await puppeteer.connect({browserURL:'http://127.0.0.1:9222',defaultViewport:null});
-        const ps=await browser.pages();page=ps.find(p=>p.url().includes('appassets'))||ps[0];
-        if(page){page.on('console',m=>CON.push(new Date().toISOString().slice(11,19)+' '+m.type()+' '+m.text()));
-          page.on('pageerror',e=>{pageErrs.push(String(e));CON.push('PAGEERROR '+e);});
-          await page.waitForFunction(()=>window.PP&&PP.st&&PP.st.series,{timeout:90000});return true;}}catch(e){console.log('connect retry '+e.message);}
+      try{const list=await getJSON('http://127.0.0.1:9222/json/list');const tg=list.find(t=>t.type==='page'&&/appassets/.test(t.url))||list.find(t=>t.type==='page');
+        last+=' targets '+list.map(t=>t.type+':'+t.url).join(' ');
+        if(tg&&tg.webSocketDebuggerUrl){const c=await withTimeout(cdp(tg.webSocketDebuggerUrl),10000,'ws open');await c.send('Runtime.enable');
+          page=makePage(c);page._url=tg.url;
+          await page.waitForFunction(()=>window.PP&&PP.st&&PP.st.series,{timeout:90000});return true;}}catch(e){last+=' error '+e.message;}
     }
+    if(i%10===9)console.log('  connect: '+last.slice(0,400));
     await sleep(1000);
   }
-  throw new Error('no WebView devtools socket');
+  throw new Error('no WebView devtools: '+last.slice(0,600));
 }
 async function launch(fresh){
   if(fresh)adb('pm clear '+PKG);
@@ -173,7 +202,7 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
   const out={};
   for(const sel of ['#adv-wa','#a-share','#a-listen','#a-qr','#adv-copy']){
    const has=await ev(s=>!!document.querySelector(s),sel);if(!has){out[sel]='not on screen';continue;}
-   await tap(sel);await sleep(2500);const top=resumed();out[sel]={resumed:top,ui:uiTexts().slice(0,15),toast:await text('#toast').catch(()=>null),url:page?page.url():null,shot:shot('btn_'+sel.slice(1))};
+   await tap(sel);await sleep(2500);const top=resumed();out[sel]={resumed:top,ui:uiTexts().slice(0,15),toast:await text('#toast').catch(()=>null),url:await ev(()=>location.href).catch(e=>String(e)),shot:shot('btn_'+sel.slice(1))};
    if(!top.includes(PKG)){await backToApp();await connect().catch(()=>{});}else{await closeModal().catch(()=>{});}
    out[sel].speaking=await ev(()=>window.speechSynthesis?{speaking:speechSynthesis.speaking,voices:speechSynthesis.getVoices().length}:'no speechSynthesis').catch(()=>null);
   }
@@ -251,10 +280,10 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
  });
  await step('signal back: queue sends and forecast refreshes (no reopen)',async()=>{
   await installNtfyGuard();const t0=Date.now();airplane(false);const log=[];
-  for(let i=0;i<48;i++){await sleep(10000);const s=await state().catch(e=>({e:String(e)}));const p=await ev(()=>window.__posted.length).catch(()=>-1);
+  for(let i=0;i<38;i++){await sleep(10000);const s=await state().catch(e=>({e:String(e)}));const p=await ev(()=>window.__posted.length).catch(()=>-1);
    log.push([Math.round((Date.now()-t0)/1000),s.src,s.online,s.outbox,p,(s.srcmsg||'').slice(0,80)]);if(s.outbox===0&&s.src==='live'&&i>2)break;}
   return {log,posted:await ev(()=>window.__posted).catch(()=>null),shot:shot('back_online')};
- });
+ },480000);
 
  // ---------- days pass with no signal ----------
  const clock=async days=>{adb('settings put global auto_time 0');const t=Math.floor(Date.now()/1000)+days*86400;adb('date @'+t);await sleep(500);return adb('date');};
@@ -274,6 +303,6 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
  R.pageErrors=pageErrs;
  fs.writeFileSync(OUT+'/console.txt',CON.join('\n'));
  fs.writeFileSync(OUT+'/results.json',JSON.stringify(R,null,1));
- try{browser&&browser.disconnect();}catch(e){}
+ try{page&&page.c.ws.terminate();}catch(e){}
  console.log('done');process.exit(0);
 })().catch(e=>{console.log('FATAL '+e.stack);R.fatal=String(e.stack);fs.writeFileSync(OUT+'/results.json',JSON.stringify(R,null,1));fs.writeFileSync(OUT+'/console.txt',CON.join('\n'));process.exit(0);});
