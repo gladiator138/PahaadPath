@@ -1,0 +1,1934 @@
+{
+ "steps": [
+  {
+   "name": "fresh install, first open with real network",
+   "t": "2026-10-28T12:30:40.089Z",
+   "state": {
+    "src": "live",
+    "lang": "en",
+    "from": "delhi",
+    "to": "mussoorie",
+    "view": "trip",
+    "tab": "route",
+    "scn": "live",
+    "err": "",
+    "srcmsg": "Live rainfall forecast, 15:36 IST (from the PahaadPath data pack)",
+    "online": true,
+    "outbox": 0,
+    "modal": false,
+    "overflowX": 0,
+    "vw": 412,
+    "ua": "Mozilla/5.0 (Linux; Android 14; sdk_gphone64_x86_64 Build/UE1A.230829.050; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/113.0.5672.136 Mobile Safari/537.36"
+   },
+   "pack": {
+    "ts": 1793190600000,
+    "made": 1793181964000,
+    "keys": 75,
+    "daily": true,
+    "alerts": null,
+    "closures": null
+   },
+   "via": "pack",
+   "shot": "01_first_open_en.png"
+  },
+  {
+   "name": "plan Dehradun to Badrinath by typing",
+   "t": "2026-10-28T12:30:53.290Z",
+   "state": {
+    "src": "live",
+    "lang": "en",
+    "from": "dehradun",
+    "to": "badrinath",
+    "view": "trip",
+    "tab": "route",
+    "scn": "live",
+    "err": "",
+    "srcmsg": "Live rainfall forecast, 15:36 IST (from the PahaadPath data pack)",
+    "online": true,
+    "outbox": 0,
+    "modal": false,
+    "overflowX": 0,
+    "vw": 412,
+    "ua": "Mozilla/5.0 (Linux; Android 14; sdk_gphone64_x86_64 Build/UE1A.230829.050; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/113.0.5672.136 Mobile Safari/537.36"
+   },
+   "verdict": "ROAD\nGO\n12\nlandslide risk / 100\nRoad looks clear for this start time\nDehradun → Badrinath. Highest risk: Govindghat → Badrinath.\nDehradun → Badrinath · ~355 km · Leaving Wed 28 Oct 18:00",
+   "closures": null,
+   "keyboardUp": "mInputShown=false",
+   "shot": "02_trip_dehradun_badrinath.png"
+  },
+  {
+   "name": "language en: every tab and view",
+   "t": "2026-10-28T12:31:13.117Z",
+   "tabs": {
+    "route": {
+     "len": 1870,
+     "style": [],
+     "overflowX": 0,
+     "shot": "03_en_tab_route.png"
+    },
+    "map": {
+     "len": 289,
+     "style": [],
+     "overflowX": 0,
+     "shot": "04_en_tab_map.png"
+    },
+    "reports": {
+     "len": 1134,
+     "style": [],
+     "overflowX": 0,
+     "shot": "05_en_tab_reports.png"
+    },
+    "rules": {
+     "len": 2667,
+     "style": [],
+     "overflowX": 0,
+     "shot": "06_en_tab_rules.png"
+    },
+    "safety": {
+     "len": 2440,
+     "style": [],
+     "overflowX": 0,
+     "shot": "07_en_tab_safety.png"
+    }
+   },
+   "view_ops": {
+    "style": [],
+    "overflowX": 0,
+    "shot": "08_en_view_ops.png"
+   },
+   "view_proof": {
+    "style": [],
+    "overflowX": 0,
+    "shot": "09_en_view_proof.png"
+   },
+   "view_trip": {
+    "style": [],
+    "overflowX": 0,
+    "shot": null
+   },
+   "headerStyle": []
+  },
+  {
+   "name": "language hi: every tab and view",
+   "t": "2026-10-28T12:31:37.671Z",
+   "tabs": {
+    "route": {
+     "len": 1972,
+     "style": [],
+     "overflowX": 0,
+     "shot": "10_hi_tab_route.png",
+     "latin": [
+      [
+       "Caine",
+       2
+      ],
+      [
+       "OSRM",
+       2
+      ],
+      [
+       "API",
+       1
+      ],
+      [
+       "Google",
+       1
+      ],
+      [
+       "TomTom",
+       1
+      ],
+      [
+       "HERE",
+       1
+      ],
+      [
+       "Mappls",
+       1
+      ],
+      [
+       "ODbL",
+       1
+      ],
+      [
+       "GLO",
+       1
+      ],
+      [
+       "Global",
+       1
+      ],
+      [
+       "Landslide",
+       1
+      ],
+      [
+       "Catalog",
+       1
+      ],
+      [
+       "Natural",
+       1
+      ],
+      [
+       "Earth",
+       1
+      ],
+      [
+       "Leaflet",
+       1
+      ],
+      [
+       "BSD",
+       1
+      ],
+      [
+       "Clause",
+       1
+      ],
+      [
+       "qrcode",
+       1
+      ],
+      [
+       "generator",
+       1
+      ],
+      [
+       "MIT",
+       1
+      ],
+      [
+       "SAARTHI",
+       1
+      ]
+     ]
+    },
+    "map": {
+     "len": 293,
+     "style": [],
+     "overflowX": 0,
+     "shot": "11_hi_tab_map.png",
+     "latin": [
+      [
+       "OSRM",
+       3
+      ],
+      [
+       "Leaflet",
+       2
+      ],
+      [
+       "Caine",
+       2
+      ],
+      [
+       "contributors",
+       1
+      ],
+      [
+       "API",
+       1
+      ],
+      [
+       "Google",
+       1
+      ],
+      [
+       "TomTom",
+       1
+      ],
+      [
+       "HERE",
+       1
+      ],
+      [
+       "Mappls",
+       1
+      ],
+      [
+       "ODbL",
+       1
+      ],
+      [
+       "GLO",
+       1
+      ],
+      [
+       "Global",
+       1
+      ],
+      [
+       "Landslide",
+       1
+      ],
+      [
+       "Catalog",
+       1
+      ],
+      [
+       "Natural",
+       1
+      ],
+      [
+       "Earth",
+       1
+      ],
+      [
+       "BSD",
+       1
+      ],
+      [
+       "Clause",
+       1
+      ],
+      [
+       "qrcode",
+       1
+      ],
+      [
+       "generator",
+       1
+      ],
+      [
+       "MIT",
+       1
+      ],
+      [
+       "SAARTHI",
+       1
+      ]
+     ]
+    },
+    "reports": {
+     "len": 1086,
+     "style": [],
+     "overflowX": 0,
+     "shot": "12_hi_tab_reports.png",
+     "latin": [
+      [
+       "Caine",
+       2
+      ],
+      [
+       "OSRM",
+       2
+      ],
+      [
+       "API",
+       1
+      ],
+      [
+       "Google",
+       1
+      ],
+      [
+       "TomTom",
+       1
+      ],
+      [
+       "HERE",
+       1
+      ],
+      [
+       "Mappls",
+       1
+      ],
+      [
+       "ODbL",
+       1
+      ],
+      [
+       "GLO",
+       1
+      ],
+      [
+       "Global",
+       1
+      ],
+      [
+       "Landslide",
+       1
+      ],
+      [
+       "Catalog",
+       1
+      ],
+      [
+       "Natural",
+       1
+      ],
+      [
+       "Earth",
+       1
+      ],
+      [
+       "Leaflet",
+       1
+      ],
+      [
+       "BSD",
+       1
+      ],
+      [
+       "Clause",
+       1
+      ],
+      [
+       "qrcode",
+       1
+      ],
+      [
+       "generator",
+       1
+      ],
+      [
+       "MIT",
+       1
+      ],
+      [
+       "SAARTHI",
+       1
+      ]
+     ]
+    },
+    "rules": {
+     "len": 2707,
+     "style": [],
+     "overflowX": 0,
+     "shot": "13_hi_tab_rules.png",
+     "latin": [
+      [
+       "Outlook",
+       2
+      ],
+      [
+       "Traveller",
+       2
+      ],
+      [
+       "Char",
+       2
+      ],
+      [
+       "Dham",
+       2
+      ],
+      [
+       "Yatra",
+       2
+      ],
+      [
+       "rules",
+       2
+      ],
+      [
+       "All",
+       2
+      ],
+      [
+       "India",
+       2
+      ],
+      [
+       "Radio",
+       2
+      ],
+      [
+       "Caine",
+       2
+      ],
+      [
+       "OSRM",
+       2
+      ],
+      [
+       "Tourist",
+       1
+      ],
+      [
+       "Care",
+       1
+      ],
+      [
+       "Uttarakhand",
+       1
+      ],
+      [
+       "official",
+       1
+      ],
+      [
+       "FAQ",
+       1
+      ],
+      [
+       "Trip",
+       1
+      ],
+      [
+       "Temples",
+       1
+      ],
+      [
+       "news",
+       1
+      ],
+      [
+       "report",
+       1
+      ],
+      [
+       "the",
+       1
+      ],
+      [
+       "yatra",
+       1
+      ],
+      [
+       "Oct",
+       1
+      ],
+      [
+       "Nov",
+       1
+      ],
+      [
+       "LiveLaw",
+       1
+      ],
+      [
+       "State",
+       1
+      ],
+      [
+       "Commission",
+       1
+      ],
+      [
+       "case",
+       1
+      ],
+      [
+       "Aug",
+       1
+      ],
+      [
+       "Daily",
+       1
+      ],
+      [
+       "Pioneer",
+       1
+      ],
+      [
+       "May",
+       1
+      ],
+      [
+       "API",
+       1
+      ],
+      [
+       "Google",
+       1
+      ],
+      [
+       "TomTom",
+       1
+      ],
+      [
+       "HERE",
+       1
+      ],
+      [
+       "Mappls",
+       1
+      ],
+      [
+       "ODbL",
+       1
+      ],
+      [
+       "GLO",
+       1
+      ],
+      [
+       "Global",
+       1
+      ],
+      [
+       "Landslide",
+       1
+      ],
+      [
+       "Catalog",
+       1
+      ],
+      [
+       "Natural",
+       1
+      ],
+      [
+       "Earth",
+       1
+      ],
+      [
+       "Leaflet",
+       1
+      ],
+      [
+       "BSD",
+       1
+      ],
+      [
+       "Clause",
+       1
+      ],
+      [
+       "qrcode",
+       1
+      ],
+      [
+       "generator",
+       1
+      ],
+      [
+       "MIT",
+       1
+      ],
+      [
+       "SAARTHI",
+       1
+      ]
+     ]
+    },
+    "safety": {
+     "len": 2345,
+     "style": [],
+     "overflowX": 0,
+     "shot": "14_hi_tab_safety.png",
+     "latin": [
+      [
+       "Hospital",
+       6
+      ],
+      [
+       "ATM",
+       4
+      ],
+      [
+       "gov",
+       2
+      ],
+      [
+       "Clinic",
+       2
+      ],
+      [
+       "Indian",
+       2
+      ],
+      [
+       "Oil",
+       2
+      ],
+      [
+       "Blood",
+       2
+      ],
+      [
+       "Bank",
+       2
+      ],
+      [
+       "Rishikesh",
+       2
+      ],
+      [
+       "Rudraprayag",
+       2
+      ],
+      [
+       "Centre",
+       2
+      ],
+      [
+       "Eye",
+       2
+      ],
+      [
+       "Caine",
+       2
+      ],
+      [
+       "OSRM",
+       2
+      ],
+      [
+       "usdma",
+       1
+      ],
+      [
+       "registrationandtouristcare",
+       1
+      ],
+      [
+       "SOS",
+       1
+      ],
+      [
+       "NDMA",
+       1
+      ],
+      [
+       "IBP",
+       1
+      ],
+      [
+       "PUMP",
+       1
+      ],
+      [
+       "Bharat",
+       1
+      ],
+      [
+       "Petroleum",
+       1
+      ],
+      [
+       "Heart",
+       1
+      ],
+      [
+       "General",
+       1
+      ],
+      [
+       "AIIMS's",
+       1
+      ],
+      [
+       "AIIMS",
+       1
+      ],
+      [
+       "Ioc",
+       1
+      ],
+      [
+       "Chaudhary",
+       1
+      ],
+      [
+       "Combined",
+       1
+      ],
+      [
+       "Srinagar",
+       1
+      ],
+      [
+       "District",
+       1
+      ],
+      [
+       "Jankalyan",
+       1
+      ],
+      [
+       "Government",
+       1
+      ],
+      [
+       "Karnaprayag",
+       1
+      ],
+      [
+       "Trauma",
+       1
+      ],
+      [
+       "INDIAN",
+       1
+      ],
+      [
+       "OIL",
+       1
+      ],
+      [
+       "FUEL",
+       1
+      ],
+      [
+       "STATION",
+       1
+      ],
+      [
+       "Kathait",
+       1
+      ],
+      [
+       "Care",
+       1
+      ],
+      [
+       "Navjyoti",
+       1
+      ],
+      [
+       "API",
+       1
+      ],
+      [
+       "Google",
+       1
+      ],
+      [
+       "TomTom",
+       1
+      ],
+      [
+       "HERE",
+       1
+      ],
+      [
+       "Mappls",
+       1
+      ],
+      [
+       "ODbL",
+       1
+      ],
+      [
+       "GLO",
+       1
+      ],
+      [
+       "Global",
+       1
+      ],
+      [
+       "Landslide",
+       1
+      ],
+      [
+       "Catalog",
+       1
+      ],
+      [
+       "Natural",
+       1
+      ],
+      [
+       "Earth",
+       1
+      ],
+      [
+       "Leaflet",
+       1
+      ],
+      [
+       "BSD",
+       1
+      ],
+      [
+       "Clause",
+       1
+      ],
+      [
+       "qrcode",
+       1
+      ],
+      [
+       "generator",
+       1
+      ],
+      [
+       "MIT",
+       1
+      ]
+     ]
+    }
+   },
+   "view_ops": {
+    "style": [],
+    "overflowX": 0,
+    "shot": "15_hi_view_ops.png",
+    "latin": [
+     [
+      "Caine",
+      3
+     ],
+     [
+      "Leaflet",
+      2
+     ],
+     [
+      "OSRM",
+      2
+     ],
+     [
+      "contributors",
+      1
+     ],
+     [
+      "API",
+      1
+     ],
+     [
+      "Google",
+      1
+     ],
+     [
+      "TomTom",
+      1
+     ],
+     [
+      "HERE",
+      1
+     ],
+     [
+      "Mappls",
+      1
+     ],
+     [
+      "ODbL",
+      1
+     ],
+     [
+      "GLO",
+      1
+     ],
+     [
+      "Global",
+      1
+     ],
+     [
+      "Landslide",
+      1
+     ],
+     [
+      "Catalog",
+      1
+     ],
+     [
+      "Natural",
+      1
+     ],
+     [
+      "Earth",
+      1
+     ],
+     [
+      "BSD",
+      1
+     ],
+     [
+      "Clause",
+      1
+     ],
+     [
+      "qrcode",
+      1
+     ],
+     [
+      "generator",
+      1
+     ],
+     [
+      "MIT",
+      1
+     ],
+     [
+      "SAARTHI",
+      1
+     ]
+    ]
+   },
+   "view_proof": {
+    "style": [],
+    "overflowX": 0,
+    "shot": "16_hi_view_proof.png",
+    "latin": [
+     [
+      "demo",
+      68
+     ],
+     [
+      "Gangotri",
+      8
+     ],
+     [
+      "Caine",
+      4
+     ],
+     [
+      "OSRM",
+      4
+     ],
+     [
+      "Leaflet",
+      2
+     ],
+     [
+      "Yamunotri",
+      2
+     ],
+     [
+      "API",
+      2
+     ],
+     [
+      "contributors",
+      1
+     ],
+     [
+      "Nalupani",
+      1
+     ],
+     [
+      "Dharasu",
+      1
+     ],
+     [
+      "Matli",
+      1
+     ],
+     [
+      "Netala",
+      1
+     ],
+     [
+      "Dabrani",
+      1
+     ],
+     [
+      "Songad",
+      1
+     ],
+     [
+      "Harsil",
+      1
+     ],
+     [
+      "Junglachatti",
+      1
+     ],
+     [
+      "Kalyani",
+      1
+     ],
+     [
+      "Dharali",
+      1
+     ],
+     [
+      "All",
+      1
+     ],
+     [
+      "India",
+      1
+     ],
+     [
+      "Radio",
+      1
+     ],
+     [
+      "Aug",
+      1
+     ],
+     [
+      "Uttarakhand",
+      1
+     ],
+     [
+      "gets",
+      1
+     ],
+     [
+      "brief",
+      1
+     ],
+     [
+      "rain",
+      1
+     ],
+     [
+      "respite",
+      1
+     ],
+     [
+      "yellow",
+      1
+     ],
+     [
+      "alert",
+      1
+     ],
+     [
+      "issued",
+      1
+     ],
+     [
+      "roads",
+      1
+     ],
+     [
+      "remain",
+      1
+     ],
+     [
+      "blocked",
+      1
+     ],
+     [
+      "newsonair",
+      1
+     ],
+     [
+      "gov",
+      1
+     ],
+     [
+      "elevation",
+      1
+     ],
+     [
+      "Google",
+      1
+     ],
+     [
+      "TomTom",
+      1
+     ],
+     [
+      "HERE",
+      1
+     ],
+     [
+      "Mappls",
+      1
+     ],
+     [
+      "ODbL",
+      1
+     ],
+     [
+      "GLO",
+      1
+     ],
+     [
+      "Global",
+      1
+     ],
+     [
+      "Landslide",
+      1
+     ],
+     [
+      "Catalog",
+      1
+     ],
+     [
+      "Natural",
+      1
+     ],
+     [
+      "Earth",
+      1
+     ],
+     [
+      "BSD",
+      1
+     ],
+     [
+      "Clause",
+      1
+     ],
+     [
+      "qrcode",
+      1
+     ],
+     [
+      "generator",
+      1
+     ],
+     [
+      "MIT",
+      1
+     ],
+     [
+      "SAARTHI",
+      1
+     ]
+    ]
+   },
+   "view_trip": {
+    "style": [],
+    "overflowX": 0,
+    "shot": null
+   },
+   "headerStyle": []
+  },
+  {
+   "name": "language remembered after the app is closed",
+   "t": "2026-10-28T12:32:01.024Z",
+   "before": "hi",
+   "after": "hi",
+   "shot": "17_reopen_lang.png"
+  },
+  {
+   "name": "back to English",
+   "t": "2026-10-28T12:32:07.631Z",
+   "lang": "en"
+  },
+  {
+   "name": "where am I, location dialog answered with Approximate",
+   "t": "2026-10-28T12:32:08.878Z",
+   "dialog": [
+    "Allow PahaadPath to access this device’s location?",
+    "Precise",
+    "Approximate",
+    "While using the app",
+    "Only this time",
+    "Don’t allow"
+   ],
+   "tapped": [
+    "Approximate",
+    "While using the app"
+   ],
+   "granted": "android.permission.ACCESS_COARSE_LOCATION\n      android.permission.ACCESS_FINE_LOCATION\n        android.permission.ACCESS_FINE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]\n        android.permission.ACCESS_COARSE_LOCATION: granted=true, flags=[ USER_SET|USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED|524288]",
+   "body": "Where am I\n\nUses GPS only, no mobile data needed.\n\nNo GPS fix. Go to open sky and try again, or check that location is allowed.",
+   "shot": "18_where_dialog.png",
+   "shot2": "19_where_after_approx.png"
+  },
+  {
+   "name": "where am I again with approximate already granted",
+   "t": "2026-10-28T12:32:24.312Z",
+   "dialog": [
+    "Change PahaadPath’s location access from approximate to precise?",
+    "Precise location",
+    "Change to precise location",
+    "Only this time",
+    "Keep approximate location"
+   ],
+   "body": "Where am I\n\nUses GPS only, no mobile data needed.\n\nFinding your position…",
+   "shot": "20_where_approx_second.png"
+  },
+  {
+   "name": "where am I with precise location",
+   "t": "2026-10-28T12:32:34.005Z",
+   "body": "Where am I\n\nUses GPS only, no mobile data needed.\n\n38 km from this route. Nearest town on it: Haridwar.",
+   "shot": "21_where_precise.png"
+  },
+  {
+   "name": "where am I when location is refused",
+   "t": "2026-10-28T12:32:52.530Z",
+   "dialog": [
+    "Allow PahaadPath to access this device’s location?",
+    "Precise",
+    "Approximate",
+    "While using the app",
+    "Only this time",
+    "Don’t allow"
+   ],
+   "tapped": "Don’t allow",
+   "body": "Where am I\n\nUses GPS only, no mobile data needed.\n\nNo GPS fix. Go to open sky and try again, or check that location is allowed.",
+   "shot": "22_where_denied.png"
+  },
+  {
+   "name": "where am I with location switched off in Android settings",
+   "t": "2026-10-28T12:33:10.571Z",
+   "body": "Where am I\n\nUses GPS only, no mobile data needed.\n\nFinding your position…",
+   "shot": "23_where_location_off.png"
+  },
+  {
+   "name": "tell family: SMS with the plan",
+   "t": "2026-10-28T12:33:30.685Z",
+   "preview": "PahaadPath trip: Delhi NCR → Mussoorie. Leaving Wed 28 Oct 18:00, expect to reach Thu 07:17. Night halt at Dehradun. Road risk: Go 5/100. I will SMS when I reach.",
+   "hrefBefore": "#",
+   "resumed": "com.google.android.apps.messaging/.main.MainActivity",
+   "smsUi": [
+    "Message list",
+    "12:33 PM",
+    "Texting with (987) 654-3210 (SMS/MMS)",
+    "Add files, location, and more",
+    "Attach from camera or gallery",
+    "PahaadPath trip: Delhi NCR → Mussoorie. Leaving Wed 28 Oct 18:00, expect to reach Thu 07:17. Night halt at Dehradun. Road risk: Go 5/100. I will SMS when I reach.",
+    "Explore emoji",
+    "Send SMS",
+    "39 / 3",
+    "SMS",
+    "Navigate up",
+    "(987) 654-3210",
+    "Make a call",
+    "Search",
+    "More conversation options"
+   ],
+   "shot": "24_family_modal.png",
+   "shot2": "25_family_sms_app.png",
+   "style": []
+  },
+  {
+   "name": "tell family: \"I am stuck\" with location",
+   "t": "2026-10-28T12:33:51.249Z",
+   "resumed": "com.google.android.apps.messaging/.main.MainActivity",
+   "smsUi": [
+    "Message list",
+    "12:33 PM",
+    "Texting with (987) 654-3210 (SMS/MMS)",
+    "Add files, location, and more",
+    "Attach from camera or gallery",
+    "Stuck on the road near Haridwar. Location: https://maps.google.com/?q=30.14620,78.59860 (accuracy 5 m). I am safe for now. (PahaadPath)",
+    "Explore emoji",
+    "Send SMS",
+    "SMS",
+    "Navigate up",
+    "(987) 654-3210",
+    "Make a call",
+    "Search",
+    "More conversation options"
+   ],
+   "shot": "26_family_stuck.png"
+  },
+  {
+   "name": "tell family with no number typed",
+   "t": "2026-10-28T12:34:05.967Z",
+   "resumed": "org.pahaadpath.app/.MainActivity",
+   "toast": "Type a phone number first.",
+   "shot": "27_family_no_number.png"
+  },
+  {
+   "name": "back button with a window open",
+   "t": "2026-10-28T12:34:10.602Z",
+   "modalOpenBeforeBack": true,
+   "resumedAfterBack": "com.google.android.apps.nexuslauncher/.NexusLauncherActivity",
+   "state": null,
+   "shot": "28_back_button.png"
+  },
+  {
+   "name": "back button on a tab other than the trip",
+   "t": "2026-10-28T12:34:23.095Z",
+   "resumedAfterBack": "com.google.android.apps.nexuslauncher/.NexusLauncherActivity"
+  },
+  {
+   "name": "save trip and my trips list",
+   "t": "2026-10-28T12:34:32.038Z",
+   "saved": "[{\"from\":\"delhi\",\"to\":\"mussoorie\",\"date\":\"2026-10-28\",\"dep\":null,\"score\":5,\"level\":0}]",
+   "mytrips": "My trips\n\nSaved trips are checked again each time the forecast updates, also offline.\n\nDelhi NCR → Mussoorie\nGo 5\nWed 28 Oct 18:00 · was Go 5 when saved\nOpen\nRemove",
+   "shot": "29_my_trips.png"
+  },
+  {
+   "name": "share buttons: WhatsApp advice, share, listen, QR, copy",
+   "t": "2026-10-28T12:34:39.079Z",
+   "#adv-wa": "not on screen",
+   "#a-share": {
+    "resumed": "com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity",
+    "ui": [
+     "Welcome to Chrome",
+     "Add account to device",
+     "Use without an account",
+     "By continuing, you agree to the Terms of Service. To help improve the app, Chrome sends usage and crash data to Google. Manage"
+    ],
+    "toast": "PahaadPath · Delhi NCR → Mussoorie · Wed 28 Oct 18:00\nROAD: GO (landslide risk 5/100) · TRAFFIC: FREE-FLOWING\nExpected driving time 6 h 22 min (normal day 6 h 22 min).\nVia Meerut · Roorkee · Dehradun.\nNight halt: Dehradun (23:04).\nBest window: 18:00 to 20:00 · Road: Go · Traffic: Free-flowing · overnight halt.\nBefore you go: Mussoorie tourist registration.\nAdvisory only. Follow police and district notices on the road.",
+    "url": "https://appassets.androidplatform.net/assets/index.html",
+    "shot": "30_btn_a-share.png",
+    "speaking": "no speechSynthesis"
+   },
+   "#a-listen": {
+    "resumed": "org.pahaadpath.app/.MainActivity",
+    "ui": [],
+    "toast": " Delhi NCR  to  Mussoorie · Wed 28 Oct 18:00. ROAD: GO (landslide risk 5/100) · TRAFFIC: FREE-FLOWING. Expected driving time 6 h 22 min (normal day 6 h 22 min).. Via Meerut · Roorkee · Dehradun.. Night halt: Dehradun (23:04).. Best window: 18:00 to 20:00 · Road: Go · Traffic: Free-flowing · overnight halt.. Before you go: Mussoorie tourist registration.. Advisory only. Follow police and district notices on the road.",
+    "url": "https://appassets.androidplatform.net/assets/index.html",
+    "shot": "31_btn_a-listen.png",
+    "speaking": "no speechSynthesis"
+   },
+   "#a-qr": {
+    "resumed": "org.pahaadpath.app/.MainActivity",
+    "ui": [
+     "PahaadPath",
+     "PahaadPath",
+     "Hill-road landslide and traffic advisory",
+     "Language",
+     "EN",
+     "हिं",
+     "Views",
+     "Plan trip",
+     "Control room",
+     "Proof",
+     "Live rainfall forecast, 15:36 IST (from the PahaadPath data pack)",
+     "WEATHER",
+     "WEATHER",
+     "TRAFFIC ASSUMPTION",
+     "TRAFFIC ASSUMPTION"
+    ],
+    "toast": " Delhi NCR  to  Mussoorie · Wed 28 Oct 18:00. ROAD: GO (landslide risk 5/100) · TRAFFIC: FREE-FLOWING. Expected driving time 6 h 22 min (normal day 6 h 22 min).. Via Meerut · Roorkee · Dehradun.. Night halt: Dehradun (23:04).. Best window: 18:00 to 20:00 · Road: Go · Traffic: Free-flowing · overnight halt.. Before you go: Mussoorie tourist registration.. Advisory only. Follow police and district notices on the road.",
+    "url": "https://appassets.androidplatform.net/assets/index.html",
+    "shot": "32_btn_a-qr.png",
+    "speaking": "no speechSynthesis"
+   },
+   "#adv-copy": "not on screen",
+   "clip": "",
+   "navigator": {
+    "share": false,
+    "clipboard": true,
+    "speech": false,
+    "sr": true
+   }
+  },
+  {
+   "name": "share the app file (APK) from the safety tab",
+   "t": "2026-10-28T12:35:00.086Z",
+   "tab": "safety",
+   "resumed": "com.android.intentresolver/.ChooserActivity",
+   "ui": [
+    "Sharing 1 file",
+    "PahaadPath.apk",
+    "No recommended people to share with",
+    "Nearby Share",
+    "Drive",
+    "Gmail"
+   ],
+   "shot": "33_share_app_chooser.png"
+  },
+  {
+   "name": "SOS button",
+   "t": "2026-10-28T12:35:08.062Z",
+   "resumed": "org.pahaadpath.app/.MainActivity",
+   "ui": [
+    "Welcome to Chrome",
+    "Add account to device",
+    "Use without an account",
+    "By continuing, you agree to the Terms of Service. To help improve the app, Chrome sends usage and crash data to Google. Manage"
+   ],
+   "shot": "34_sos.png"
+  },
+  {
+   "name": "voice question (mic button)",
+   "t": "2026-10-28T12:35:17.248Z",
+   "ui": [
+    "PahaadPath",
+    "PahaadPath",
+    "Hill-road landslide and traffic advisory",
+    "Language",
+    "EN",
+    "हिं",
+    "Views",
+    "Plan trip",
+    "Control room",
+    "Proof",
+    "Live rainfall forecast, 15:36 IST (from the PahaadPath data pack)",
+    "WEATHER",
+    "WEATHER",
+    "TRAFFIC ASSUMPTION",
+    "TRAFFIC ASSUMPTION"
+   ],
+   "toast": "Listening…",
+   "shot": "35_mic.png",
+   "resumed": "org.pahaadpath.app/.MainActivity"
+  },
+  {
+   "name": "typed question box in English and Hinglish",
+   "t": "2026-10-28T12:35:31.964Z",
+   "dehradun to kedarnath tomorrow morning": {
+    "from": "dehradun",
+    "to": "kedarnath",
+    "date": "2026-10-29",
+    "dep": null
+   },
+   "rishikesh se joshimath kal": {
+    "from": "rishikesh",
+    "to": "joshimath",
+    "date": "2026-10-29",
+    "dep": null
+   },
+   "hindiTyped": {
+    "to": "badrinath",
+    "val": "Badrinath"
+   },
+   "shot": "36_ask_box.png"
+  },
+  {
+   "name": "downloads inside the app (proof and open data exports)",
+   "t": "2026-10-28T12:35:43.346Z",
+   "#pr-dl": {
+    "resumed": "org.pahaadpath.app/.MainActivity",
+    "ui": [
+     "PahaadPath",
+     "PahaadPath",
+     "Hill-road landslide and traffic advisory",
+     "Language",
+     "EN",
+     "हिं",
+     "Views",
+     "Plan trip",
+     "Control room",
+     "Proof"
+    ]
+   },
+   "#od-exp": {
+    "resumed": "org.pahaadpath.app/.MainActivity",
+    "ui": [
+     "PahaadPath",
+     "PahaadPath",
+     "Hill-road landslide and traffic advisory",
+     "Language",
+     "EN",
+     "हिं",
+     "Views",
+     "Plan trip",
+     "Control room",
+     "Proof"
+    ]
+   },
+   "downloadsFolder": "total 0",
+   "shot": "37_downloads.png"
+  },
+  {
+   "name": "turn the phone sideways",
+   "t": "2026-10-28T12:35:59.882Z",
+   "before": [
+    "rishikesh",
+    "badrinath",
+    "route"
+   ],
+   "landscape": [
+    "rishikesh",
+    "badrinath",
+    "route",
+    0,
+    866
+   ],
+   "shot": "38_landscape.png"
+  },
+  {
+   "name": "app killed in the background, then reopened",
+   "t": "2026-10-28T12:36:05.904Z",
+   "before": [
+    "rishikesh",
+    "badrinath",
+    "reports"
+   ],
+   "after": [
+    "delhi",
+    "mussoorie",
+    "route"
+   ],
+   "shot": "39_after_kill.png"
+  },
+  {
+   "name": "large text (font size 130 percent)",
+   "t": "2026-10-28T12:36:13.326Z",
+   "overflowX": 0,
+   "clipped": [],
+   "shot": "40_font_130.png"
+  },
+  {
+   "name": "dark mode phone",
+   "t": "2026-10-28T12:36:18.487Z",
+   "bg": "rgb(237, 239, 232)",
+   "shot": "41_dark.png"
+  },
+  {
+   "name": "copy link in the QR window",
+   "t": "2026-10-28T12:36:24.258Z",
+   "link": "Scan to open this trip\n\nhttps://appassets.androidplatform.net/assets/index.html?from=delhi&to=mussoorie&date=2026-10-28\n\nCopy link",
+   "toast": "https://appassets.androidplatform.net/assets/index.html?from=delhi&to=mussoorie&date=2026-10-28",
+   "writeText": "NotAllowedError: Write permission denied.",
+   "shot": "42_copy_link.png"
+  },
+  {
+   "name": "control room advisory: copy and WhatsApp",
+   "t": "2026-10-28T12:36:35.473Z",
+   "copyToast": "PahaadPath decision support draft, Wed 28 Oct 18:06 IST. Not an official order. Review before issuing. No stretch reaches Avoid in the next 24 hours. Basis: rain forecast from Open-Meteo against the C",
+   "shot": "43_adv_copy.png",
+   "waResumed": "com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity",
+   "waShot": "44_adv_wa.png"
+  },
+  {
+   "name": "helpline number tap opens the dialer",
+   "t": "2026-10-28T12:36:47.546Z",
+   "href": "tel:112",
+   "resumed": "com.google.android.dialer/com.android.dialer.main.impl.MainActivity",
+   "ui": [
+    "More options",
+    "112",
+    "backspace",
+    "1,",
+    "1",
+    "2,ABC",
+    "2",
+    "ABC",
+    "3,DEF",
+    "3",
+    "DEF",
+    "4,GHI"
+   ],
+   "shot": "45_helpline.png"
+  },
+  {
+   "name": "voice input error",
+   "t": "2026-10-28T12:36:57.545Z",
+   "sr": [
+    "error:not-allowed",
+    "no end after 8 s"
+   ],
+   "ui": []
+  },
+  {
+   "name": "file pickers: load results file, load open data file",
+   "t": "2026-10-28T12:37:07.571Z",
+   "#pr-ul": {
+    "resumed": "org.pahaadpath.app/.MainActivity",
+    "ui": [
+     "PahaadPath",
+     "PahaadPath",
+     "Hill-road landslide and traffic advisory",
+     "Language",
+     "EN",
+     "हिं",
+     "Views",
+     "Plan trip"
+    ]
+   },
+   "#od-imp": {
+    "resumed": "org.pahaadpath.app/.MainActivity",
+    "ui": [
+     "PahaadPath",
+     "PahaadPath",
+     "Hill-road landslide and traffic advisory",
+     "Language",
+     "EN",
+     "हिं",
+     "Views",
+     "Plan trip"
+    ]
+   },
+   "shot": "46_file_picker.png"
+  },
+  {
+   "name": "open a saved trip, swap from and to",
+   "t": "2026-10-28T12:37:24.282Z",
+   "savedTripButton": true,
+   "afterOpen": [
+    "delhi",
+    "mussoorie"
+   ],
+   "afterSwap": [
+    "mussoorie",
+    "delhi"
+   ]
+  },
+  {
+   "name": "shared report channel status with signal",
+   "t": "2026-10-28T12:37:27.361Z",
+   "status": "Shared channel connected · 0 reports from other phones in the last 48 hours",
+   "shot": "47_share_status_online.png"
+  },
+  {
+   "name": "date picker",
+   "t": "2026-10-28T12:37:47.653Z",
+   "ui": [
+    "2026",
+    "Wed, Oct 28",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10"
+   ],
+   "shot": "48_date_picker.png"
+  },
+  {
+   "name": "English words left on Hindi screens (in context)",
+   "t": "2026-10-28T12:37:53.518Z",
+   "failShot": "49_fail.png",
+   "error": "Error: page: ReferenceError: v is not defined\n    at <anonymous>:1:44\n    at <anonymous>:1:210\n    at Object.evaluate (/home/runner/work/PahaadPath/PahaadPath/tests/emulator/drive.js:45:33)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async /home/runner/work/PahaadPath/PahaadPath/tests/emulator/drive.js:305:11\n    at async step (/home/runner/work/PahaadPath/PahaadPath/tests/emulator/drive.js:16:23)\n    at async /home/runner/work/PahaadPath/PahaadPath/tests/emulator/drive.js:302:2"
+  },
+  {
+   "name": "flight mode, reopen the app",
+   "t": "2026-10-28T12:37:57.372Z",
+   "state": {
+    "src": "cache",
+    "lang": "hi",
+    "from": "delhi",
+    "to": "mussoorie",
+    "view": "trip",
+    "tab": "route",
+    "scn": "live",
+    "err": "",
+    "srcmsg": "ऑफ़लाइन। पूर्वानुमान बुध 28 अक्तूबर 15:36 IST सहेजा गया (3 घंटे पहले)।",
+    "online": false,
+    "outbox": 0,
+    "modal": false,
+    "overflowX": 0,
+    "vw": 412,
+    "ua": "Mozilla/5.0 (Linux; Android 14; sdk_gphone64_x86_64 Build/UE1A.230829.050; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/113.0.5672.136 Mobile Safari/537.36"
+   },
+   "verdict": "सड़क\nचलें\n5\nभूस्खलन जोखिम / 100\nइस समय रास्ता ठीक दिखता है\nदिल्ली एनसीआर → मसूरी। सबसे ऊँचा जोखिम: देहरादून → मसूरी।\nदिल्ली एनसीआर → मसूरी · ~300 किमी · रवानगी बुध 28 अक्तूबर 18:00",
+   "closures": null,
+   "alerts": null,
+   "net": "Active default network: none",
+   "shot": "50_offline_trip.png"
+  },
+  {
+   "name": "offline: plan another trip and where am I",
+   "t": "2026-10-28T12:38:14.716Z",
+   "verdict": "सड़क\nचलें\n7\nभूस्खलन जोखिम / 100\nइस समय रास्ता ठीक दिखता है\nहरिद्वार → केदारनाथ। सबसे ऊँचा जोखिम: ऋषिकेश → देवप्रयाग।\nहरिद्वार → केदारनाथ · ~240 किमी · रवानगी बुध 28 अक्तूबर 18:00",
+   "where": "मैं कहाँ हूँ\n\nसिर्फ़ GPS से, मोबाइल डेटा नहीं चाहिए।\n\nदेवप्रयाग → श्रीनगर (गढ़वाल) पर, देवप्रयाग से लगभग 4 किमी।\n\nयहाँ अभी भूस्खलन जोखिम: चलें 3।\n\nइस यात्रा में आगे कोई सावधानी या टालें वाला हिस्सा नहीं।\n\nठहरने की जगह वाला अगला शहर: श्रीनगर (गढ़वाल), लगभग 32 किमी आगे।\n\nअगला दर्ज अस्पताल या क्लिनिक: श्रीनगर (गढ़वाल), लगभग 32 किमी आगे।\n\nकेदारनाथ तक लगभग 144 किमी बाकी।",
+   "shot": "51_offline_where.png"
+  },
+  {
+   "name": "offline: road report goes to the waiting queue",
+   "t": "2026-10-28T12:38:24.226Z",
+   "options": [
+    "rishikesh-devprayag|0=तोताघाटी (ऋषिकेश → देवप्रयाग)",
+    "rishikesh-devprayag|-1=ऋषिकेश → देवप्रयाग",
+    "devprayag-srinagar|-1=देवप्रयाग → श्रीनगर (गढ़वाल)"
+   ],
+   "outbox": 1,
+   "shareStatus": "साझा चैनल से जुड़ रहे हैं… · 1 रिपोर्ट नेटवर्क का इंतज़ार कर रही है",
+   "panelStart": "सड़क की स्थिति बताएँ\nकहाँ\nतोताघाटी (ऋषिकेश → देवप्रयाग)\nऋषिकेश → देवप्रयाग\nदेवप्रयाग → श्रीनगर (गढ़वाल)\nसिरोबगड़ (श्रीनगर (गढ़वाल) → रुद्रप्रयाग)\nश्रीनगर (गढ़वाल) → रुद्रप्रयाग\nरुद्रप्रयाग → गुप्तकाशी\nफाटा से डोलिया देवी (गुप्तकाशी → सोनप्रयाग)\nगुप्तकाशी → सोनप्रयाग\nमुनकटिया (सोनप्रयाग → गौरीकुंड)\nसोनप्रयाग → गौरीकुंड\nक्या दिख रहा है\nसड़क पर भूस्खलन\nमलबा या गिरते पत्थर\nसड़क बह गई\nपुल क्षतिग्रस्त\nरास्ता फिर खुल गया\nरिपोर्ट भेजें\n\nरिपोर्ट 6 घंटे तक मानी जाती है। दो या अधिक पुष्टि होने पर हिस्सा बंद माना जाता है। इस प्रोटोटाइप में रिपोर्ट सिर्फ़ इसी फ़ोन में रहती हैं।\n\nहाल की रिपोर्ट\nसड़क पर भूस्",
+   "posted": [],
+   "shot": "52_offline_report_queued.png"
+  },
+  {
+   "name": "offline: Hindi screens",
+   "t": "2026-10-28T12:38:27.815Z",
+   "srcmsg": "ऑफ़लाइन। पूर्वानुमान बुध 28 अक्तूबर 15:36 IST सहेजा गया (3 घंटे पहले)।",
+   "panel": "सड़क की स्थिति बताएँ\nकहाँ\nतोताघाटी (ऋषिकेश → देवप्रयाग)\nऋषिकेश → देवप्रयाग\nदेवप्रयाग → श्रीनगर (गढ़वाल)\nसिरोबगड़ (श्रीनगर (गढ़वाल) → रुद्रप्रयाग)\nश्रीनगर (गढ़वाल) → रुद्रप्रयाग\nरुद्रप्रयाग → गुप्तकाशी\nफाटा से डोलिया देवी (गुप्तकाशी → सोनप्रयाग)\nगुप्तकाशी → सोनप्रयाग\nमुनकटिया (सोनप्रयाग → गौरीकुंड)\nसोनप्रयाग → गौरीकुंड\nक्या दिख रहा है\nसड़क पर भूस्खलन\nमलबा या गिरते पत्थर\nसड़क बह गई\nपुल क्षतिग्रस्त\nरास्ता फिर खुल गया\nरिपोर्ट भेजें\n\nरिपोर्ट 6 घंटे तक मानी जाती है। दो या अधिक पुष्टि होने पर हिस्सा बं",
+   "style": [],
+   "shot": "53_offline_hi_reports.png"
+  },
+  {
+   "name": "offline: map tab with the offline map",
+   "t": "2026-10-28T12:38:31.247Z",
+   "offlineMapButton": true,
+   "shot": "54_offline_map.png"
+  },
+  {
+   "name": "offline: closure and alert cards (sample data put in the saved forecast)",
+   "t": "2026-10-28T12:38:37.433Z",
+   "src": "cache",
+   "en": {
+    "alerts": "Official alerts for Uttarakhand\n\nFrom NDMA Sachet, saved with the forecast so they show with no signal. Issued by government agencies, not by PahaadPath.\n\nTEST SAMPLE: Thunderstorm with lightning likely over Chamoli, Rudraprayag in next 3 hours.\n\nIMD Dehradun · 2 h ago\n\nAll alerts on Sachet",
+    "closures": "Roads reported closed (PWD Uttarakhand)\n\nPWD morning report of 28 Oct: 2 roads closed in districts on this trip (Chamoli 2). The report names closed roads, not the spot, so PahaadPath does not mark its own stretches closed. Most are village roads. Call 1070 or the district control room 1077 before you set out.\n\nClosed roads that name a town on your route\n\nJyotirmath Malari motor road (test sample)\n\nChamoli, state highway. Closed since 28 Oct, 07:10, expected to open 28 Oct, 18:00.\n\nMain roads closed in these districts\n\nNandprayag Ghat motor road (test sample)\n\nChamoli, district road. Closed since 28 Oct, 06:42.\n\nFull report (PDF)",
+    "shot": "55_offline_cards_en.png",
+    "style": []
+   },
+   "hi": {
+    "alerts": "उत्तराखंड के लिए आधिकारिक चेतावनियाँ\n\nNDMA सचेत से, पूर्वानुमान के साथ सहेजी गईं ताकि बिना नेटवर्क भी दिखें। ये सरकारी एजेंसियों की हैं, पहाड़ पथ की नहीं।\n\nTEST SAMPLE: Thunderstorm with lightning likely over Chamoli, Rudraprayag in next 3 hours.\n\nIMD Dehradun · 2 घंटे पहले\n\nसचेत पर सभी चेतावनियाँ",
+    "closures": "बंद सड़कें (लोक निर्माण विभाग उत्तराखंड)\n\nलोक निर्माण विभाग की 28 अक्तू॰ की सुबह की रिपोर्ट: इस यात्रा के ज़िलों (चमोली 2) में 2 सड़कें बंद। रिपोर्ट बंद सड़क का नाम बताती है, जगह नहीं, इसलिए पहाड़ पथ अपने हिस्सों को बंद नहीं दिखाता। ज़्यादातर गाँव की सड़कें हैं। निकलने से पहले 1070 या ज़िला नियंत्रण कक्ष 1077 पर फ़ोन करें।\n\nबंद सड़कें जिनके नाम में आपके रास्ते का शहर है\n\nJyotirmath Malari motor road (test sample)\n\nचमोली, राज्य मार्ग। 28 अक्तू॰, 07:10 से बंद, खुलने का अनुमान 28 अक्तू॰, 18:00।\n\nइन ज़िलों में बंद मुख्य सड़कें\n\nNandprayag Ghat motor road (test sample)\n\nचमोली, ज़िला सड़क। 28 अक्तू॰, 06:42 से बंद।\n\nपूरी रिपोर्ट (PDF)",
+    "shot": "56_offline_cards_hi.png",
+    "style": []
+   }
+  },
+  {
+   "name": "signal back: queue sends and forecast refreshes (no reopen)",
+   "t": "2026-10-28T12:38:47.322Z",
+   "log": [
+    [
+     10,
+     "live",
+     true,
+     0,
+     1,
+     "Live rainfall forecast, 15:36 IST (from the PahaadPath data pack)"
+    ],
+    [
+     20,
+     "live",
+     true,
+     0,
+     1,
+     "Live rainfall forecast, 15:36 IST (from the PahaadPath data pack)"
+    ],
+    [
+     30,
+     "live",
+     true,
+     0,
+     1,
+     "Live rainfall forecast, 15:36 IST (from the PahaadPath data pack)"
+    ],
+    [
+     40,
+     "live",
+     true,
+     0,
+     1,
+     "Live rainfall forecast, 15:36 IST (from the PahaadPath data pack)"
+    ]
+   ],
+   "posted": [
+    {
+     "url": "https://ntfy.sh/pahaadpath-uk-road-reports-v1",
+     "body": "{\"v\":1,\"dev\":\"36kcn92q\",\"rt\":1793191104927,\"k\":\"report\",\"rid\":\"u1793191104926\",\"seg\":\"rishikesh-devprayag\",\"spot\":0,\"type\":\"landslide\"}",
+     "at": 1793191128323,
+     "online": true
+    }
+   ],
+   "shot": "57_back_online.png"
+  },
+  {
+   "name": "offline: report queued, app reopened later with signal",
+   "t": "2026-10-28T12:39:27.770Z",
+   "queuedBefore": 1,
+   "guarded": true,
+   "log": [
+    [
+     5,
+     "live",
+     0,
+     0
+    ],
+    [
+     10,
+     "live",
+     0,
+     0
+    ],
+    [
+     15,
+     "live",
+     0,
+     0
+    ],
+    [
+     20,
+     "live",
+     0,
+     0
+    ],
+    [
+     25,
+     "live",
+     0,
+     0
+    ],
+    [
+     30,
+     "live",
+     0,
+     0
+    ],
+    [
+     35,
+     "live",
+     0,
+     0
+    ],
+    [
+     40,
+     "live",
+     0,
+     0
+    ],
+    [
+     45,
+     "live",
+     0,
+     0
+    ]
+   ],
+   "shot": "58_reopen_with_signal.png"
+  },
+  {
+   "name": "flight mode, phone clock 2 days later, reopen",
+   "t": "2026-10-28T12:40:42.294Z",
+   "deviceDate": "Fri Oct 30 12:40:45 UTC 2026",
+   "state": {
+    "src": "cache",
+    "lang": "en",
+    "from": "delhi",
+    "to": "mussoorie",
+    "view": "trip",
+    "tab": "route",
+    "scn": "live",
+    "err": "",
+    "srcmsg": "Offline. Forecast saved Wed 28 Oct 15:36 IST, 2 days ago. Rain since then is not known: ask locally and check road reports.",
+    "online": false,
+    "outbox": 0,
+    "modal": false,
+    "overflowX": 0,
+    "vw": 412,
+    "ua": "Mozilla/5.0 (Linux; Android 14; sdk_gphone64_x86_64 Build/UE1A.230829.050; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/113.0.5672.136 Mobile Safari/537.36"
+   },
+   "verdict": "ROAD\nGO\n8\nlandslide risk / 100\nRoad looks clear for this start time\nDelhi NCR → Mussoorie. Highest risk: Dehradun → Mussoorie.\nDelhi NCR → Mussoorie · ~505 km · Leaving Fri 30 Oct 20:00",
+   "pills": 5,
+   "reports": 0,
+   "shot": "59_offline_2_days.png"
+  },
+  {
+   "name": "flight mode, phone clock 11 days later, reopen",
+   "t": "2026-10-28T12:40:57.893Z",
+   "deviceDate": "Sun Nov  8 12:41:00 UTC 2026",
+   "state": {
+    "src": "none",
+    "lang": "en",
+    "from": "delhi",
+    "to": "mussoorie",
+    "view": "trip",
+    "tab": "route",
+    "scn": "live",
+    "err": "old",
+    "srcmsg": "Saved forecast is from Wed 28 Oct, more than 10 days old, so landslide risk is not shown. Ask locally and get a moment of signal to update.",
+    "online": false,
+    "outbox": 0,
+    "modal": false,
+    "overflowX": 0,
+    "vw": 412,
+    "ua": "Mozilla/5.0 (Linux; Android 14; sdk_gphone64_x86_64 Build/UE1A.230829.050; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/113.0.5672.136 Mobile Safari/537.36"
+   },
+   "verdict": "No current forecast: landslide risk not shown\n\nSaved forecast is from Wed 28 Oct, more than 10 days old, so landslide risk is not shown. Ask locally and get a moment of signal to update.",
+   "pills": 0,
+   "reports": 0,
+   "shot": "60_offline_11_days.png"
+  },
+  {
+   "name": "clock back to now, signal back",
+   "t": "2026-10-28T12:41:12.168Z",
+   "state": {
+    "src": "live",
+    "lang": "en",
+    "from": "delhi",
+    "to": "mussoorie",
+    "view": "trip",
+    "tab": "route",
+    "scn": "live",
+    "err": "",
+    "srcmsg": "Live rainfall forecast, 15:36 IST (from the PahaadPath data pack)",
+    "online": true,
+    "outbox": 0,
+    "modal": false,
+    "overflowX": 0,
+    "vw": 412,
+    "ua": "Mozilla/5.0 (Linux; Android 14; sdk_gphone64_x86_64 Build/UE1A.230829.050; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/113.0.5672.136 Mobile Safari/537.36"
+   },
+   "date": "Wed Oct 28 12:41:29 UTC 2026"
+  }
+ ],
+ "device": {
+  "model": "sdk_gphone64_x86_64",
+  "sdk": "34",
+  "type": "userdebug",
+  "webview": "versionName=113.0.5672.136Current WebView package (name, version): (com.google.android.webview, 113.0.5672.136)",
+  "size": "Physical size: 1080x2400",
+  "density": "Physical density: 420"
+ },
+ "pkg": "versionCode=38 minSdk=21 targetSdk=34\n    versionName=5.0",
+ "perms": "runtime permissions:\n        android.permission.ACCESS_FINE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]\n        android.permission.ACCESS_COARSE_LOCATION: granted=false, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]\n\nQueries:\n  system apps queryable: false\n  queries via forceQueryable:\n  queries via package name:\n  queries via component:\n    com.google.android.settings.intelligence:\n      org.pahaadpath.app\n  queryable via interaction:\n    User 0:",
+ "wvTop": 128,
+ "wm": "Physical size: 1080x2400",
+ "outboxLeftBeforeLastOnline": 0,
+ "pageErrors": []
+}
