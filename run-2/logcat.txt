@@ -1,0 +1,199 @@
+10-28 12:14:23.197 W/id.gms.unstable( 3248): Long monitor contention with owner ChromiumNet (3508) at boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long)(MessageQueue.java:600) waiters=0 in android.os.Message android.os.MessageQueue.next() for 486ms
+10-28 12:14:25.797 W/.pahaadpath.app( 3853): Unexpected CPU variant for x86: x86_64.
+10-28 12:14:25.797 W/.pahaadpath.app( 3853): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:14:25.808 E/.pahaadpath.app( 3853): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:14:26.755 W/.pahaadpath.app( 3853): Entry not found
+10-28 12:14:28.437 W/iew:webview_apk( 4075): Unexpected CPU variant for x86: x86_64.
+10-28 12:14:28.437 W/iew:webview_apk( 4075): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:14:28.585 E/iew:webview_apk( 4075): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:14:28.657 W/iew:webview_apk( 4075): Entry not found
+10-28 12:14:28.692 W/InputManager-JNI(  519): Input channel object '3f2f89 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:14:29.726 W/cr_AWNetworkFetcherTask( 4075): 	at org.chromium.android_webview.nonembedded.NetworkFetcherTask.download(chromium-TrichromeWebViewGoogle6432.apk-stable-567263637:48)
+10-28 12:14:30.479 W/.gms.persistent( 1440): Verification of void org.chromium.net.impl.CronetLibraryLoader.c(java.lang.Runnable) took 123.621ms (234.59 bytecodes/s) (1880B approximate peak alloc)
+10-28 12:14:33.671 W/earchbox:search( 1820): Long monitor contention with owner BG Thread #1 (2292) at void org.chromium.net.impl.CronetUrlRequest.cancel()(PG:3) waiters=0 in void org.chromium.net.impl.u.run() for 315ms
+10-28 12:15:00.420 E/FrameTracker( 3853): force finish cuj, time out: J<IME_INSETS_ANIMATION::0@0@org.pahaadpath.app>
+10-28 12:15:00.420 W/FrameTracker( 3853): Missed App frame:UNKNOWN: 10, 6255, 0, CUJ=J<IME_INSETS_ANIMATION::0@0@org.pahaadpath.app>
+10-28 12:15:00.420 W/FrameTracker( 3853): Missed SF frame:UNKNOWN: 10, 6255, 0, CUJ=J<IME_INSETS_ANIMATION::0@0@org.pahaadpath.app>
+10-28 12:15:10.727 E/FrameTracker( 3853): force finish cuj, time out: J<IME_INSETS_ANIMATION::1@0@org.pahaadpath.app>
+10-28 12:15:14.184 W/android.webview( 5374): Unexpected CPU variant for x86: x86_64.
+10-28 12:15:14.184 W/android.webview( 5374): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:15:14.207 E/android.webview( 5374): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:15:14.493 W/android.webview( 5374): Entry not found
+10-28 12:15:49.215 W/ActivityTaskManager(  519): Force removing ActivityRecord{7fd9963 u0 org.pahaadpath.app/.MainActivity t8 f}}: app died, no saved state
+10-28 12:15:49.296 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{567e584 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity}
+10-28 12:15:49.311 W/InputManager-JNI(  519): Input channel object '567e584 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:15:49.620 W/WindowManager(  519): Exception thrown during dispatchAppVisibility Window{567e584 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:15:50.364 W/.pahaadpath.app( 6210): Unexpected CPU variant for x86: x86_64.
+10-28 12:15:50.364 W/.pahaadpath.app( 6210): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:15:50.367 E/.pahaadpath.app( 6210): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:15:50.957 W/.pahaadpath.app( 6210): Entry not found
+10-28 12:15:51.097 E/chromium( 6210): [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/org.pahaadpath.app/cache/WebView/Default/HTTP Cache/Code Cache/wasm: No such file or directory (2)
+10-28 12:15:51.098 E/chromium( 6210): [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/org.pahaadpath.app/cache/WebView/Default/HTTP Cache/Code Cache/js: No such file or directory (2)
+10-28 12:15:51.098 E/chromium( 6210): [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+10-28 12:15:51.098 E/chromium( 6210): [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+10-28 12:15:51.576 W/InputManager-JNI(  519): Input channel object '39a173b Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:16:23.362 W/ActivityTaskManager(  519): Force removing ActivityRecord{1b69fbe u0 org.pahaadpath.app/.MainActivity t9 f}}: app died, no saved state
+10-28 12:16:23.481 W/InputManager-JNI(  519): Input channel object '78babf2 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:16:23.528 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{78babf2 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:16:23.789 W/WindowManager(  519): Exception thrown during dispatchAppVisibility Window{78babf2 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:16:24.288 W/.pahaadpath.app( 6597): Unexpected CPU variant for x86: x86_64.
+10-28 12:16:24.288 W/.pahaadpath.app( 6597): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:16:24.294 E/.pahaadpath.app( 6597): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:16:24.702 W/.pahaadpath.app( 6597): Entry not found
+10-28 12:16:24.855 E/chromium( 6597): [ERROR:simple_version_upgrade.cc(152)] Failed to write a new fake index.
+10-28 12:16:24.858 E/chromium( 6597): [ERROR:simple_version_upgrade.cc(152)] Failed to write a new fake index.
+10-28 12:16:25.294 W/InputManager-JNI(  519): Input channel object 'e118cb7 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:16:42.835 W/ActivityTaskManager(  519): Force removing ActivityRecord{78786ea u0 org.pahaadpath.app/.MainActivity t10}: app died, no saved state
+10-28 12:16:42.896 W/InputManager-JNI(  519): Input channel object '4f47b47 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:16:42.909 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{4f47b47 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:16:43.151 W/WindowManager(  519): Exception thrown during dispatchAppVisibility Window{4f47b47 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:16:44.012 W/.pahaadpath.app( 6892): Unexpected CPU variant for x86: x86_64.
+10-28 12:16:44.012 W/.pahaadpath.app( 6892): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:16:44.035 E/.pahaadpath.app( 6892): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:16:44.454 W/.pahaadpath.app( 6892): Entry not found
+10-28 12:16:44.956 W/InputManager-JNI(  519): Input channel object '394c976 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:16:46.012 W/ProcessStats(  519): Tracking association SourceState{35e5ce8 org.pahaadpath.app/10192 BTop #12819} whose proc state 2 is better than process ProcessState{824ee10 com.google.android.gms.persistent/10131 pkg=com.google.android.gms} proc state 4 (1406 skipped)
+10-28 12:16:56.502 W/ProcessStats(  519): Tracking association SourceState{32a27a4 org.pahaadpath.app/10192 BTop #12877} whose proc state 2 is better than process ProcessState{106c6b1 com.google.android.gms/10131 pkg=com.google.android.gms} proc state 4 (131 skipped)
+10-28 12:17:00.483 W/ActivityTaskManager(  519): Force removing ActivityRecord{531c74c u0 org.pahaadpath.app/.MainActivity t11 f}}: app died, no saved state
+10-28 12:17:00.511 W/InputManager-JNI(  519): Input channel object '47a0b58 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:17:00.532 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{47a0b58 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:17:00.725 W/WindowManager(  519): Exception thrown during dispatchAppVisibility Window{47a0b58 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:17:01.172 W/.pahaadpath.app( 7118): Unexpected CPU variant for x86: x86_64.
+10-28 12:17:01.172 W/.pahaadpath.app( 7118): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:17:01.175 E/.pahaadpath.app( 7118): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:17:01.520 W/.pahaadpath.app( 7118): Entry not found
+10-28 12:17:01.748 E/chromium( 7118): [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/org.pahaadpath.app/cache/WebView/Default/HTTP Cache/Code Cache/js: No such file or directory (2)
+10-28 12:17:01.748 E/chromium( 7118): [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+10-28 12:17:01.748 E/chromium( 7118): [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/org.pahaadpath.app/cache/WebView/Default/HTTP Cache/Code Cache/wasm: No such file or directory (2)
+10-28 12:17:01.748 E/chromium( 7118): [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+10-28 12:17:02.120 W/InputManager-JNI(  519): Input channel object '5a06b39 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:17:07.694 W/ProcessStats(  519): Tracking association SourceState{35e5ce8 org.pahaadpath.app/10192 BTop #13001} whose proc state 2 is better than process ProcessState{824ee10 com.google.android.gms.persistent/10131 pkg=com.google.android.gms} proc state 4 (625 skipped)
+10-28 12:17:19.155 W/ProcessStats(  519): Tracking association SourceState{35e5ce8 org.pahaadpath.app/10192 BTop #13041} whose proc state 2 is better than process ProcessState{824ee10 com.google.android.gms.persistent/10131 pkg=com.google.android.gms} proc state 4 (131 skipped)
+10-28 12:17:20.376 W/ActivityTaskManager(  519): Force removing ActivityRecord{d986594 u0 org.pahaadpath.app/.MainActivity t12 f}}: app died, no saved state
+10-28 12:17:20.428 W/InputManager-JNI(  519): Input channel object '9394a08 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:17:20.448 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{9394a08 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:17:20.604 W/WindowManager(  519): Exception thrown during dispatchAppVisibility Window{9394a08 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:17:21.030 W/.pahaadpath.app( 7295): Unexpected CPU variant for x86: x86_64.
+10-28 12:17:21.030 W/.pahaadpath.app( 7295): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:17:21.033 E/.pahaadpath.app( 7295): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:17:21.270 W/.pahaadpath.app( 7295): Entry not found
+10-28 12:17:21.395 E/chromium( 7295): [ERROR:simple_version_upgrade.cc(152)] Failed to write a new fake index.
+10-28 12:17:21.395 E/chromium( 7295): [ERROR:simple_version_upgrade.cc(152)] Failed to write a new fake index.
+10-28 12:17:21.740 W/InputManager-JNI(  519): Input channel object 'eb797e2 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:17:36.953 E/FrameTracker( 7295): force finish cuj, time out: J<IME_INSETS_ANIMATION::0@0@org.pahaadpath.app>
+10-28 12:17:38.088 E/FrameTracker( 7295): force finish cuj, time out: J<IME_INSETS_ANIMATION::1@0@org.pahaadpath.app>
+10-28 12:17:50.957 W/InputManager-JNI(  519): Input channel object '690c076 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:17:58.568 W/InputManager-JNI(  519): Input channel object '9888cb1 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:18:00.760 W/InputManager-JNI(  519): Input channel object '673e2a5 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:18:07.568 W/InputManager-JNI(  519): Input channel object 'ae66589 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:18:09.201 W/ActivityTaskManager(  519): Force removing ActivityRecord{4c27d8d u0 org.pahaadpath.app/.MainActivity t16 f}}: app died, no saved state
+10-28 12:18:09.241 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{51ae3fd u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity}
+10-28 12:18:09.244 W/InputManager-JNI(  519): Input channel object '51ae3fd org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:18:09.361 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{51ae3fd u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:18:09.364 W/WindowManager(  519): Exception thrown during dispatchAppVisibility Window{51ae3fd u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:18:10.058 W/.pahaadpath.app( 7834): Unexpected CPU variant for x86: x86_64.
+10-28 12:18:10.058 W/.pahaadpath.app( 7834): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:18:10.061 E/.pahaadpath.app( 7834): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:18:10.231 W/.pahaadpath.app( 7834): Entry not found
+10-28 12:18:10.685 W/InputManager-JNI(  519): Input channel object 'baf9280 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:18:16.929 W/ProcessStats(  519): Tracking association SourceState{35e5ce8 org.pahaadpath.app/10192 BTop #13727} whose proc state 2 is better than process ProcessState{824ee10 com.google.android.gms.persistent/10131 pkg=com.google.android.gms} proc state 4 (198 skipped)
+10-28 12:18:23.192 W/InputManager-JNI(  519): Input channel object '46458c0 com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:18:23.848 E/cr_CronetUrlRequestContext( 1820): 	at org.chromium.net.impl.r.run(PG:5)
+10-28 12:18:27.246 W/ProcessStats(  519): Tracking association SourceState{35e5ce8 org.pahaadpath.app/10192 BTop #13878} whose proc state 2 is better than process ProcessState{824ee10 com.google.android.gms.persistent/10131 pkg=com.google.android.gms} proc state 4 (726 skipped)
+10-28 12:18:29.460 W/chromium( 2764): [WARNING:controller_impl.cc(1188)] Background download complete, client: 6, completion type: 0, file size:5398
+10-28 12:18:29.505 W/chromium( 2764): [WARNING:controller_impl.cc(1188)] Background download complete, client: 6, completion type: 0, file size:5225
+10-28 12:18:29.543 W/ActivityManager(  519): Scheduling restart of crashed service com.android.chrome/org.chromium.content.app.SandboxedProcessService0:1 in 1000ms for connection
+10-28 12:18:29.551 W/chromium( 2764): [WARNING:controller_impl.cc(1188)] Background download complete, client: 6, completion type: 0, file size:5112
+10-28 12:18:38.299 W/ProcessStats(  519): Tracking association SourceState{35e5ce8 org.pahaadpath.app/10192 BTop #13923} whose proc state 2 is better than process ProcessState{824ee10 com.google.android.gms.persistent/10131 pkg=com.google.android.gms} proc state 4 (100 skipped)
+10-28 12:18:43.172 W/ChooserPreview( 8316): Could not read content://org.pahaadpath.app.files/share/PahaadPath.apk stream types. If a preview is desired, call Intent#setClipData() to ensure that the sharesheet is given permission.
+10-28 12:18:43.173 W/ChooserPreview( 8316): Could not read content://org.pahaadpath.app.files/share/PahaadPath.apk metadata. If a preview is desired, call Intent#setClipData() to ensure that the sharesheet is given permission.
+10-28 12:18:58.775 W/InputManager-JNI(  519): Input channel object 'ea322b4 com.android.chrome/org.chromium.chrome.browser.firstrun.FirstRunActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:19:06.345 W/InputManager-JNI(  519): Input channel object '74a95d2 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:19:12.412 W/InputManager-JNI(  519): Input channel object '6572444 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:19:29.111 E/FrameTracker( 7834): force finish cuj, time out: J<IME_INSETS_ANIMATION::0@0@org.pahaadpath.app>
+10-28 12:19:37.763 E/FrameTracker( 7834): force finish cuj, time out: J<IME_INSETS_ANIMATION::1@0@org.pahaadpath.app>
+10-28 12:19:52.176 W/UsageStatsService(  519): Unexpected activity event reported! (org.pahaadpath.app/org.pahaadpath.app.MainActivity event : 23 instanceId : 14346966)
+10-28 12:19:52.190 W/InputManager-JNI(  519): Input channel object 'd37244f org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:19:53.375 W/.pahaadpath.app( 8858): Unexpected CPU variant for x86: x86_64.
+10-28 12:19:53.375 W/.pahaadpath.app( 8858): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:19:53.389 E/.pahaadpath.app( 8858): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:19:53.606 W/.pahaadpath.app( 8858): Entry not found
+10-28 12:19:53.813 E/chromium( 8858): [ERROR:simple_version_upgrade.cc(152)] Failed to write a new fake index.
+10-28 12:19:53.818 E/chromium( 8858): [ERROR:simple_version_upgrade.cc(152)] Failed to write a new fake index.
+10-28 12:19:54.192 W/InputManager-JNI(  519): Input channel object '14a8d5b Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:19:58.160 W/ActivityTaskManager(  519): Force removing ActivityRecord{ab93698 u0 org.pahaadpath.app/.MainActivity t20 f}}: app died, no saved state
+10-28 12:19:58.161 W/InputManager-JNI(  519): Input channel object 'Letterbox_fullWindow_ActivityRecord{ab93698 u0 org.pahaadpath.app/.MainActivity t20} (client)' was disposed without first being removed with the input manager!
+10-28 12:19:58.205 W/InputManager-JNI(  519): Input channel object '966aa00 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:19:58.880 W/.pahaadpath.app( 9008): Unexpected CPU variant for x86: x86_64.
+10-28 12:19:58.880 W/.pahaadpath.app( 9008): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:19:58.883 E/.pahaadpath.app( 9008): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:19:59.111 W/.pahaadpath.app( 9008): Entry not found
+10-28 12:19:59.859 W/InputManager-JNI(  519): Input channel object '3c0d61e Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:20:03.733 W/ActivityTaskManager(  519): Force removing ActivityRecord{8b896ed u0 org.pahaadpath.app/.MainActivity t21 f}}: app died, no saved state
+10-28 12:20:03.753 W/InputManager-JNI(  519): Input channel object '249e2f0 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:20:03.808 E/ActivityTaskManager(  519): Failed to schedule configuration change: ProcessRecord{b2e118a 9036:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a192i8}
+10-28 12:20:04.556 W/.pahaadpath.app( 9160): Unexpected CPU variant for x86: x86_64.
+10-28 12:20:04.556 W/.pahaadpath.app( 9160): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:20:04.567 E/.pahaadpath.app( 9160): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:20:04.734 W/.pahaadpath.app( 9160): Entry not found
+10-28 12:20:04.981 E/chromium( 9160): [ERROR:simple_version_upgrade.cc(152)] Failed to write a new fake index.
+10-28 12:20:04.982 E/chromium( 9160): [ERROR:simple_version_upgrade.cc(152)] Failed to write a new fake index.
+10-28 12:20:05.691 W/InputManager-JNI(  519): Input channel object 'ad027c1 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:20:09.839 W/InputManager-JNI(  519): Input channel object 'c866a28 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:20:13.745 W/HeterodyneSyncer( 5617): 	at org.chromium.net.impl.CronetUrlRequest.onError(:com.google.android.gms.dynamite_cronetdynamite@231818047@23.18.18 (190800-0):5)
+10-28 12:20:13.779 E/bwfc    ( 5617): 	at org.chromium.net.impl.CronetUrlRequest.onError(:com.google.android.gms.dynamite_cronetdynamite@231818047@23.18.18 (190800-0):5)
+10-28 12:20:14.093 W/ActivityTaskManager(  519): Force removing ActivityRecord{901588e u0 org.pahaadpath.app/.MainActivity t22 f}}: app died, no saved state
+10-28 12:20:14.116 W/InputManager-JNI(  519): Input channel object '498d481 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-28 12:20:14.127 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{498d481 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:20:14.271 W/WindowManager(  519): Exception thrown during dispatchAppVisibility Window{498d481 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:20:14.761 W/.pahaadpath.app( 9399): Unexpected CPU variant for x86: x86_64.
+10-28 12:20:14.761 W/.pahaadpath.app( 9399): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:20:14.779 E/.pahaadpath.app( 9399): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:20:15.041 W/.pahaadpath.app( 9399): Entry not found
+10-28 12:20:15.229 W/chromium( 9399): [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+10-28 12:20:15.252 E/chromium( 9399): [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/org.pahaadpath.app/cache/WebView/Default/HTTP Cache/Code Cache/js: No such file or directory (2)
+10-28 12:20:15.252 E/chromium( 9399): [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+10-28 12:20:15.586 W/InputManager-JNI(  519): Input channel object 'f100d63 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+10-28 12:20:36.093 W/ProcessStats(  519): Tracking association SourceState{35e5ce8 org.pahaadpath.app/10192 BTop #14924} whose proc state 2 is better than process ProcessState{824ee10 com.google.android.gms.persistent/10131 pkg=com.google.android.gms} proc state 4 (203 skipped)
+10-28 12:20:44.420 W/chromium( 1839): [1028/122044.420757:WARNING:dns_config_service_android.cc(81)] Failed to read DnsConfig.
+10-28 12:20:44.539 W/chromium( 2764): [WARNING:media_drm_origin_id_manager.cc(243)] Failed to provision origin ID
+10-30 12:21:27.564 W/ActivityTaskManager(  519): Force removing ActivityRecord{7fc2906 u0 org.pahaadpath.app/.MainActivity t23 f}}: app died, no saved state
+10-30 12:21:27.586 W/InputManager-JNI(  519): Input channel object '9043081 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+10-30 12:21:27.608 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{9043081 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-30 12:21:27.828 W/WindowManager(  519): Exception thrown during dispatchAppVisibility Window{9043081 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-30 12:21:28.358 W/.pahaadpath.app( 9879): Unexpected CPU variant for x86: x86_64.
+10-30 12:21:28.358 W/.pahaadpath.app( 9879): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-30 12:21:28.359 E/.pahaadpath.app( 9879): Not starting debugger since process cannot load the jdwp agent.
+10-30 12:21:28.626 W/.pahaadpath.app( 9879): Entry not found
+10-30 12:21:28.752 W/chromium( 9879): [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+10-30 12:21:28.772 E/chromium( 9879): [ERROR:simple_version_upgrade.cc(152)] Failed to write a new fake index.
+10-30 12:21:28.773 E/chromium( 9879): [ERROR:simple_version_upgrade.cc(152)] Failed to write a new fake index.
+10-30 12:21:29.109 W/InputManager-JNI(  519): Input channel object 'ef5f3d5 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+11-08 12:21:42.545 W/ActivityTaskManager(  519): Force removing ActivityRecord{4d42c9 u0 org.pahaadpath.app/.MainActivity t24 f}}: app died, no saved state
+11-08 12:21:42.568 W/InputManager-JNI(  519): Input channel object '9d241fc org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+11-08 12:21:42.590 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{9d241fc u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+11-08 12:21:42.746 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{9d241fc u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+11-08 12:21:42.748 W/WindowManager(  519): Exception thrown during dispatchAppVisibility Window{9d241fc u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+11-08 12:21:42.765 W/A       ( 1820): 	at org.chromium.net.impl.CronetUrlRequest.onError(:com.google.android.gms.dynamite_cronetdynamite@231818047@23.18.18 (190800-0):5)
+11-08 12:21:42.765 W/A       ( 1820): 	at org.chromium.net.impl.CronetUrlRequest.onError(:com.google.android.gms.dynamite_cronetdynamite@231818047@23.18.18 (190800-0):5)
+11-08 12:21:43.320 W/.pahaadpath.app(10057): Unexpected CPU variant for x86: x86_64.
+11-08 12:21:43.320 W/.pahaadpath.app(10057): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+11-08 12:21:43.328 E/.pahaadpath.app(10057): Not starting debugger since process cannot load the jdwp agent.
+11-08 12:21:43.392 W/.pahaadpath.app(10057): Entry not found
+11-08 12:21:43.571 W/chromium(10057): [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+11-08 12:21:43.592 E/chromium(10057): [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/org.pahaadpath.app/cache/WebView/Default/HTTP Cache/Code Cache/wasm: No such file or directory (2)
+11-08 12:21:43.592 E/chromium(10057): [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+11-08 12:21:43.592 E/chromium(10057): [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/org.pahaadpath.app/cache/WebView/Default/HTTP Cache/Code Cache/js: No such file or directory (2)
+11-08 12:21:43.592 E/chromium(10057): [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+11-08 12:21:43.985 W/InputManager-JNI(  519): Input channel object '9af9198 Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
+11-08 12:21:49.058 W/ProcessStats(  519): Tracking association SourceState{35e5ce8 org.pahaadpath.app/10192 BTop #15783} whose proc state 2 is better than process ProcessState{824ee10 com.google.android.gms.persistent/10131 pkg=com.google.android.gms} proc state 4 (565 skipped)
+11-08 12:21:53.412 W/ActivityTaskManager(  519): Force removing ActivityRecord{bd8cfe u0 org.pahaadpath.app/.MainActivity t25 f}}: app died, no saved state
+11-08 12:21:53.421 W/InputManager-JNI(  519): Input channel object 'fa220b8 org.pahaadpath.app/org.pahaadpath.app.MainActivity (client)' was disposed without first being removed with the input manager!
+11-08 12:21:53.456 W/WindowManager(  519): Failed to deliver inset control state change to w=Window{fa220b8 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:21:53.899 W/WindowManager(  519): Exception thrown during dispatchAppVisibility Window{fa220b8 u0 org.pahaadpath.app/org.pahaadpath.app.MainActivity EXITING}
+10-28 12:21:53.737 W/GLSUser ( 5617): 	at org.chromium.net.impl.CronetUrlRequest.onError(:com.google.android.gms.dynamite_cronetdynamite@231818047@23.18.18 (190800-0):5)
+10-28 12:22:02.037 W/.pahaadpath.app(10387): Unexpected CPU variant for x86: x86_64.
+10-28 12:22:02.037 W/.pahaadpath.app(10387): Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+10-28 12:22:02.039 E/.pahaadpath.app(10387): Not starting debugger since process cannot load the jdwp agent.
+10-28 12:22:02.307 W/.pahaadpath.app(10387): Entry not found
+10-28 12:22:02.794 W/InputManager-JNI(  519): Input channel object '62f887c Splash Screen org.pahaadpath.app (client)' was disposed without first being removed with the input manager!
