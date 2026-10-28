@@ -99,9 +99,10 @@ const style=s=>[/—/,/–/,/\S - \S/,/, (and|or|और|या) /].filter(re=>re
 const latin=async()=>ev(()=>{const allow=/^(PahaadPath|PWD|IMD|SMS|GPS|km|h|min|NH|SH|MDR|BRO|ODR|OSM|QR|PDF|APK|ntfy|Open|Meteo|NASA|DEM|ERA5|AUC|USDMA|SDRF|SEOC|ISRO|Copernicus|OpenStreetMap|WhatsApp|Bluetooth|Android|EN|ID|OK|am|pm|AM|PM|v\d|UTC|IST|GMT)$/;
   const words=(document.body.innerText.match(/[A-Za-z][A-Za-z']{2,}/g)||[]);const names=new Set();try{PP.NODES&&Object.values(PP.NODES).forEach(x=>(x.name||'').split(/\W+/).forEach(w=>names.add(w)));}catch(e){}
   const bad={};words.forEach(w=>{if(!allow.test(w)&&!names.has(w))bad[w]=(bad[w]||0)+1;});return Object.entries(bad).sort((a,b)=>b[1]-a[1]).slice(0,60);});
-const installNtfyGuard=()=>ev(()=>{if(window.__guard)return;window.__guard=1;window.__posted=[];const f=window.fetch;
-  window.fetch=function(u,o){const url=String(u&&u.url||u);if(/ntfy\.sh/.test(url)&&o&&String(o.method).toUpperCase()==='POST'){window.__posted.push({url,body:o.body,at:Date.now(),online:navigator.onLine});
-    return navigator.onLine?Promise.resolve(new Response('{}',{status:200})):Promise.reject(new TypeError('Failed to fetch'));}return f.apply(this,arguments);};});
+const GUARD=`(()=>{if(window.__guard)return;window.__guard=1;window.__posted=[];const f=window.fetch;
+  window.fetch=function(u,o){const url=String(u&&u.url||u);if(/ntfy\\.sh/.test(url)&&o&&String(o.method).toUpperCase()==='POST'){window.__posted.push({url,body:o.body,at:Date.now(),online:navigator.onLine});
+    return navigator.onLine?Promise.resolve(new Response('{}',{status:200})):Promise.reject(new TypeError('Failed to fetch'));}return f.apply(this,arguments);};})()`;
+const installNtfyGuard=()=>page.c.send('Runtime.evaluate',{expression:GUARD});
 const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'));if(on){adb('svc wifi disable');adb('svc data disable');}else{adb('svc wifi enable');adb('svc data enable');}};
 
 (async()=>{
@@ -173,7 +174,7 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
  sh('adb emu geo fix 78.5986 30.1462');
 
  await step('tell family: SMS with the plan',async()=>{
-  await closeModal();await launch(false);await tap('#a-fam');await tap('#fm-num');adb('input text 9876543210');await sleep(500);adb('input keyevent 111');
+  await closeModal();await launch(false);await tap('#a-fam');await tap('#fm-num');adb('input text 9876543210');await sleep(500);await ev(()=>document.activeElement&&document.activeElement.blur());await sleep(800);
   const prev=await text('#fm-prev');const s1=shot('family_modal');
   const href0=await ev(()=>document.querySelector('[data-fm="plan"]').getAttribute('href'));
   await tap('[data-fm="plan"]');await sleep(3000);const app=resumed();const smsUi=uiTexts().slice(0,30);const s2=shot('family_sms_app');
@@ -189,8 +190,8 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
   await tap('[data-fm="ok"]');await sleep(800);const toast=await text('#toast');return {resumed:resumed(),toast,shot:shot('family_no_number')};
  });
  await step('back button with a window open',async()=>{
-  await closeModal().catch(()=>{});await tap('#a-fam');adb('input keyevent 111');await sleep(300);adb('input keyevent 4');await sleep(1500);
-  const top=resumed();let s=null;if(top.includes(PKG)){s=await state().catch(()=>null);}const sc=shot('back_button');await backToApp();await connect().catch(()=>{});return {resumedAfterBack:top,state:s,shot:sc};
+  await closeModal().catch(()=>{});await tap('#a-fam');await sleep(500);const open=await ev(()=>!!document.querySelector('#modal:not([hidden])'));adb('input keyevent 4');await sleep(1500);
+  const top=resumed();let s=null;if(top.includes(PKG)){s=await state().catch(()=>null);}const sc=shot('back_button');await backToApp();await connect().catch(()=>{});return {modalOpenBeforeBack:open,resumedAfterBack:top,state:s,shot:sc};
  });
  await step('back button on a tab other than the trip',async()=>{
   await ev(()=>{PP.st.tab='safety';PP.render();});adb('input keyevent 4');await sleep(1500);const top=resumed();await backToApp();await connect().catch(()=>{});return {resumedAfterBack:top};
@@ -256,6 +257,56 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
  });
  await step('dark mode phone',async()=>{adb('cmd uimode night yes');await launch(false);const s=shot('dark');const bg=await ev(()=>getComputedStyle(document.body).backgroundColor);adb('cmd uimode night no');return {bg,shot:s};});
 
+
+ // ---------- more online checks ----------
+ await step('copy link in the QR window',async()=>{
+  await launch(false);await ev(()=>{PP.st.tab='route';PP.render();});await tap('#a-qr');await sleep(800);const link=await text('#modal-body');
+  await tap('#a-copyl');await sleep(1200);const toast=await text('#toast');
+  const direct=await ev(()=>navigator.clipboard.writeText('pp-test').then(()=>'ok',e=>String(e)));
+  const sc=shot('copy_link');await closeModal();return {link:link.slice(0,300),toast:toast.slice(0,200),writeText:direct,shot:sc};
+ });
+ await step('control room advisory: copy and WhatsApp',async()=>{
+  await ev(()=>scrollTo(0,0));await tap('[data-view="ops"]');await sleep(1500);const out={};
+  await tap('#adv-copy');await sleep(1200);out.copyToast=(await text('#toast')).slice(0,200);out.shot=shot('adv_copy');
+  await tap('#adv-wa');await sleep(2500);out.waResumed=resumed();out.waShot=shot('adv_wa');
+  if(!out.waResumed.includes(PKG)){await backToApp();await connect().catch(()=>{});}
+  await ev(()=>scrollTo(0,0));await tap('[data-view="trip"]');return out;
+ });
+ await step('helpline number tap opens the dialer',async()=>{
+  await ev(()=>{PP.st.tab='safety';PP.render();});const href=await ev(()=>{const a=document.querySelector('a.help');return a&&a.getAttribute('href');});
+  await tap('a.help');await sleep(2500);const top=resumed();const u=uiTexts().slice(0,12);const sc=shot('helpline');await backToApp();await connect().catch(()=>{});return {href,resumed:top,ui:u,shot:sc};
+ });
+ await step('voice input error',async()=>{
+  return {sr:await ev(()=>new Promise(r=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return r('no SpeechRecognition');
+   const x=new SR();const ev=[];x.onstart=()=>ev.push('start');x.onaudiostart=()=>ev.push('audiostart');x.onerror=e=>ev.push('error:'+e.error);x.onend=()=>{ev.push('end');r(ev);};
+   try{x.start();}catch(e){r('throws '+e);}setTimeout(()=>r(ev.concat('no end after 8 s')),8000);})),ui:uiTexts().slice(0,8)};
+ });
+ await step('file pickers: load results file, load open data file',async()=>{
+  await ev(()=>scrollTo(0,0));await tap('[data-view="proof"]');await sleep(1500);const out={};
+  for(const sel of ['#pr-ul','#od-imp']){if(!(await ev(s=>!!document.querySelector(s),sel))){out[sel]='not on screen';continue;}
+   await tap(sel);await sleep(2500);out[sel]={resumed:resumed(),ui:uiTexts().slice(0,8)};if(!out[sel].resumed.includes(PKG)){await backToApp();await connect().catch(()=>{});}}
+  out.shot=shot('file_picker');await ev(()=>scrollTo(0,0));await tap('[data-view="trip"]');return out;
+ });
+ await step('open a saved trip, swap from and to',async()=>{
+  await ev(()=>{PP.st.from='haridwar';PP.st.to='kedarnath';PP.st.tab='route';PP.render();});const has=await ev(()=>!!document.querySelector('[data-mt-open="0"]'));
+  if(has)await tap('[data-mt-open="0"]');const a=await ev(()=>[PP.st.from,PP.st.to]);await ev(()=>scrollTo(0,0));await tap('#swap');await sleep(600);const b=await ev(()=>[PP.st.from,PP.st.to]);
+  return {savedTripButton:has,afterOpen:a,afterSwap:b};
+ });
+ await step('shared report channel status with signal',async()=>{
+  await ev(()=>{PP.st.tab='reports';PP.render();});await sleep(20000);return {status:await text('#sh-st'),shot:shot('share_status_online')};
+ });
+ await step('date picker',async()=>{
+  await ev(()=>{PP.st.tab='route';PP.render();scrollTo(0,0);});await tap('#in-date');await sleep(1500);const u=uiTexts().slice(0,12);const sc=shot('date_picker');adb('input keyevent 4');await sleep(800);
+  if(!resumed().includes(PKG))await backToApp();return {ui:u,shot:sc};
+ });
+ await step('English words left on Hindi screens (in context)',async()=>{
+  await tap('#b-hi');const out={};
+  for(const v of ['proof','ops']){await ev(()=>scrollTo(0,0));await tap('[data-view="'+v+'"]');await sleep(1200);
+   out[v]=await ev(()=>{const t=document.getElementById('v-'+v).innerText.split('\n');return t.filter(l=>/[A-Za-z]{4,}/.test(l)&&/[\u0900-\u097F]/.test(l)||/^[^\u0900-\u097F]*[a-z]{4,}[^\u0900-\u097F]*$/.test(l)).slice(0,25);});}
+  for(const tb of ['rules','safety','reports']){await ev(()=>scrollTo(0,0));await tap('[data-view="trip"]');await ev(tb=>{PP.st.tab=tb;PP.render();},tb);
+   out[tb]=await ev(()=>document.getElementById('panel').innerText.split('\n').filter(l=>/[a-z]{4,}/.test(l)).slice(0,25));}
+  await tap('#b-en');return out;
+ });
  // ---------- offline ----------
  await step('flight mode, reopen the app',async()=>{
   airplane(true);await sleep(4000);await launch(false);await sleep(8000);const s=await state();
@@ -278,12 +329,48 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
  await step('offline: Hindi screens',async()=>{
   await tap('#b-hi');await sleep(800);const m=(await state()).srcmsg;const p=await text('#panel');const sc=shot('offline_hi_reports');await tap('#b-en');return {srcmsg:m,panel:p.slice(0,500),style:style(m+p),shot:sc};
  });
+
+ await step('offline: map tab with the offline map',async()=>{
+  await ev(()=>{PP.st.from='dehradun';PP.st.to='badrinath';PP.st.tab='map';PP.render();scrollTo(0,0);});await sleep(1500);
+  const has=await ev(()=>!!document.querySelector('[data-tiles="0"]'));if(has)await tap('[data-tiles="0"]');await sleep(2000);
+  await ev(()=>{const m=document.getElementById('lmap');m&&m.scrollIntoView({block:'center'});});await sleep(800);return {offlineMapButton:has,shot:shot('offline_map')};
+ });
+ await step('offline: closure and alert cards (sample data put in the saved forecast)',async()=>{
+  const saved=await ev(()=>localStorage.getItem('pp_cache2'));
+  await ev(()=>{const c=JSON.parse(localStorage.getItem('pp_cache2'));const istDay=ms=>new Date(ms+5.5*3600e3).toISOString().slice(0,10);const today=istDay(Date.now()-4*3600e3);
+   c.alerts=[{t:'TEST SAMPLE: Thunderstorm with lightning likely over Chamoli, Rudraprayag in next 3 hours.',by:'IMD Dehradun',at:new Date(Date.now()-2*3600e3).toISOString().slice(0,19)+'Z'}];
+   c.closures={date:today,slot:'morning',url:'https://example.org/sample.pdf',total:3,dist:{dehradun:'Dehradun',rishikesh:'Dehradun',devprayag:'Tehri',srinagar:'Pauri',rudraprayag:'Rudraprayag',karnaprayag:'Chamoli',chamoli:'Chamoli',joshimath:'Chamoli',govindghat:'Chamoli',badrinath:'Chamoli'},
+    per:{Chamoli:2,Pithoragarh:1},roads:[{n:'Jyotirmath Malari motor road (test sample)',id:1,ag:'BRO',ty:'SH',d:'Chamoli',km:'12',c:today+'T07:10',e:today+'T18:00',near:['joshimath']},
+    {n:'Nandprayag Ghat motor road (test sample)',id:2,ag:'PWD',ty:'MDR',d:'Chamoli',km:'1,3',c:today+'T06:42'}]};
+   localStorage.setItem('pp_cache2',JSON.stringify(c));});
+  await page.c.send('Page.reload',{});await sleep(2500);await page.waitForFunction(()=>window.PP&&PP.st&&PP.st.series,{timeout:60000});
+  await ev(()=>{PP.st.from='dehradun';PP.st.to='badrinath';PP.st.tab='route';PP.render();});await sleep(1000);
+  const out={src:(await state()).src};
+  for(const lang of ['en','hi']){await tap(lang==='en'?'#b-en':'#b-hi');await sleep(600);
+   out[lang]={alerts:await ev(()=>{const c=document.getElementById('alerts');return c&&!c.hidden?c.innerText:null;}),closures:await ev(()=>{const c=document.getElementById('closures');return c&&!c.hidden?c.innerText:null;})};
+   await ev(()=>{const c=document.getElementById('closures')||document.getElementById('alerts');c&&c.scrollIntoView({block:'start'});});await sleep(500);out[lang].shot=shot('offline_cards_'+lang);
+   out[lang].style=style((out[lang].alerts||'')+(out[lang].closures||''));}
+  await tap('#b-en');await ev(s=>localStorage.setItem('pp_cache2',s),saved);return out;
+ });
  await step('signal back: queue sends and forecast refreshes (no reopen)',async()=>{
   await installNtfyGuard();const t0=Date.now();airplane(false);const log=[];
   for(let i=0;i<38;i++){await sleep(10000);const s=await state().catch(e=>({e:String(e)}));const p=await ev(()=>window.__posted.length).catch(()=>-1);
    log.push([Math.round((Date.now()-t0)/1000),s.src,s.online,s.outbox,p,(s.srcmsg||'').slice(0,80)]);if(s.outbox===0&&s.src==='live'&&i>2)break;}
   return {log,posted:await ev(()=>window.__posted).catch(()=>null),shot:shot('back_online')};
  },480000);
+ await step('offline: report queued, app reopened later with signal',async()=>{
+  airplane(true);await sleep(4000);
+  await page.c.send('Page.enable');await page.c.send('Page.addScriptToEvaluateOnNewDocument',{source:GUARD});
+  await page.c.send('Page.reload',{});await sleep(2500);await page.waitForFunction(()=>window.PP&&PP.st&&PP.st.series,{timeout:60000});
+  // the guard must be in place before the page's own scripts run, or a queued report would reach the public channel
+  if(!(await ev(()=>!!window.__guard&&Array.isArray(window.__posted))))throw new Error('guard not active after reload, stopping before signal');
+  await ev(()=>{PP.st.tab='reports';PP.render();scrollTo(0,0);});await sleep(500);await tap('#r-send');await sleep(1000);
+  const before=(await state()).outbox;airplane(false);await sleep(6000);
+  await page.c.send('Page.reload',{});await sleep(2500);await page.waitForFunction(()=>window.PP&&PP.st&&PP.st.series,{timeout:60000});
+  let log=[];for(let i=0;i<9;i++){await sleep(5000);const s=await state();const p=await ev(()=>(window.__posted||[]).length);log.push([i*5+5,s.src,s.outbox,p]);if(s.outbox===0&&p>0)break;}
+  const guarded=await ev(()=>!!window.__guard);airplane(true);await sleep(3000);
+  return {queuedBefore:before,guarded,log,shot:shot('reopen_with_signal')};
+ });
 
  // ---------- days pass with no signal ----------
  const clock=async days=>{adb('settings put global auto_time 0');const t=Math.floor(Date.now()/1000)+days*86400;adb('date @'+t);await sleep(500);return adb('date');};
