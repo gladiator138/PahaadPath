@@ -4,7 +4,7 @@
 const {execSync}=require('child_process');
 const fs=require('fs');
 const OUT=process.argv[2]||'out';fs.mkdirSync(OUT,{recursive:true});
-const PKG='org.pahaadpath.app',ACT=PKG+'/.MainActivity';
+const PKG=process.env.PKG||'org.pahaadpath.app',ACT=process.env.ACT||PKG+'/.MainActivity';
 const R={steps:[]};const CON=[];
 const sh=(c,o={})=>{try{return execSync(c,{encoding:'utf8',timeout:o.t||60000,stdio:['ignore','pipe','pipe']}).trim();}catch(e){return 'ERR '+(e.stdout||'')+(e.stderr||e.message);}};
 const adb=c=>sh('adb shell '+JSON.stringify(c));

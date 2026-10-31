@@ -5,12 +5,23 @@ on:
     branches: ['claude/**']
     paths: ['tests/emulator/**', '.github/workflows/emulator.yml']
   workflow_dispatch:
+    inputs:
+      apk_url:
+        description: APK to test
+        required: false
+      site_url:
+        description: Live site whose page the APK should carry
+        required: false
 permissions:
   contents: write
 jobs:
   emulator:
     runs-on: ubuntu-latest
     timeout-minutes: 80
+    # The team's app now lives in jatainsahil98-web/Pahaad-Path-app; a manual run can test another APK.
+    env:
+      APK_URL: ${{ inputs.apk_url || 'https://github.com/jatainsahil98-web/Pahaad-Path-app/releases/download/android-latest/PahaadPath.apk' }}
+      SITE_URL: ${{ inputs.site_url || 'https://jatainsahil98-web.github.io/Pahaad-Path-app/' }}
     steps:
       - uses: actions/checkout@v4
         with:
