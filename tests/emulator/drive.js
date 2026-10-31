@@ -147,15 +147,16 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
 
  // where am I: on the Rishikesh to Devprayag road. First answer the Android dialog with Approximate (Android 12+ offers it).
  adb('emu geo fix 78.5986 30.1462')||sh('adb emu geo fix 78.5986 30.1462');sh('adb emu geo fix 78.5986 30.1462');
+ const waitFix=async ms=>{const t0=Date.now();let b='';while(Date.now()-t0<ms){b=await text('#modal-body').catch(()=>'');if(!/Finding your position/.test(b))break;await sleep(1500);}return {body:b,waited:Math.round((Date.now()-t0)/1000)};};
  await step('where am I, location dialog answered with Approximate',async()=>{
   await ev(()=>{PP.st.tab='route';PP.render();});await tap('#a-where');await sleep(1500);
   const dlg=uiTexts();const s1=shot('where_dialog');
-  const a=await uiTap(/^Approximate$/i);const b=await uiTap(/While using the app|Only this time/i);await sleep(4000);
-  const body=await text('#modal-body');const p=adb('dumpsys package '+PKG+' | grep -E "LOCATION" | head -4');
-  return {dialog:dlg,tapped:[a,b],granted:p,body,shot:s1,shot2:shot('where_after_approx')};
+  const a=await uiTap(/^Approximate$/i);const b=await uiTap(/While using the app|Only this time/i);
+  const wf=await waitFix(38000);const body=wf.body;const p=adb('dumpsys package '+PKG+' | grep -E "LOCATION" | head -4');
+  return {dialog:dlg,tapped:[a,b],granted:p,body,waited:wf.waited,shot:s1,shot2:shot('where_after_approx')};
  });
  await step('where am I again with approximate already granted',async()=>{
-  await closeModal();await tap('#a-where');await sleep(5000);return {dialog:uiTexts().slice(0,12),body:await text('#modal-body'),shot:shot('where_approx_second')};
+  await closeModal();await tap('#a-where');await sleep(1500);const dlg=uiTexts().slice(0,12);const wf=await waitFix(38000);return {dialog:dlg,body:wf.body,waited:wf.waited,shot:shot('where_approx_second')};
  });
  await step('where am I with precise location',async()=>{
   await closeModal();adb('pm grant '+PKG+' android.permission.ACCESS_FINE_LOCATION');await launch(false);
@@ -184,6 +185,13 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
  await step('tell family: "I am stuck" with location',async()=>{
   await closeModal().catch(()=>{});await tap('#a-fam');await tap('[data-fm="stuck"]');await sleep(6000);const app=resumed();const smsUi=uiTexts().slice(0,30);const s=shot('family_stuck');
   await backToApp();await connect().catch(()=>{});return {resumed:app,smsUi,shot:s};
+ });
+ await step('tell family: "I am stuck" when the phone is off the planned route',async()=>{
+  await closeModal().catch(()=>{});const keep=await ev(()=>[PP.st.from,PP.st.to]);
+  await ev(()=>{PP.st.from='delhi';PP.st.to='mussoorie';PP.st.tab='route';PP.render();});await sleep(800);
+  await tap('#a-fam');await tap('[data-fm="stuck"]');await sleep(6000);const app=resumed();const smsUi=uiTexts().slice(0,30);const s=shot('family_stuck_off_route');
+  await backToApp();await connect().catch(()=>{});await closeModal().catch(()=>{});await ev(k=>{PP.st.from=k[0];PP.st.to=k[1];PP.render();},keep);
+  return {trip:'Delhi NCR to Mussoorie, phone at Devprayag',resumed:app,smsUi,shot:s};
  });
  await step('tell family with no number typed',async()=>{
   await closeModal().catch(()=>{});await ev(()=>localStorage.removeItem('pp_fam'));await tap('#a-fam');await ev(()=>{const e=document.getElementById('fm-num');e.value='';});
@@ -315,7 +323,7 @@ const airplane=on=>{adb('cmd connectivity airplane-mode '+(on?'enable':'disable'
   return {state:s,verdict:await text('#verdict'),closures,alerts,net:adb('dumpsys connectivity | grep -i "Active default network" | head -1'),shot:shot('offline_trip')};
  });
  await step('offline: plan another trip and where am I',async()=>{
-  await ev(()=>{PP.st.from='haridwar';PP.st.to='kedarnath';PP.render();});await sleep(800);const v=await text('#verdict');
+  await ev(()=>{PP.st.from='haridwar';PP.st.to='kedarnath';PP.st.tab='route';PP.render();scrollTo(0,0);});await sleep(800);const v=await text('#verdict');
   await tap('#a-where');await sleep(6000);const w=await text('#modal-body');const sc=shot('offline_where');await closeModal();
   return {verdict:v,where:w,shot:sc};
  });
