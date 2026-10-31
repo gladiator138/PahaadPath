@@ -81,9 +81,11 @@ async function tap(sel){
   const r=await ev(s=>{const e=typeof s==='string'?document.querySelector(s):null;if(!e)return null;e.scrollIntoView({block:'center'});const b=e.getBoundingClientRect();
     return {x:b.left+b.width/2,y:b.top+b.height/2,dpr:devicePixelRatio,w:b.width,h:b.height};},sel);
   if(!r||!r.w)throw new Error('not on screen: '+sel);
-  if(wvTop===null){const d=adb('dumpsys window | grep -E "mStableInsets|statusBars" | head -3');const st=adb('wm size');wvTop=0;
-    // WebView fills the activity below the status bar: read its bounds from the UI tree
-    adb('uiautomator dump /sdcard/u.xml >/dev/null 2>&1');const x=adb('cat /sdcard/u.xml');const m=x.match(/class="android\.webkit\.WebView"[^>]*bounds="\[(\d+),(\d+)\]/);wvTop=m?+m[2]:0;R.wvTop=wvTop;R.wm=st;}
+  if(wvTop===null){const st=adb('wm size');
+    // WebView fills the activity below the status bar: read its bounds from the UI tree. A dump can miss it, so retry,
+    // and never guess: a wrong offset sends every later tap to the wrong element.
+    for(let i=0;i<8&&wvTop===null;i++){adb('uiautomator dump /sdcard/u.xml >/dev/null 2>&1');const x=adb('cat /sdcard/u.xml');const m=x.match(/class="android\.webkit\.WebView"[^>]*bounds="\[(\d+),(\d+)\]/);if(m)wvTop=+m[2];else await sleep(1500);}
+    if(wvTop===null)throw new Error('WebView bounds not found in the UI tree');R.wvTop=wvTop;R.wm=st;}
   await sleep(250);
   adb('input tap '+Math.round(r.x*r.dpr)+' '+Math.round(r.y*r.dpr+wvTop));await sleep(900);
 }
